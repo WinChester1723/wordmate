@@ -30,4 +30,4 @@ No additional dependencies nor repositories required for this branch.
 - Language detection does not work
 
 # Issues
-Feel free to use issues to ask a question about the problem you encounter. 
+Feel free to use [issues section](https://github.com/OrkhanGG/wordmate/issues) to ask a question about the problem you encounter. 
