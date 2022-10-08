@@ -16,7 +16,7 @@ public final class InputCore implements NativeKeyListener {//<-- Remember to add
         if (e.getKeyCode() == NativeKeyEvent.VC_HOME) {
             try {
                 //System.out.println(ClipboardManager.getInstance().getSelectedText(User32.INSTANCE, ClipboardManager.CustomUser32.INSTANCE));
-                GUICore.getInstance().RequestTranslate(ClipboardManager.getInstance().getSelectedText(User32.INSTANCE, ClipboardManager.CustomUser32.INSTANCE));
+                GUICore.getInstance().UpdateTranslateFromField(ClipboardManager.getInstance().getSelectedText(User32.INSTANCE, ClipboardManager.CustomUser32.INSTANCE));
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }

@@ -1,10 +1,7 @@
 package main.java.gui;
 
 import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.icons.FlatAnimatedIcon;
 import com.formdev.flatlaf.icons.FlatMenuArrowIcon;
-import com.formdev.flatlaf.icons.FlatRevealIcon;
-import com.formdev.flatlaf.ui.FlatTitlePaneIcon;
 import main.java.io.translator.TranslationCore;
 
 import javax.swing.*;
@@ -14,8 +11,6 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -25,8 +20,6 @@ public final class GUICore {
     final static short translateFieldMaxLength = 500;
     private static GUICore single_instance = null;
     // info: ------------------------------------
-    String currentTranslateFromLang = "en";
-    String currentTranslateToLang = "tr";
     // Main GUI Elements
     private JFrame mainFrame = null;
     private JPanel mainPanel = null;
@@ -61,7 +54,7 @@ public final class GUICore {
 
     // INFO: RequestTranslate will do some pre-checks and set the translation area text if everything's okay.
     //  As the translation area text has a listener, it'll do translation job itself, we don't need to call anything else.
-    public boolean RequestTranslate(String textToTranslate) {
+    public boolean UpdateTranslateFromField(String textToTranslate) {
         if (textToTranslate.length() >= translateFieldMaxLength) {
             JOptionPane.showMessageDialog(null, "Given text cannot be greated than 500 characters long!", "Error", JOptionPane.INFORMATION_MESSAGE);
             return false;
@@ -119,7 +112,7 @@ public final class GUICore {
         return -1;
     }
 
-    // Returns true if desired language was selected successfully, false otherwise.
+    // Attempts to select the given language.
     private void setSelectedLanguage(String lang, TranslationSides side) {
         for (var i : getLanguageButtonsBySide(side).entrySet())
                 i.getValue().setSelected(false);
@@ -167,7 +160,7 @@ public final class GUICore {
         }
     }
 
-    public void InitGUI() throws BadLocationException {
+    public void Initialize() throws BadLocationException {
         try {
             UIManager.setLookAndFeel(new FlatDarkLaf());
         } catch (UnsupportedLookAndFeelException e) {
@@ -334,6 +327,9 @@ public final class GUICore {
                             final String from = getSelectedLanguage(TranslationSides.TS_LEFT);
                             final String to = getSelectedLanguage(TranslationSides.TS_RIGHT);
 
+                            System.out.println(from);
+                            System.out.println(to);
+
                             final String translatedText =
                                     TranslationCore.getInstance().translate(TranslationCore.getInstance().getLanguageCodeByName(from), TranslationCore.getInstance().getLanguageCodeByName(to), translateFromField.getText());
 
@@ -353,6 +349,44 @@ public final class GUICore {
             @Override
             public void changedUpdate(DocumentEvent e) {
             }
+        });
+
+        // On any translateFromUserLanguages button pressed
+        for (Map.Entry<String, JToggleButton> currentEntry : translateFromUserLanguages.entrySet()) {
+            currentEntry.getValue().addActionListener(e->{
+                setSelectedLanguage(currentEntry.getKey(),TranslationSides.TS_LEFT);
+            });
+        }
+
+        //translateToUserLanguages
+        for (Map.Entry<String, JToggleButton> currentEntry : translateToUserLanguages.entrySet()) {
+            currentEntry.getValue().addActionListener(e->{
+                setSelectedLanguage(currentEntry.getKey(), TranslationSides.TS_RIGHT);
+            });
+        }
+
+        // Swap button listener
+        swapLanguages.addActionListener(e->{
+            var leftSideButton = translateFromUserLanguages.get(getSelectedLanguage(TranslationSides.TS_LEFT));
+            var rightSideButton = translateToUserLanguages.get(getSelectedLanguage(TranslationSides.TS_RIGHT));
+            final String leftSideText = leftSideButton.getText();
+            final String rightSideText = rightSideButton.getText();
+            leftSideButton.setText(rightSideText);
+            rightSideButton.setText(leftSideText);
+
+            final Map<String,JToggleButton> temporary1 = translateFromUserLanguages;
+            final Map<String,JToggleButton> temporary2 = translateToUserLanguages;
+            translateFromUserLanguages.clear();
+            translateToUserLanguages.clear();
+            for(Map.Entry<String,JToggleButton> temp : temporary1.entrySet()){
+                translateFromUserLanguages.put(temp.getValue().getText().toString(),temp.getValue());
+            }
+            for(Map.Entry<String,JToggleButton> temp1 : temporary2.entrySet()){
+                translateToUserLanguages.put(temp1.getValue().getText().toString(),temp1.getValue());
+            }
+            //-----------------------
+            final String rightSideTranslation = translateToField.getText();
+            translateFromField.setText(rightSideTranslation);
         });
 
 

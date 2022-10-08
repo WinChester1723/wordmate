@@ -16,7 +16,7 @@ public class Application {
 
         // Start GUI
         try {
-            GUICore.getInstance().InitGUI();
+            GUICore.getInstance().Initialize();
         } catch (BadLocationException e) {
             throw new RuntimeException(e);
         }
