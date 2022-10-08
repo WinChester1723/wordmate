@@ -1,3 +1,4 @@
+// Authors: OrkhanGG, WinChester1723, Deusrazen
 package main.java;
 
 import com.github.kwhat.jnativehook.GlobalScreen;
