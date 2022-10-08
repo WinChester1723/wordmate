@@ -5,6 +5,7 @@ import com.github.kwhat.jnativehook.NativeHookException;
 import main.java.gui.GUICore;
 import main.java.io.keyboard.InputCore;
 
+import javax.swing.text.BadLocationException;
 import java.io.IOException;
 
 
@@ -13,7 +14,11 @@ public class Application {
     public static void main(String[] args) throws IOException {
 
         // Start GUI
-        GUICore.getInstance().InitGUI();
+        try {
+            GUICore.getInstance().InitGUI();
+        } catch (BadLocationException e) {
+            throw new RuntimeException(e);
+        }
 
         // Implement Input Core
         try {
