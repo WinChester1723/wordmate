@@ -34,10 +34,13 @@ public final class GUICore {
     private JFrame mainFrame = null;
     private JPanel mainPanel = null;// To store all pages/panels inside a panel (for now)
     private List<JToggleButton> translateFromUserLanguages = null;
+    JDropdownButton translateFromLanguageDropdown;
     private JButton swapLanguages = null;
     private JTextArea translateFromField = null;
     private List<JToggleButton> translateToUserLanguages = null;
     private JTextArea translateToField = null;
+    JDropdownButton translateToLanguageDropdown;
+
     // Side-Thread(s)
     private Thread translatorThread = null;
 
@@ -204,12 +207,10 @@ public final class GUICore {
         JPanel translateFromPreferencePanel;
         GridLayout translateFromPreferencePanelGL;
         JPanel translateFromUserLanguagesPanel;
-        JDropdownButton translateFromLanguageDropdown;
         // INFO: TranslateTo Section
         JPanel translateToPreferencePanel;
         GridLayout translateToPreferencePanelGL;
         JPanel translateToUserLanguagesPanel;
-        JDropdownButton translateToLanguageDropdown;
         {
             mainPanel = new JPanel();
             translateFromPreferencePanel = new JPanel();
@@ -270,7 +271,7 @@ public final class GUICore {
             translateToField.setEditable(false);
         }
 
-        AddListeners();// Add listeners for the controls that exist in this function
+        AddEventListeners();// Add listeners for the controls that exist in this function
 
         // Final touches
         {
@@ -364,7 +365,7 @@ public final class GUICore {
 
     // info: ------------------------------------
 
-    private void AddListeners() {
+    private void AddEventListeners() {
 
         // On TranslateField Change(When user stops typing)
         DeferredDocumentListener listener = new DeferredDocumentListener(500, new ActionListener() {
@@ -424,7 +425,26 @@ public final class GUICore {
             translateFromField.setText(rightSideTranslation);
         });
 
-
+        // Dropdown events
+        if(translateFromLanguageDropdown.getMenuItems().size() > 0 &&
+                translateToLanguageDropdown.getMenuItems().size() > 0){
+            for(var i : translateFromLanguageDropdown.getMenuItems()){
+                i.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        RequestToSelectLanguage(i.getText(),TranslationSides.TS_LEFT);
+                    }
+                });
+            }
+            for(var i : translateToLanguageDropdown.getMenuItems()){
+                i.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        RequestToSelectLanguage(i.getText(),TranslationSides.TS_RIGHT);
+                    }
+                });
+            }
+        }else{
+            JOptionPane.showMessageDialog(mainFrame, "Either translate-From/To LanguageDropdown button's menu items don't exist! ", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     enum TranslationSides {
@@ -433,10 +453,13 @@ public final class GUICore {
 
     // Nested Classes
     private final class JDropdownButton extends JButton {
+        private List<JMenuItem> menuItems;
+        private List<String> items;
+        private JPopupMenu popupMenu = null;
 
-        List<JMenuItem> menuItems;
-        List<String> items;
-        JPopupMenu popupMenu = null;
+        public List<JMenuItem> getMenuItems() {
+            return menuItems;
+        }
 
         public JDropdownButton(String label, Icon icon, List<String> items) {
 
@@ -445,15 +468,15 @@ public final class GUICore {
             this.items = items;
 
             menuItems = new ArrayList<>();
+            for (var i : items) {
+                menuItems.add(new JMenuItem(i));
+            }
 
             super.addActionListener(e ->
             {
                 String s = e.getActionCommand();
                     popupMenu = new JPopupMenu();
 
-                    for (var i : items) {
-                        menuItems.add(new JMenuItem(i));
-                    }
                     for (var i : menuItems)
                         popupMenu.add(i);
 

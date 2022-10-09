@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a" name="Changes" comment="Added App icons and their functionality. Testing on Mac &amp; Linux has not been done yet.">
+    <list default="true" id="c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a" name="Changes" comment="Fixed a small issue. Known bugs about layouts still exist.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/gui/core/GUICore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/core/GUICore.java" afterDir="false" />
     </list>
@@ -98,7 +98,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665301311676</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Fixed a small issue. Known bugs about layouts still exist.">
+      <created>1665301576011</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1665301576011</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -117,14 +124,15 @@
     <MESSAGE value="Added necessary libraries. Additionally, project management is adjusted." />
     <MESSAGE value="Up to 50 error fixes. &#10;Changed ToggleButton Map to List and added temporal but powerful solutions. Known bugs: 1. translateField layout gets expanded automatically while typing text. 2. Add language dropdown button exists but does not work." />
     <MESSAGE value="Added App icons and their functionality. Testing on Mac &amp; Linux has not been done yet." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added App icons and their functionality. Testing on Mac &amp; Linux has not been done yet." />
+    <MESSAGE value="Fixed a small issue. Known bugs about layouts still exist." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed a small issue. Known bugs about layouts still exist." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/gui/core/GUICore.java</url>
-          <line>116</line>
+          <line>119</line>
           <option name="timeStamp" value="29" />
         </line-breakpoint>
       </breakpoints>
