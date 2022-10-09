@@ -4,19 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a" name="Changes" comment="Fixed a small issue. Known bugs about layouts still exist.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/core/GUICore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/core/GUICore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$4.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$DeferredDocumentListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$DeferredDocumentListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$JDropdownButton.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$JDropdownButton.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$JTextFieldLimit.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$JTextFieldLimit.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$TranslationSides.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$TranslationSides.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore.class" afterDir="false" />
-    </list>
+    <list default="true" id="c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a" name="Changes" comment="Fixed a small issue. Known bugs about layouts still exist." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -122,7 +110,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665303355068</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Fixed a small issue. Known bugs about layouts still exist.">
+      <created>1665311160133</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1665311160133</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
