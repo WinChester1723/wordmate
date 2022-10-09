@@ -25,7 +25,7 @@ public final class TranslationCore {
         return single_instance;
     }
 
-    public static String translate(String langFrom, String langTo, String text) throws IOException {
+    public String translate(String langFrom, String langTo, String text) throws IOException {
         // INSERT YOU URL HERE
         String urlStr = "https://script.google.com/macros/s/AKfycbyGdtZ3uVFKiZtTtxfsqnKngalPHmJBSBNQDWMN7NK3PhkIe93iAbYbNc9Pue62UMsR/exec" + "?q=" + URLEncoder.encode(text, StandardCharsets.UTF_8) + "&target=" + langTo + "&source=" + langFrom;
         URL url = new URL(urlStr);
@@ -41,15 +41,15 @@ public final class TranslationCore {
         return response.toString();
     }
 
-    public static Map<String, String> getAvailableLanguages() {
+    public Map<String, String> getAvailableLanguages() {
         return languageCodeMap;
     }
 
-    public static String getLanguageCodeByName(String language) {
+    public String getLanguageCodeByName(String language) {
         return languageCodeMap.get(language);
     }
 
-    private static void configureLanguageCodes() {
+    private void configureLanguageCodes() {
         languageCodeMap.put("Afrikaans", "af");
         languageCodeMap.put("Irish", "ga");
         languageCodeMap.put("Albanian", "sq");

@@ -1,6 +1,7 @@
-package main.java.gui;
+package gui.core;
 
 import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.icons.FlatDescendingSortIcon;
 import com.formdev.flatlaf.icons.FlatMenuArrowIcon;
 import main.java.io.translator.TranslationCore;
 
@@ -12,8 +13,10 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.List;
 
 public final class GUICore {
     // Constants
@@ -22,22 +25,11 @@ public final class GUICore {
     // info: ------------------------------------
     // Main GUI Elements
     private JFrame mainFrame = null;
-    private JPanel mainPanel = null;
-    // INFO: Translate Section
-    private JPanel translateFromPreferencePanel = null;
-    private GridLayout translateFromPreferencePanelGL = null;
-    private JPanel translateFromUserLanguagesPanel = null;
-    private Map<String, JToggleButton> translateFromUserLanguages = null;
+    private List<JToggleButton> translateFromUserLanguages = null;
     private JButton swapLanguages = null;
-    private JComboBox translateFromLanguageDropdown = null;
     private JTextArea translateFromField = null;
-    // INFO: TranslateTo Section
-    private JPanel translateToPreferencePanel = null;
-    private GridLayout translateToPreferencePanelGL = null;
-    private JPanel translateToUserLanguagesPanel = null;
-    private Map<String, JToggleButton> translateToUserLanguages = null;
+    private List<JToggleButton> translateToUserLanguages = null;
     private JTextArea translateToField = null;
-    private JComboBox translateToLanguageDropdown = null;
     // Side-Thread(s) // TODO: Move from this class.
     private Thread translatorThread = null;
 
@@ -54,74 +46,75 @@ public final class GUICore {
 
     // INFO: RequestTranslate will do some pre-checks and set the translation area text if everything's okay.
     //  As the translation area text has a listener, it'll do translation job itself, we don't need to call anything else.
-    public boolean UpdateTranslateFromField(String textToTranslate) {
+    public void UpdateTranslateFromField(String textToTranslate) {
         if (textToTranslate.length() >= translateFieldMaxLength) {
-            JOptionPane.showMessageDialog(null, "Given text cannot be greated than 500 characters long!", "Error", JOptionPane.INFORMATION_MESSAGE);
-            return false;
+            JOptionPane.showMessageDialog(null, "Given text cannot be greater than 500 characters long!", "Error", JOptionPane.INFORMATION_MESSAGE);
+            return;
         }
-
         translateFromField.setText(textToTranslate);
-
-        return true;
     }
 
     private void loadLanguagesButtons() {
         boolean saveFound = false;
         if (!saveFound) { // Default initialization values
             // left side
-            translateFromUserLanguages.put("English", new JToggleButton("English"));
-            translateFromUserLanguages.put("Russian", new JToggleButton("Russian"));
-            translateFromUserLanguages.put("French", new JToggleButton("French"));//-------
+            translateFromUserLanguages.add(new JToggleButton("English"));
+            translateFromUserLanguages.add(new JToggleButton("Russian"));
+            translateFromUserLanguages.add(new JToggleButton("French"));//-------
             setSelectedLanguage("English", TranslationSides.TS_LEFT);
             // right side
-            translateToUserLanguages.put("Turkish", new JToggleButton("Turkish"));
-            translateToUserLanguages.put("Spanish", new JToggleButton("Spanish"));
-            translateToUserLanguages.put("Japanese", new JToggleButton("Japanese"));//-------
+            translateToUserLanguages.add(new JToggleButton("Turkish"));
+            translateToUserLanguages.add(new JToggleButton("Spanish"));
+            translateToUserLanguages.add(new JToggleButton("Japanese"));//-------
             setSelectedLanguage("Turkish", TranslationSides.TS_RIGHT);
         }
 
         // TODO: Serialize user info to load on startup.
     }
 
-    private String[] getExistingLanguages(TranslationSides side) {
-        final int buttonCount = 3;
-        String[] out = new String[buttonCount];
-        for (int c = 0; c < buttonCount; c++)
-            out[c] = getLanguageButtonsBySide(side).get(c).getText();
+    private List<String> getExistingLanguages(TranslationSides side) {
+        List<String> out = new ArrayList<>();
+        for (var i : getLanguageButtonsBySide(side))
+        {
+            out.add(i.getText());
+        }
         return out;
     }
 
-    private Map<String, JToggleButton> getLanguageButtonsBySide(TranslationSides side) {
+    private List<JToggleButton> getLanguageButtonsBySide(TranslationSides side) {
         if (side.equals(TranslationSides.TS_LEFT)) return translateFromUserLanguages;
         else return translateToUserLanguages;
     }
 
-    // Returns the selected language button's value; Returns null if could not find any selected button
+    // Returns the selected language button's value; Returns null it could not find any selected button
     private String getSelectedLanguage(TranslationSides side) {
-        for (var i : getLanguageButtonsBySide(side).entrySet()) {
-            if (i.getValue().isSelected()) return i.getKey();
-        }
+        for (var i : getLanguageButtonsBySide(side))
+            if (i.isSelected()) return i.getText();
+        // TODO: IDK WHETHER RETURNING THE BUTTON'S TEXT IS THE RIGHT WAY
+        //  BECAUSE BUTTON'S TEXT CANNOT REPRESENT LANGUAGE NAME ALWAYS.
+        //  BUT IT WORKS FOR NOW, SO I KEEP IT
         return null;
     }
 
-    // Returns the selected language button's index
-    private int getSelectedLanguageByIndex(TranslationSides side) {
-        for (int c = 0; c < getLanguageButtonsBySide(side).size(); c++)
-            if (getLanguageButtonsBySide(side).get(getLanguageButtonsBySide(side).keySet().toArray()[c]).isSelected())
-                return c;
-        return -1;
+    // Returns the selected language button's instance; Returns null it could not find any selected button
+    private JToggleButton getSelectedLanguageButton(TranslationSides side) {
+        for (var i : getLanguageButtonsBySide(side))
+            if (i.isSelected()) return i;
+        return null;
     }
 
     // Attempts to select the given language.
     private void setSelectedLanguage(String lang, TranslationSides side) {
-        for (var i : getLanguageButtonsBySide(side).entrySet())
-                i.getValue().setSelected(false);
-        getLanguageButtonsBySide(side).get(lang).setSelected(true);
+        for (var i : getLanguageButtonsBySide(side))
+            if(!i.getText().equals(lang))
+                i.setSelected(false);
+            else
+                i.setSelected(true);// This will be called only once(if there's no bugs)
     }
 
     private boolean containsLanguage(String lang, TranslationSides side) {
-        for (var i : getLanguageButtonsBySide(side).entrySet())
-            if (i.getValue().equals(lang)) return true;
+        for (var i : getLanguageButtonsBySide(side))
+            if (i.getText().equals(lang)) return true;
         return false;
     }
 
@@ -130,22 +123,16 @@ public final class GUICore {
             // We are going to insert a new language
             // Since we always will have 3 languages -> EN, RU, AZ
             // We can push the first and remove the last -> FR, EN, RU
-            String[] _languages_ = getExistingLanguages(side);
-            for (int c = _languages_.length - 1; c >= 1; c--) {
-                _languages_[c] = _languages_[c - 1];
-            }
-            _languages_[0] = lang;
+            List<String> _languages_ = getExistingLanguages(side);
+            _languages_.add(0,lang);
+            _languages_.remove((_languages_.size()-1) < 0 ? 0 : _languages_.size()-1);
             //---------------------------------------------------------
 
-            var temporary = getLanguageButtonsBySide(side);
-            getLanguageButtonsBySide(side).clear();
-            // Since we are not able to change the keys easily
-            // We are going to store buttons in temporary variable[so we may not add them again to the Layout]
-            // And re-add them into the list with new keys.
-            for (int c = 0; c < _languages_.length; c++) {
-                var button = temporary.get(temporary.keySet().toArray()[c]);
-                button.setText(_languages_[c]);
-                getLanguageButtonsBySide(side).put(_languages_[c], button);
+            assert getLanguageButtonsBySide(side).size() == _languages_.size() : "EC:001-> getLanguageButtonsBySide(side).size() != _languages_.size()";
+
+            // Assign values
+            for(int c = 0; c < _languages_.size(); c++){
+                getLanguageButtonsBySide(side).get(c).setText(_languages_.get(c));
             }
         }
         // Finally, whether it's recently added or not, select the button
@@ -164,22 +151,34 @@ public final class GUICore {
         try {
             UIManager.setLookAndFeel(new FlatDarkLaf());
         } catch (UnsupportedLookAndFeelException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
 
         // Init UI Elements
+        JPanel mainPanel;
         {
             mainFrame = new JFrame();
             mainPanel = new JPanel();
         }
 
         // Translate From Initialization
+        // INFO: Translate Section
+        JPanel translateFromPreferencePanel;
+        GridLayout translateFromPreferencePanelGL;
+        JPanel translateFromUserLanguagesPanel;
+        JDropdownButton translateFromLanguageDropdown;
+        // INFO: TranslateTo Section
+        JPanel translateToPreferencePanel;
+        GridLayout translateToPreferencePanelGL;
+        JPanel translateToUserLanguagesPanel;
+        JDropdownButton translateToLanguageDropdown;
         {
             translateFromPreferencePanel = new JPanel();
             translateFromUserLanguagesPanel = new JPanel();//--------
             translateFromPreferencePanelGL = new GridLayout(1, 3);
-            translateFromUserLanguages = new LinkedHashMap<>();
-            translateFromLanguageDropdown = new JComboBox();
+            translateFromUserLanguages = new ArrayList<>();
+            translateFromLanguageDropdown = new JDropdownButton("", new FlatDescendingSortIcon(),
+                    new ArrayList<>(TranslationCore.getInstance().getAvailableLanguages().keySet()));
             swapLanguages = new JButton("Swap");
             swapLanguages.setIcon(new FlatMenuArrowIcon());
             translateFromField = new JTextArea();
@@ -188,8 +187,9 @@ public final class GUICore {
             translateToPreferencePanel = new JPanel();
             translateToUserLanguagesPanel = new JPanel();//--------
             translateToPreferencePanelGL = new GridLayout(1, 3);
-            translateToUserLanguages = new LinkedHashMap<>();
-            translateToLanguageDropdown = new JComboBox();
+            translateToUserLanguages = new ArrayList<>();
+            translateToLanguageDropdown = new JDropdownButton("", new FlatDescendingSortIcon(),
+                    new ArrayList<>(TranslationCore.getInstance().getAvailableLanguages().keySet()));
             translateToField = new JTextArea("");
         }
 
@@ -200,35 +200,24 @@ public final class GUICore {
         // TranslateFromPreferencePanel Handling
         {
             translateFromUserLanguagesPanel.setLayout(translateFromPreferencePanelGL);
-            for (var i : translateFromUserLanguages.entrySet())// add checkboxes to the panel
-                translateFromUserLanguagesPanel.add(i.getValue());
+            for (var i : translateFromUserLanguages)// add buttons to the panel
+                translateFromUserLanguagesPanel.add(i);
 
             // TranslateFromPreferencePanel Handling
             translateFromPreferencePanel.add(translateFromUserLanguagesPanel);
-            translateFromPreferencePanel.add(translateFromLanguageDropdown);
             translateFromPreferencePanel.add(swapLanguages);
+            translateFromPreferencePanel.add(translateFromLanguageDropdown);
         }
 
         // TranslateFromPreferencePanel Handling
         {
             translateToUserLanguagesPanel.setLayout(translateToPreferencePanelGL);
-            for (var i : translateToUserLanguages.entrySet())// add checkboxes to the panel
-                translateToUserLanguagesPanel.add(i.getValue());
+            for (var i : translateToUserLanguages)// add buttons to the panel
+                translateToUserLanguagesPanel.add(i);
 
             // TranslateFromPreferencePanel Handling
             translateToPreferencePanel.add(translateToUserLanguagesPanel);
             translateToPreferencePanel.add(translateToLanguageDropdown);
-        }
-
-        // TODO: Get languages by Google if there's any internet connection.(Keep the existing database though!)
-        LoadSupportedLanguages();// We have a small database that contains a Language map.
-
-        // TranslateOptions Handle
-        {
-            // TODO: Remove this functionality.
-            //  Since we've switched up google like 4 button system to choose language to translate.
-            translateFromLanguageDropdown.setSelectedItem("English");// TO-DO: Load previously selected values
-            translateToLanguageDropdown.setSelectedItem("Turkish");// TO-DO: Load previously selected values
         }
 
         // Handle Translate Field Configuration
@@ -255,7 +244,7 @@ public final class GUICore {
             mainPanel.add(translateFromPreferencePanel, gridBagConstraints);
             gridBagConstraints.gridx = 1;
             mainPanel.add(translateToPreferencePanel, gridBagConstraints);
-            gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.weightx = 0.0;
             gridBagConstraints.ipady = 100;
             gridBagConstraints.gridx = 0;
@@ -302,41 +291,26 @@ public final class GUICore {
     }
     // info: ------------------------------------
 
-    private void LoadSupportedLanguages() {
-        for (var i : TranslationCore.getInstance().getAvailableLanguages().entrySet()) {
-            translateFromLanguageDropdown.addItem(i.getKey());
-            translateToLanguageDropdown.addItem(i.getKey());
-        }
-    }
-
     private void AddListeners() {
         // On TranslateField Change
         translateFromField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
+                translatorThread = new Thread(() -> {
+                    try {
 
-                translatorThread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            //translatorThread.wait(500);
+                        final String from = getSelectedLanguage(TranslationSides.TS_LEFT);
+                        final String to = getSelectedLanguage(TranslationSides.TS_RIGHT);
 
-                            //final String from = translateFromLanguageDropdown.getItemAt(translateFromLanguageDropdown.getSelectedIndex()).toString();
-                            //final String to = translateToLanguageDropdown.getItemAt(translateToLanguageDropdown.getSelectedIndex()).toString();
+                        System.out.println(from);
+                        System.out.println(to);
 
-                            final String from = getSelectedLanguage(TranslationSides.TS_LEFT);
-                            final String to = getSelectedLanguage(TranslationSides.TS_RIGHT);
+                        final String translatedText =
+                                TranslationCore.getInstance().translate(TranslationCore.getInstance().getLanguageCodeByName(from), TranslationCore.getInstance().getLanguageCodeByName(to), translateFromField.getText());
 
-                            System.out.println(from);
-                            System.out.println(to);
-
-                            final String translatedText =
-                                    TranslationCore.getInstance().translate(TranslationCore.getInstance().getLanguageCodeByName(from), TranslationCore.getInstance().getLanguageCodeByName(to), translateFromField.getText());
-
-                            translateToField.setText(translatedText);
-                        } catch (IOException exc) {
-                            System.out.println(exc);
-                        }
+                        translateToField.setText(translatedText);
+                    } catch (IOException exc) {
+                        exc.printStackTrace();
                     }
                 });
                 translatorThread.start();
@@ -352,38 +326,22 @@ public final class GUICore {
         });
 
         // On any translateFromUserLanguages button pressed
-        for (Map.Entry<String, JToggleButton> currentEntry : translateFromUserLanguages.entrySet()) {
-            currentEntry.getValue().addActionListener(e->{
-                setSelectedLanguage(currentEntry.getKey(),TranslationSides.TS_LEFT);
-            });
+        for (var currentEntry : translateFromUserLanguages) {
+            currentEntry.addActionListener(e -> RequestToSelectLanguage(currentEntry.getText(), TranslationSides.TS_LEFT));
         }
 
         //translateToUserLanguages
-        for (Map.Entry<String, JToggleButton> currentEntry : translateToUserLanguages.entrySet()) {
-            currentEntry.getValue().addActionListener(e->{
-                setSelectedLanguage(currentEntry.getKey(), TranslationSides.TS_RIGHT);
-            });
+        for (var currentEntry : translateToUserLanguages) {
+            currentEntry.addActionListener(e ->RequestToSelectLanguage(currentEntry.getText(), TranslationSides.TS_RIGHT));
         }
 
         // Swap button listener
-        swapLanguages.addActionListener(e->{
-            var leftSideButton = translateFromUserLanguages.get(getSelectedLanguage(TranslationSides.TS_LEFT));
-            var rightSideButton = translateToUserLanguages.get(getSelectedLanguage(TranslationSides.TS_RIGHT));
-            final String leftSideText = leftSideButton.getText();
-            final String rightSideText = rightSideButton.getText();
-            leftSideButton.setText(rightSideText);
-            rightSideButton.setText(leftSideText);
+        swapLanguages.addActionListener(e -> {
+            final String leftSideText = getSelectedLanguageButton(TranslationSides.TS_LEFT).getText();
+            final String rightSideText = getSelectedLanguageButton(TranslationSides.TS_RIGHT).getText();
+            getSelectedLanguageButton(TranslationSides.TS_LEFT).setText(rightSideText);
+            getSelectedLanguageButton(TranslationSides.TS_RIGHT).setText(leftSideText);
 
-            final Map<String,JToggleButton> temporary1 = translateFromUserLanguages;
-            final Map<String,JToggleButton> temporary2 = translateToUserLanguages;
-            translateFromUserLanguages.clear();
-            translateToUserLanguages.clear();
-            for(Map.Entry<String,JToggleButton> temp : temporary1.entrySet()){
-                translateFromUserLanguages.put(temp.getValue().getText().toString(),temp.getValue());
-            }
-            for(Map.Entry<String,JToggleButton> temp1 : temporary2.entrySet()){
-                translateToUserLanguages.put(temp1.getValue().getText().toString(),temp1.getValue());
-            }
             //-----------------------
             final String rightSideTranslation = translateToField.getText();
             translateFromField.setText(rightSideTranslation);
@@ -397,15 +355,40 @@ public final class GUICore {
     }
 
     // Nested Classes
-    private final class JTextFieldLimit extends PlainDocument {
+    private static final class JDropdownButton extends JButton {
+
+        List<JMenuItem> menuItems = new ArrayList<>();
+        List<String> items;
+        JPopupMenu popupMenu = null;
+
+        public JDropdownButton(String label, Icon icon, List<String> items) {
+            super(label, icon);
+
+            this.items = items;
+
+            super.addActionListener(e -> onPopup() );
+        }
+
+        private void onPopup() {
+            popupMenu = new JPopupMenu();
+
+            items.clear();
+
+            for (var i : items) {
+                menuItems.add(new JMenuItem(i));
+            }
+            for (var i : menuItems)
+                popupMenu.add(i);
+
+            popupMenu.setVisible(true);
+
+        }
+    }
+
+    private static final class JTextFieldLimit extends PlainDocument {
         private final int limit;
 
         JTextFieldLimit(int limit) {
-            super();
-            this.limit = limit;
-        }
-
-        JTextFieldLimit(int limit, boolean upper) {
             super();
             this.limit = limit;
         }

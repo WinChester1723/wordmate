@@ -3,7 +3,7 @@ package main.java;
 
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
-import main.java.gui.GUICore;
+import gui.core.GUICore;
 import main.java.io.keyboard.InputCore;
 
 import javax.swing.text.BadLocationException;

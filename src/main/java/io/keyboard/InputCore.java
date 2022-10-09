@@ -3,7 +3,7 @@ package main.java.io.keyboard;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import com.sun.jna.platform.win32.User32;
-import main.java.gui.GUICore;
+import gui.core.GUICore;
 import main.java.gui.frames.MiniQuick;
 import main.java.utils.ClipboardManager;
 
