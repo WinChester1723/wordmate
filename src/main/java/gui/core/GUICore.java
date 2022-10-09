@@ -14,7 +14,6 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -29,6 +28,8 @@ public final class GUICore {
     final static short translateFieldMaxLength = 500;
     private static GUICore single_instance = null;
     JProgressBar mainProgressBar = null;
+    JDropdownButton translateFromLanguageDropdown;
+    JDropdownButton translateToLanguageDropdown;
     // info: ------------------------------------
     // Main GUI Elements
     private JFrame mainFrame = null;
@@ -53,21 +54,18 @@ public final class GUICore {
     }
 
     private void HandleProgressBar(boolean show, double seconds) {
-        if (mainProgressBar == null)
-            mainProgressBar = new JProgressBar();
+        if (mainProgressBar == null) mainProgressBar = new JProgressBar();
 
         final long pastTime = System.currentTimeMillis();
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                while (System.currentTimeMillis() < (pastTime + (seconds * 1000))) { //multiply by 1000 to get milliseconds
-                    final double passed = System.currentTimeMillis() - pastTime;
-                    final int percentage = (int) ((passed / (seconds * 1000)) * 100);
-                    mainProgressBar.setValue(percentage);
-                    //below code to update progress bar while running on thread
-                    mainProgressBar.update(mainProgressBar.getGraphics());
-                }
-                HandleProgressBar(false, 0);
+        SwingUtilities.invokeLater(() -> {
+            while (System.currentTimeMillis() < (pastTime + (seconds * 1000))) { //multiply by 1000 to get milliseconds
+                final double passed = System.currentTimeMillis() - pastTime;
+                final int percentage = (int) ((passed / (seconds * 1000)) * 100);
+                mainProgressBar.setValue(percentage);
+                //below code to update progress bar while running on thread
+                mainProgressBar.update(mainProgressBar.getGraphics());
             }
+            HandleProgressBar(false, 0);
         });
 
         if (show) {
@@ -100,11 +98,13 @@ public final class GUICore {
             translateFromUserLanguages.add(new JToggleButton("English"));
             translateFromUserLanguages.add(new JToggleButton("Russian"));
             translateFromUserLanguages.add(new JToggleButton("French"));//-------
-            setSelectedLanguage("English", TranslationSides.TS_LEFT);
             // right side
             translateToUserLanguages.add(new JToggleButton("Turkish"));
             translateToUserLanguages.add(new JToggleButton("Spanish"));
             translateToUserLanguages.add(new JToggleButton("Japanese"));//-------
+
+            // Set Selected Languages
+            setSelectedLanguage("English", TranslationSides.TS_LEFT);
             setSelectedLanguage("Turkish", TranslationSides.TS_RIGHT);
         }
 
@@ -131,7 +131,15 @@ public final class GUICore {
         // TODO: IDK WHETHER RETURNING THE BUTTON'S TEXT IS THE RIGHT WAY
         //  BECAUSE BUTTON'S TEXT CANNOT REPRESENT LANGUAGE NAME ALWAYS.
         //  BUT IT WORKS FOR NOW, SO I KEEP IT
-        return null;
+        return "";
+    }
+
+    private int getSelectedLanguageIndex(TranslationSides side) {
+        for (int c = 0; c < getLanguageButtonsBySide(side).size(); c++) {
+            var i = getLanguageButtonsBySide(side).get(c);
+            if (i.isSelected()) return c;
+        }
+        return -1;
     }
 
     // Returns the selected language button's instance; Returns null it could not find any selected button
@@ -141,11 +149,29 @@ public final class GUICore {
         return null;
     }
 
+    private void selectNextLanguage(TranslationSides side) {
+        int currentSelectedIndex = getSelectedLanguageIndex(side)+1;
+
+        if(currentSelectedIndex >= getExistingLanguages(side).size())
+            currentSelectedIndex = 0;
+
+        setSelectedLanguage(getExistingLanguages(side).get(currentSelectedIndex),side);
+    }
+
+    // Returns the opposite side of the given side -> EX: RIGHT for LEFT, LEFT for RIGHT
+    private TranslationSides getOppositeSide(TranslationSides side){
+        return side.equals(TranslationSides.TS_LEFT) ? TranslationSides.TS_RIGHT : TranslationSides.TS_LEFT;
+    }
+
     // Attempts to select the given language.
     private void setSelectedLanguage(String lang, TranslationSides side) {
-        // This will be called only once(if there's no bugs)
-        for (var i : getLanguageButtonsBySide(side))
-            i.setSelected(i.getText().equals(lang));
+            // This will be called only once(if there's no bugs)
+            for (var i : getLanguageButtonsBySide(side))
+                i.setSelected(i.getText().equals(lang));
+
+                // be sure that we don't try to translate to same language
+        if (getSelectedLanguage(getOppositeSide(side)).equals(lang))
+            selectNextLanguage(getOppositeSide(side));
 
         UpdateTranslateFromField();// Update translation in any case
     }
@@ -163,7 +189,7 @@ public final class GUICore {
             // We can push the first and remove the last -> FR, EN, RU
             List<String> _languages_ = getExistingLanguages(side);
             _languages_.add(0, lang);
-            _languages_.remove((_languages_.size() - 1) < 0 ? 0 : _languages_.size() - 1);
+            _languages_.remove((_languages_.size() - 1) <= 0 ? 0 : _languages_.size() - 1);
             //---------------------------------------------------------
 
             assert getLanguageButtonsBySide(side).size() == _languages_.size() : "EC:001-> getLanguageButtonsBySide(side).size() != _languages_.size()";
@@ -204,20 +230,17 @@ public final class GUICore {
         JPanel translateFromPreferencePanel;
         GridLayout translateFromPreferencePanelGL;
         JPanel translateFromUserLanguagesPanel;
-        JDropdownButton translateFromLanguageDropdown;
         // INFO: TranslateTo Section
         JPanel translateToPreferencePanel;
         GridLayout translateToPreferencePanelGL;
         JPanel translateToUserLanguagesPanel;
-        JDropdownButton translateToLanguageDropdown;
         {
             mainPanel = new JPanel();
             translateFromPreferencePanel = new JPanel();
             translateFromUserLanguagesPanel = new JPanel();//--------
             translateFromPreferencePanelGL = new GridLayout(1, 3);
             translateFromUserLanguages = new ArrayList<>();
-            translateFromLanguageDropdown = new JDropdownButton("Add", new FlatDescendingSortIcon(),
-                    new ArrayList<>(TranslationCore.getInstance().getAvailableLanguages().keySet()));
+            translateFromLanguageDropdown = new JDropdownButton("Add", new FlatDescendingSortIcon(), new ArrayList<>(TranslationCore.getInstance().getAvailableLanguages().keySet()));
             swapLanguages = new JButton("Swap");
             swapLanguages.setIcon(new FlatMenuArrowIcon());
             translateFromField = new JTextArea();
@@ -227,8 +250,7 @@ public final class GUICore {
             translateToUserLanguagesPanel = new JPanel();//--------
             translateToPreferencePanelGL = new GridLayout(1, 3);
             translateToUserLanguages = new ArrayList<>();
-            translateToLanguageDropdown = new JDropdownButton("Add", new FlatDescendingSortIcon(),
-                    new ArrayList<>(TranslationCore.getInstance().getAvailableLanguages().keySet()));
+            translateToLanguageDropdown = new JDropdownButton("Add", new FlatDescendingSortIcon(), new ArrayList<>(TranslationCore.getInstance().getAvailableLanguages().keySet()));
             translateToField = new JTextArea("");
         }
 
@@ -244,8 +266,8 @@ public final class GUICore {
 
             // TranslateFromPreferencePanel Handling
             translateFromPreferencePanel.add(translateFromUserLanguagesPanel);
-            translateFromPreferencePanel.add(swapLanguages);
             translateFromPreferencePanel.add(translateFromLanguageDropdown);
+            translateFromPreferencePanel.add(swapLanguages);
         }
 
         // TranslateFromPreferencePanel Handling
@@ -270,7 +292,7 @@ public final class GUICore {
             translateToField.setEditable(false);
         }
 
-        AddListeners();// Add listeners for the controls that exist in this function
+        AddEventListeners();// Add listeners for the controls that exist in this function
 
         // Final touches
         {
@@ -307,10 +329,10 @@ public final class GUICore {
         AddTrayIcon();
     }
 
-    private void SetIcon(){
+    private void SetIcon() {
         File file = new File(Constants.APP_ICON_PATH);
 
-        if(!(new File(Constants.APP_TRAY_ICON_PATH).exists())){
+        if (!(new File(Constants.APP_TRAY_ICON_PATH).exists())) {
             JOptionPane.showMessageDialog(mainFrame, "App icon could not be found!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -320,7 +342,7 @@ public final class GUICore {
             getMainFrame().setIconImage(bImage);
 
             //set icon on system tray, as in Mac OS X system
-            if(System.getProperty("os.name").contains("Mac")){
+            if (System.getProperty("os.name").contains("Mac")) {
                 final Taskbar taskbar = Taskbar.getTaskbar();
                 taskbar.setIconImage(bImage);// - OrkhanGG TODO: test it on Mac
             }
@@ -329,14 +351,14 @@ public final class GUICore {
         }
     }
 
-    private void AddTrayIcon(){
+    private void AddTrayIcon() {
         if (!SystemTray.isSupported()) {
             System.out.println("SystemTray is not supported");
             return;
         }
 
-        if(!(new File(Constants.APP_TRAY_ICON_PATH).exists())){
-          JOptionPane.showMessageDialog(mainFrame, "App Tray icon could not be found!", "Error", JOptionPane.ERROR_MESSAGE);
+        if (!(new File(Constants.APP_TRAY_ICON_PATH).exists())) {
+            JOptionPane.showMessageDialog(mainFrame, "App Tray icon could not be found!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -346,11 +368,7 @@ public final class GUICore {
         final SystemTray tray = SystemTray.getSystemTray();
 
         MenuItem exitItem = new MenuItem("Exit");
-        exitItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.exit(1);
-            }
-        });
+        exitItem.addActionListener(e -> System.exit(1));
         popup.add(exitItem);
 
         trayIcon.setPopupMenu(popup);
@@ -364,30 +382,26 @@ public final class GUICore {
 
     // info: ------------------------------------
 
-    private void AddListeners() {
+    private void AddEventListeners() {
 
         // On TranslateField Change(When user stops typing)
-        DeferredDocumentListener listener = new DeferredDocumentListener(500, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                translatorThread = new Thread(() -> {
-                    try {
-                        final String from = getSelectedLanguage(TranslationSides.TS_LEFT);
-                        final String to = getSelectedLanguage(TranslationSides.TS_RIGHT);
+        DeferredDocumentListener listener = new DeferredDocumentListener(500, e -> {
+            translatorThread = new Thread(() -> {
+                try {
+                    final String from = getSelectedLanguage(TranslationSides.TS_LEFT);
+                    final String to = getSelectedLanguage(TranslationSides.TS_RIGHT);
 
-                        final String translatedText =
-                                TranslationCore.getInstance().translate(TranslationCore.getInstance().getLanguageCodeByName(from), TranslationCore.getInstance().getLanguageCodeByName(to), translateFromField.getText());
+                    final String translatedText = TranslationCore.getInstance().translate(TranslationCore.getInstance().getLanguageCodeByName(from), TranslationCore.getInstance().getLanguageCodeByName(to), translateFromField.getText());
 
-                        translateToField.setText(translatedText);
-                    } catch (IOException exc) {
-                        exc.printStackTrace();
-                    }
-                });
-                translatorThread.start();
+                    translateToField.setText(translatedText);
+                } catch (IOException exc) {
+                    exc.printStackTrace();
+                }
+            });
+            translatorThread.start();
 
-                // Update mainFrame size
-                getMainFrame().pack();
-            }
+            // Update mainFrame size
+            getMainFrame().pack();
         }, true);
         translateFromField.getDocument().addDocumentListener(listener);
         translateFromField.addFocusListener(new FocusListener() {
@@ -424,43 +438,21 @@ public final class GUICore {
             translateFromField.setText(rightSideTranslation);
         });
 
-
+        // Dropdown events
+        if (translateFromLanguageDropdown.getMenuItems().size() > 0 && translateToLanguageDropdown.getMenuItems().size() > 0) {
+            for (var i : translateFromLanguageDropdown.getMenuItems()) {
+                i.addActionListener(e -> RequestToSelectLanguage(i.getText(), TranslationSides.TS_LEFT));
+            }
+            for (var i : translateToLanguageDropdown.getMenuItems()) {
+                i.addActionListener(e -> RequestToSelectLanguage(i.getText(), TranslationSides.TS_RIGHT));
+            }
+        } else {
+            JOptionPane.showMessageDialog(mainFrame, "Either translate-From/To LanguageDropdown button's menu items don't exist! ", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     enum TranslationSides {
         TS_LEFT, TS_RIGHT
-    }
-
-    // Nested Classes
-    private final class JDropdownButton extends JButton {
-
-        List<JMenuItem> menuItems;
-        List<String> items;
-        JPopupMenu popupMenu = null;
-
-        public JDropdownButton(String label, Icon icon, List<String> items) {
-
-            super(label, icon);
-
-            this.items = items;
-
-            menuItems = new ArrayList<>();
-
-            super.addActionListener(e ->
-            {
-                String s = e.getActionCommand();
-                    popupMenu = new JPopupMenu();
-
-                    for (var i : items) {
-                        menuItems.add(new JMenuItem(i));
-                    }
-                    for (var i : menuItems)
-                        popupMenu.add(i);
-
-                    popupMenu.show(this,10,10);
-            });
-        }
-
     }
 
     private static final class JTextFieldLimit extends PlainDocument {
@@ -478,6 +470,36 @@ public final class GUICore {
                 super.insertString(offset, str, attr);
             }
         }
+    }
+
+    // Nested Classes
+    private final class JDropdownButton extends JButton {
+        private final List<JMenuItem> menuItems;
+        private JPopupMenu popupMenu = null;
+
+        public JDropdownButton(String label, Icon icon, List<String> items) {
+
+            super(label, icon);
+
+            menuItems = new ArrayList<>();
+            for (var i : items) {
+                menuItems.add(new JMenuItem(i));
+            }
+
+            super.addActionListener(e -> {
+                popupMenu = new JPopupMenu();
+
+                for (var i : menuItems)
+                    popupMenu.add(i);
+
+                popupMenu.show(this, 10, 10);
+            });
+        }
+
+        public List<JMenuItem> getMenuItems() {
+            return menuItems;
+        }
+
     }
 
     public class DeferredDocumentListener implements DocumentListener {
