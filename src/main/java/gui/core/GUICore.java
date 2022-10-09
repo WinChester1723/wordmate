@@ -224,7 +224,6 @@ public final class GUICore {
             mainFrame = new JFrame(Constants.APP_NAME);
             translatorPanel = new JPanel();
         }
-
         // Translate From Initialization
         // INFO: Translate Section
         JPanel translateFromPreferencePanel;
