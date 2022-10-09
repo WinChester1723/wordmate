@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a" name="Changes" comment="Up to 50 error fixes. &#10;Changed ToggleButton Map to List and added temporal but powerful solutions. Known bugs: 1. translateField layout gets expanded automatically while typing text. 2. Add language dropdown button exists but does not work.">
-      <change afterPath="$PROJECT_DIR$/app_icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/Constants.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/resources/static/app_tray_icon.png" afterDir="false" />
+    <list default="true" id="c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a" name="Changes" comment="Added App icons and their functionality. Testing on Mac &amp; Linux has not been done yet.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/gui/core/GUICore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/core/GUICore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/static/app_icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/static/app_icon.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +91,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665286176588</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Added App icons and their functionality. Testing on Mac &amp; Linux has not been done yet.">
+      <created>1665301311676</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1665301311676</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -113,7 +116,8 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Added necessary libraries. Additionally, project management is adjusted." />
     <MESSAGE value="Up to 50 error fixes. &#10;Changed ToggleButton Map to List and added temporal but powerful solutions. Known bugs: 1. translateField layout gets expanded automatically while typing text. 2. Add language dropdown button exists but does not work." />
-    <option name="LAST_COMMIT_MESSAGE" value="Up to 50 error fixes. &#10;Changed ToggleButton Map to List and added temporal but powerful solutions. Known bugs: 1. translateField layout gets expanded automatically while typing text. 2. Add language dropdown button exists but does not work." />
+    <MESSAGE value="Added App icons and their functionality. Testing on Mac &amp; Linux has not been done yet." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added App icons and their functionality. Testing on Mac &amp; Linux has not been done yet." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -127,6 +131,6 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/wordmate$MASTER.ic" NAME="MASTER Coverage Results" MODIFIED="1665281770559" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/wordmate$MASTER.ic" NAME="MASTER Coverage Results" MODIFIED="1665301457343" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

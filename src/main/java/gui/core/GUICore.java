@@ -274,7 +274,7 @@ public final class GUICore {
 
         // Final touches
         {
-            translatorPanel.setLayout(new GridLayout(2, 2));
+            translatorPanel.setLayout(new GridBagLayout());
 
             GridBagConstraints gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -283,7 +283,7 @@ public final class GUICore {
             translatorPanel.add(translateFromPreferencePanel, gridBagConstraints);
             gridBagConstraints.gridx = 1;
             translatorPanel.add(translateToPreferencePanel, gridBagConstraints);
-            gridBagConstraints.fill = GridBagConstraints.BOTH;
+            gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints.weightx = 0.0;
             gridBagConstraints.ipady = 100;
             gridBagConstraints.gridx = 0;
@@ -302,6 +302,7 @@ public final class GUICore {
             mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             mainFrame.setResizable(false);
         }
+
         SetIcon();
         AddTrayIcon();
     }
