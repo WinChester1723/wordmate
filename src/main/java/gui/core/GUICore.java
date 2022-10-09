@@ -4,7 +4,9 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.icons.FlatDescendingSortIcon;
 import com.formdev.flatlaf.icons.FlatMenuArrowIcon;
 import main.java.io.translator.TranslationCore;
+import utils.Constants;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -12,25 +14,31 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.List;
 
 public final class GUICore {
-    // Constants
+    // utils.Constants
     final static short translateFieldMaxLength = 500;
     private static GUICore single_instance = null;
+    JProgressBar mainProgressBar = null;
     // info: ------------------------------------
     // Main GUI Elements
     private JFrame mainFrame = null;
+    private JPanel mainPanel = null;// To store all pages/panels inside a panel (for now)
     private List<JToggleButton> translateFromUserLanguages = null;
     private JButton swapLanguages = null;
     private JTextArea translateFromField = null;
     private List<JToggleButton> translateToUserLanguages = null;
     private JTextArea translateToField = null;
-    // Side-Thread(s) // TODO: Move from this class.
+    // Side-Thread(s)
     private Thread translatorThread = null;
 
     // Public Methods
@@ -44,6 +52,33 @@ public final class GUICore {
         return mainFrame;
     }
 
+    private void HandleProgressBar(boolean show, double seconds) {
+        if (mainProgressBar == null)
+            mainProgressBar = new JProgressBar();
+
+        final long pastTime = System.currentTimeMillis();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                while (System.currentTimeMillis() < (pastTime + (seconds * 1000))) { //multiply by 1000 to get milliseconds
+                    final double passed = System.currentTimeMillis() - pastTime;
+                    final int percentage = (int) ((passed / (seconds * 1000)) * 100);
+                    mainProgressBar.setValue(percentage);
+                    //below code to update progress bar while running on thread
+                    mainProgressBar.update(mainProgressBar.getGraphics());
+                }
+                HandleProgressBar(false, 0);
+            }
+        });
+
+        if (show) {
+            mainPanel.add(mainProgressBar);
+        } else {
+            mainPanel.remove(mainProgressBar);
+        }
+
+        getMainFrame().pack();
+    }
+
     // INFO: RequestTranslate will do some pre-checks and set the translation area text if everything's okay.
     //  As the translation area text has a listener, it'll do translation job itself, we don't need to call anything else.
     public void UpdateTranslateFromField(String textToTranslate) {
@@ -52,6 +87,10 @@ public final class GUICore {
             return;
         }
         translateFromField.setText(textToTranslate);
+    }
+
+    public void UpdateTranslateFromField() {
+        UpdateTranslateFromField(translateFromField.getText());
     }
 
     private void loadLanguagesButtons() {
@@ -74,8 +113,7 @@ public final class GUICore {
 
     private List<String> getExistingLanguages(TranslationSides side) {
         List<String> out = new ArrayList<>();
-        for (var i : getLanguageButtonsBySide(side))
-        {
+        for (var i : getLanguageButtonsBySide(side)) {
             out.add(i.getText());
         }
         return out;
@@ -105,11 +143,11 @@ public final class GUICore {
 
     // Attempts to select the given language.
     private void setSelectedLanguage(String lang, TranslationSides side) {
+        // This will be called only once(if there's no bugs)
         for (var i : getLanguageButtonsBySide(side))
-            if(!i.getText().equals(lang))
-                i.setSelected(false);
-            else
-                i.setSelected(true);// This will be called only once(if there's no bugs)
+            i.setSelected(i.getText().equals(lang));
+
+        UpdateTranslateFromField();// Update translation in any case
     }
 
     private boolean containsLanguage(String lang, TranslationSides side) {
@@ -124,14 +162,14 @@ public final class GUICore {
             // Since we always will have 3 languages -> EN, RU, AZ
             // We can push the first and remove the last -> FR, EN, RU
             List<String> _languages_ = getExistingLanguages(side);
-            _languages_.add(0,lang);
-            _languages_.remove((_languages_.size()-1) < 0 ? 0 : _languages_.size()-1);
+            _languages_.add(0, lang);
+            _languages_.remove((_languages_.size() - 1) < 0 ? 0 : _languages_.size() - 1);
             //---------------------------------------------------------
 
             assert getLanguageButtonsBySide(side).size() == _languages_.size() : "EC:001-> getLanguageButtonsBySide(side).size() != _languages_.size()";
 
             // Assign values
-            for(int c = 0; c < _languages_.size(); c++){
+            for (int c = 0; c < _languages_.size(); c++) {
                 getLanguageButtonsBySide(side).get(c).setText(_languages_.get(c));
             }
         }
@@ -155,10 +193,10 @@ public final class GUICore {
         }
 
         // Init UI Elements
-        JPanel mainPanel;
+        JPanel translatorPanel;
         {
-            mainFrame = new JFrame();
-            mainPanel = new JPanel();
+            mainFrame = new JFrame(Constants.APP_NAME);
+            translatorPanel = new JPanel();
         }
 
         // Translate From Initialization
@@ -173,11 +211,12 @@ public final class GUICore {
         JPanel translateToUserLanguagesPanel;
         JDropdownButton translateToLanguageDropdown;
         {
+            mainPanel = new JPanel();
             translateFromPreferencePanel = new JPanel();
             translateFromUserLanguagesPanel = new JPanel();//--------
             translateFromPreferencePanelGL = new GridLayout(1, 3);
             translateFromUserLanguages = new ArrayList<>();
-            translateFromLanguageDropdown = new JDropdownButton("", new FlatDescendingSortIcon(),
+            translateFromLanguageDropdown = new JDropdownButton("Add", new FlatDescendingSortIcon(),
                     new ArrayList<>(TranslationCore.getInstance().getAvailableLanguages().keySet()));
             swapLanguages = new JButton("Swap");
             swapLanguages.setIcon(new FlatMenuArrowIcon());
@@ -188,7 +227,7 @@ public final class GUICore {
             translateToUserLanguagesPanel = new JPanel();//--------
             translateToPreferencePanelGL = new GridLayout(1, 3);
             translateToUserLanguages = new ArrayList<>();
-            translateToLanguageDropdown = new JDropdownButton("", new FlatDescendingSortIcon(),
+            translateToLanguageDropdown = new JDropdownButton("Add", new FlatDescendingSortIcon(),
                     new ArrayList<>(TranslationCore.getInstance().getAvailableLanguages().keySet()));
             translateToField = new JTextArea("");
         }
@@ -235,25 +274,27 @@ public final class GUICore {
 
         // Final touches
         {
-            mainPanel.setLayout(new GridBagLayout());
+            translatorPanel.setLayout(new GridLayout(2, 2));
 
             GridBagConstraints gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 0;
-            mainPanel.add(translateFromPreferencePanel, gridBagConstraints);
+            translatorPanel.add(translateFromPreferencePanel, gridBagConstraints);
             gridBagConstraints.gridx = 1;
-            mainPanel.add(translateToPreferencePanel, gridBagConstraints);
+            translatorPanel.add(translateToPreferencePanel, gridBagConstraints);
             gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.weightx = 0.0;
             gridBagConstraints.ipady = 100;
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 1;
-            mainPanel.add(translateFromField, gridBagConstraints);
+            translatorPanel.add(translateFromField, gridBagConstraints);
             gridBagConstraints.gridx = 1;
-            mainPanel.add(translateToField, gridBagConstraints);
+            translatorPanel.add(translateToField, gridBagConstraints);
 
-            mainFrame.setLayout(new GridLayout(1, 1));
+            mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+            mainPanel.add(translatorPanel);
+
             mainFrame.add(mainPanel);
             mainFrame.setAlwaysOnTop(false);
             mainFrame.pack();
@@ -261,49 +302,77 @@ public final class GUICore {
             mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             mainFrame.setResizable(false);
         }
-
-        // TODO: Add tray functionality
-//        if (!SystemTray.isSupported()) {
-//            System.out.println("SystemTray is not supported");
-//            return;
-//        }
-//        Image image = Toolkit.getDefaultToolkit().getImage("MY/PATH/TO_IMAGE");
-//
-//        final PopupMenu popup = new PopupMenu();
-//        final TrayIcon trayIcon = new TrayIcon(image, "MY PROGRAM NAME", popup);
-//        final SystemTray tray = SystemTray.getSystemTray();
-//
-//        MenuItem exitItem = new MenuItem("Exit");
-//        exitItem.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent e) {
-//                System.exit(1);
-//            }
-//        });
-//        popup.add(exitItem);
-//
-//        trayIcon.setPopupMenu(popup);
-//
-//        try {
-//            tray.add(trayIcon);
-//        } catch (AWTException e) {
-//            System.out.println("TrayIcon could not be added.");
-//        }
+        SetIcon();
+        AddTrayIcon();
     }
+
+    private void SetIcon(){
+        File file = new File(Constants.APP_ICON_PATH);
+
+        if(!(new File(Constants.APP_TRAY_ICON_PATH).exists())){
+            JOptionPane.showMessageDialog(mainFrame, "App icon could not be found!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            BufferedImage bImage = ImageIO.read(file);
+            getMainFrame().setIconImage(bImage);
+
+            //set icon on system tray, as in Mac OS X system
+            if(System.getProperty("os.name").contains("Mac")){
+                final Taskbar taskbar = Taskbar.getTaskbar();
+                taskbar.setIconImage(bImage);// - OrkhanGG TODO: test it on Mac
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void AddTrayIcon(){
+        if (!SystemTray.isSupported()) {
+            System.out.println("SystemTray is not supported");
+            return;
+        }
+
+        if(!(new File(Constants.APP_TRAY_ICON_PATH).exists())){
+          JOptionPane.showMessageDialog(mainFrame, "App Tray icon could not be found!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Image image = Toolkit.getDefaultToolkit().getImage(Constants.APP_TRAY_ICON_PATH);
+        final PopupMenu popup = new PopupMenu();
+        final TrayIcon trayIcon = new TrayIcon(image, Constants.APP_NAME, popup);
+        final SystemTray tray = SystemTray.getSystemTray();
+
+        MenuItem exitItem = new MenuItem("Exit");
+        exitItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(1);
+            }
+        });
+        popup.add(exitItem);
+
+        trayIcon.setPopupMenu(popup);
+
+        try {
+            tray.add(trayIcon);
+        } catch (AWTException e) {
+            System.out.println("TrayIcon could not be added.");
+        }
+    }
+
     // info: ------------------------------------
 
     private void AddListeners() {
-        // On TranslateField Change
-        translateFromField.getDocument().addDocumentListener(new DocumentListener() {
+
+        // On TranslateField Change(When user stops typing)
+        DeferredDocumentListener listener = new DeferredDocumentListener(500, new ActionListener() {
             @Override
-            public void insertUpdate(DocumentEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 translatorThread = new Thread(() -> {
                     try {
-
                         final String from = getSelectedLanguage(TranslationSides.TS_LEFT);
                         final String to = getSelectedLanguage(TranslationSides.TS_RIGHT);
-
-                        System.out.println(from);
-                        System.out.println(to);
 
                         final String translatedText =
                                 TranslationCore.getInstance().translate(TranslationCore.getInstance().getLanguageCodeByName(from), TranslationCore.getInstance().getLanguageCodeByName(to), translateFromField.getText());
@@ -314,14 +383,21 @@ public final class GUICore {
                     }
                 });
                 translatorThread.start();
+
+                // Update mainFrame size
+                getMainFrame().pack();
+            }
+        }, true);
+        translateFromField.getDocument().addDocumentListener(listener);
+        translateFromField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                listener.start();
             }
 
             @Override
-            public void removeUpdate(DocumentEvent e) {
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
+            public void focusLost(FocusEvent e) {
+                listener.stop();
             }
         });
 
@@ -332,7 +408,7 @@ public final class GUICore {
 
         //translateToUserLanguages
         for (var currentEntry : translateToUserLanguages) {
-            currentEntry.addActionListener(e ->RequestToSelectLanguage(currentEntry.getText(), TranslationSides.TS_RIGHT));
+            currentEntry.addActionListener(e -> RequestToSelectLanguage(currentEntry.getText(), TranslationSides.TS_RIGHT));
         }
 
         // Swap button listener
@@ -355,34 +431,35 @@ public final class GUICore {
     }
 
     // Nested Classes
-    private static final class JDropdownButton extends JButton {
+    private final class JDropdownButton extends JButton {
 
-        List<JMenuItem> menuItems = new ArrayList<>();
+        List<JMenuItem> menuItems;
         List<String> items;
         JPopupMenu popupMenu = null;
 
         public JDropdownButton(String label, Icon icon, List<String> items) {
+
             super(label, icon);
 
             this.items = items;
 
-            super.addActionListener(e -> onPopup() );
+            menuItems = new ArrayList<>();
+
+            super.addActionListener(e ->
+            {
+                String s = e.getActionCommand();
+                    popupMenu = new JPopupMenu();
+
+                    for (var i : items) {
+                        menuItems.add(new JMenuItem(i));
+                    }
+                    for (var i : menuItems)
+                        popupMenu.add(i);
+
+                    popupMenu.show(this,10,10);
+            });
         }
 
-        private void onPopup() {
-            popupMenu = new JPopupMenu();
-
-            items.clear();
-
-            for (var i : items) {
-                menuItems.add(new JMenuItem(i));
-            }
-            for (var i : menuItems)
-                popupMenu.add(i);
-
-            popupMenu.setVisible(true);
-
-        }
     }
 
     private static final class JTextFieldLimit extends PlainDocument {
@@ -400,5 +477,39 @@ public final class GUICore {
                 super.insertString(offset, str, attr);
             }
         }
+    }
+
+    public class DeferredDocumentListener implements DocumentListener {
+
+        private final Timer timer;
+
+        public DeferredDocumentListener(int timeOut, ActionListener listener, boolean repeats) {
+            timer = new Timer(timeOut, listener);
+            timer.setRepeats(repeats);
+        }
+
+        public void start() {
+            timer.start();
+        }
+
+        public void stop() {
+            timer.stop();
+        }
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            timer.restart();
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            timer.restart();
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            timer.restart();
+        }
+
     }
 }
