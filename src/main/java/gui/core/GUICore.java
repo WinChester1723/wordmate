@@ -1,9 +1,10 @@
 package gui.core;
 
+import aws.api.TextToSpeechAPI;
 import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.icons.FlatDescendingSortIcon;
-import com.formdev.flatlaf.icons.FlatMenuArrowIcon;
-import main.java.io.translator.TranslationCore;
+import com.formdev.flatlaf.icons.*;
+import aws.api.TranslateAPI;
+import utils.ClipboardManager;
 import utils.Constants;
 
 import javax.imageio.ImageIO;
@@ -24,21 +25,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class GUICore {
-    // utils.Constants
+
+    // GUI Core
+    TrayIcon trayIcon = null;
+    private TextToSpeechAPI textToSpeechAPI = null;
+    // Main GUI Elements
     final static short translateFieldMaxLength = 500;
     private static GUICore single_instance = null;
-    JProgressBar mainProgressBar = null;
-    JDropdownButton translateFromLanguageDropdown;
-    JDropdownButton translateToLanguageDropdown;
-    // info: ------------------------------------
-    // Main GUI Elements
+    private JProgressBar mainProgressBar = null;
+    private JDropdownButton translateFromLanguageDropdown;
+    private JDropdownButton translateToLanguageDropdown;
+
     private JFrame mainFrame = null;
     private JPanel mainPanel = null;// To store all pages/panels inside a panel (for now)
     private List<JToggleButton> translateFromUserLanguages = null;
+    private JButton translateFromReadLoud = null;
+    private JButton translateFromCopyToClipboard = null;
     private JButton swapLanguages = null;
     private JTextArea translateFromField = null;
     private List<JToggleButton> translateToUserLanguages = null;
     private JTextArea translateToField = null;
+    private JButton translateToReadLoud = null;
+    private JButton translateToCopyToClipboard = null;
     // Side-Thread(s)
     private Thread translatorThread = null;
 
@@ -218,6 +226,10 @@ public final class GUICore {
             e.printStackTrace();
         }
 
+        // Init other elements
+        textToSpeechAPI = new TextToSpeechAPI();
+        textToSpeechAPI.Initialize();// TODO: Load recent voice and output format (serialized ones)
+
         // Init UI Elements
         JPanel translatorPanel;
         {
@@ -229,28 +241,35 @@ public final class GUICore {
         JPanel translateFromPreferencePanel;
         GridLayout translateFromPreferencePanelGL;
         JPanel translateFromUserLanguagesPanel;
+        JPanel translateFromAdditionalPanel;
         // INFO: TranslateTo Section
         JPanel translateToPreferencePanel;
         GridLayout translateToPreferencePanelGL;
         JPanel translateToUserLanguagesPanel;
+        JPanel translateToAdditionalPanel;
         {
             mainPanel = new JPanel();
             translateFromPreferencePanel = new JPanel();
             translateFromUserLanguagesPanel = new JPanel();//--------
-            translateFromPreferencePanelGL = new GridLayout(1, 3);
+            translateFromPreferencePanelGL = new GridLayout(1, 3,5,0);
             translateFromUserLanguages = new ArrayList<>();
-            translateFromLanguageDropdown = new JDropdownButton("Add", new FlatDescendingSortIcon(), new ArrayList<>(TranslationCore.getInstance().getAvailableLanguages().keySet()));
+            translateFromLanguageDropdown = new JDropdownButton("Add", new FlatDescendingSortIcon(), new ArrayList<>(TranslateAPI.getInstance().getAvailableLanguages().keySet()));
             swapLanguages = new JButton("Swap");
             swapLanguages.setIcon(new FlatMenuArrowIcon());
             translateFromField = new JTextArea();
-
+            translateFromAdditionalPanel = new JPanel();
+            translateFromReadLoud = new JButton("Play", new FlatMenuArrowIcon());
+            translateFromCopyToClipboard = new JButton("Copy to Clipboard", new FlatFileViewFileIcon());
             //----------
             translateToPreferencePanel = new JPanel();
             translateToUserLanguagesPanel = new JPanel();//--------
-            translateToPreferencePanelGL = new GridLayout(1, 3);
+            translateToPreferencePanelGL = new GridLayout(1, 3,5,0);
             translateToUserLanguages = new ArrayList<>();
-            translateToLanguageDropdown = new JDropdownButton("Add", new FlatDescendingSortIcon(), new ArrayList<>(TranslationCore.getInstance().getAvailableLanguages().keySet()));
+            translateToLanguageDropdown = new JDropdownButton("Add", new FlatDescendingSortIcon(), new ArrayList<>(TranslateAPI.getInstance().getAvailableLanguages().keySet()));
             translateToField = new JTextArea("");
+            translateToAdditionalPanel = new JPanel();
+            translateToReadLoud = new JButton("Play", new FlatMenuArrowIcon());
+            translateToCopyToClipboard = new JButton("Copy to Clipboard", new FlatFileViewFileIcon());
         }
 
         { // Configure Language Buttons
@@ -313,6 +332,22 @@ public final class GUICore {
             gridBagConstraints.gridx = 1;
             translatorPanel.add(translateToField, gridBagConstraints);
 
+            // translateFrom Additional Panel
+            translateFromAdditionalPanel.setLayout(new GridLayout(1,2));
+            translateFromAdditionalPanel.add(translateFromReadLoud);
+            translateFromAdditionalPanel.add(translateFromCopyToClipboard);
+            // translateTo Additional Panel
+            translateToAdditionalPanel.setLayout(new GridLayout(1,2));
+            translateToAdditionalPanel.add(translateToReadLoud);
+            translateToAdditionalPanel.add(translateToCopyToClipboard);
+
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 2;
+            translatorPanel.add(translateFromAdditionalPanel,gridBagConstraints);
+            gridBagConstraints.gridx = 1;
+            translatorPanel.add(translateToAdditionalPanel,gridBagConstraints);
+
             mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
             mainPanel.add(translatorPanel);
 
@@ -363,7 +398,8 @@ public final class GUICore {
 
         Image image = Toolkit.getDefaultToolkit().getImage(Constants.APP_TRAY_ICON_PATH);
         final PopupMenu popup = new PopupMenu();
-        final TrayIcon trayIcon = new TrayIcon(image, Constants.APP_NAME, popup);
+        trayIcon = new TrayIcon(image, Constants.APP_NAME, popup);
+        trayIcon.setImageAutoSize(true);
         final SystemTray tray = SystemTray.getSystemTray();
 
         MenuItem exitItem = new MenuItem("Exit");
@@ -390,7 +426,7 @@ public final class GUICore {
                     final String from = getSelectedLanguage(TranslationSides.TS_LEFT);
                     final String to = getSelectedLanguage(TranslationSides.TS_RIGHT);
 
-                    final String translatedText = TranslationCore.getInstance().translate(TranslationCore.getInstance().getLanguageCodeByName(from), TranslationCore.getInstance().getLanguageCodeByName(to), translateFromField.getText());
+                    final String translatedText = TranslateAPI.getInstance().translate(TranslateAPI.getInstance().getLanguageCodeByName(from), TranslateAPI.getInstance().getLanguageCodeByName(to), translateFromField.getText());
 
                     translateToField.setText(translatedText);
                 } catch (IOException exc) {
@@ -448,6 +484,60 @@ public final class GUICore {
         } else {
             JOptionPane.showMessageDialog(mainFrame, "Either translate-From/To LanguageDropdown button's menu items don't exist! ", "Error", JOptionPane.ERROR_MESSAGE);
         }
+
+        // Text to Speech events
+        // TODO: Depending on TTS support over the languages, these buttons will be enabled/disabled!
+        translateFromReadLoud.addActionListener(e->
+        {
+            textToSpeechAPI.RequestSetStream(translateFromField.getText());
+            textToSpeechAPI.RequestPlayStream();
+        });
+        translateToReadLoud.addActionListener(e-> {
+            textToSpeechAPI.RequestSetStream(translateToField.getText());
+            textToSpeechAPI.RequestPlayStream();
+        });
+
+        // Copy to Clipboard events
+        translateFromCopyToClipboard.addActionListener(e->{
+            try {
+                ClipboardManager.getInstance().setClipboardText(translateFromField.getText());
+                String originalText = translateFromCopyToClipboard.getText();
+                translateFromCopyToClipboard.setText("Copied!");
+                trayIcon.displayMessage(Constants.APP_NAME,"Copied:"+translateFromField.getText(), TrayIcon.MessageType.INFO);
+
+                new java.util.Timer().schedule(
+                        new java.util.TimerTask() {
+                            @Override
+                            public void run() {
+                                translateFromCopyToClipboard.setText(originalText);
+                            }
+                        },
+                        1000
+                );
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        translateToCopyToClipboard.addActionListener(e->{
+            try {
+                ClipboardManager.getInstance().setClipboardText(translateToField.getText());
+                String originalText = translateToCopyToClipboard.getText();
+                translateToCopyToClipboard.setText("Copied!");
+                trayIcon.displayMessage(Constants.APP_NAME,"Copied:"+translateToField.getText(), TrayIcon.MessageType.INFO);
+
+                new java.util.Timer().schedule(
+                        new java.util.TimerTask() {
+                            @Override
+                            public void run() {
+                                translateToCopyToClipboard.setText(originalText);
+                            }
+                        },
+                        1000
+                );
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
     }
 
     enum TranslationSides {

@@ -1,4 +1,4 @@
-package main.java.utils;
+package utils;
 
 import com.sun.jna.Native;
 import com.sun.jna.platform.win32.User32;
@@ -29,11 +29,11 @@ public final class ClipboardManager implements ClipboardOwner {
         customUser32.keybd_event((byte) 0x11 /* VK_CONTROL*/, (byte) 0, 2 /* KEYEVENTF_KEYUP */, 0);// 'Left Control Up
     }
 
-    String getClipboardText() throws Exception {
+    public String getClipboardText() throws Exception {
         return (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
     }
 
-    void setClipboardText(String data) throws Exception {
+    public void setClipboardText(String data) throws Exception {
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(data), this);
     }
 
