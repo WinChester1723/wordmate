@@ -10,24 +10,27 @@ to transmit the selected text to WordMate (You can customize the Home button as 
 WordMate will translate texts into another language in accordance with your translation environment.
 
 # Building
-### Required to download manually
-Since master branch contains library files, you don't need to download any additional SDKs except:
-- IDE (Recommended: IntelliJ IDEA)
+In order to build, you'll of course need an IDE and a Development. We recommend:
+- IntelliJ IDEA
 - OpenJDK 18
 
-### SDKs that will be downloaded automatically
+### SDKs that this project uses:
+- JNativeHook
+- FlatLaf
+- JLayer
+- JNA
 - AWS SDK
 
 # Roadmap
-- Deprecate Google Script requirement
-- Implement AWS
-- Add TTS functionality
++ Deprecate Google Script requirement
++ Implement AWS
++ Add TTS functionality
 - Add STT functionality 
 
 # Known bugs
-- Translation issue while fast-typing
-- UI buttons does not work properly
-- Checkboxes still exist to choose language
++ Translation issue while fast-typing
++ UI buttons does not work properly
++ Checkboxes still exist to choose language
 - Language detection does not work
 
 # Issues
