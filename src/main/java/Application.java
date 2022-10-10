@@ -1,10 +1,9 @@
 // Authors: OrkhanGG, WinChester1723, Deusrazen
-package main.java;
 
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import gui.core.GUICore;
-import main.java.io.keyboard.InputCore;
+import io.InputCore;
 
 import javax.swing.text.BadLocationException;
 import java.io.IOException;
@@ -13,7 +12,6 @@ import java.io.IOException;
 public class Application {
 
     public static void main(String[] args) throws IOException {
-
         // Start GUI
         try {
             GUICore.getInstance().Initialize();
