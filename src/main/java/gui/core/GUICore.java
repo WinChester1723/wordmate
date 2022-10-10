@@ -43,7 +43,7 @@ public final class GUICore {
     private JButton translateFromCopyToClipboard = null;
     private JTextArea translateFromField = null;
     JScrollPane translateFromFieldScrollbar;
-    private JLabel translateFromCharacterCount = null;
+    private JProgressBar translateFromCharacterCount = null;
     private JButton swapLanguages = null;
     private List<JToggleButton> translateToUserLanguages = null;
     private JTextArea translateToField = null;
@@ -264,7 +264,7 @@ public final class GUICore {
             translateFromAdditionalPanel = new JPanel();
             translateFromReadLoud = new JButton("Play", new FlatMenuArrowIcon());
             translateFromCopyToClipboard = new JButton("Copy to Clipboard", new FlatFileViewFileIcon());
-            translateFromCharacterCount = new JLabel(String.format("%d / %d", translateFromField.getText().length(), translateFieldMaxLength));
+            translateFromCharacterCount = new JProgressBar(0,translateFieldMaxLength);
             //----------
             translateToPreferencePanel = new JPanel();
             translateToUserLanguagesPanel = new JPanel();//--------
@@ -317,6 +317,12 @@ public final class GUICore {
             translateToField.setEditable(false);
         }
 
+        // Character count Handling
+        {
+            translateFromCharacterCount.setStringPainted(true);
+            translateFromCharacterCount.setString(String.format("%d / %d", translateFromField.getText().length(), translateFieldMaxLength));
+        }
+
         AddEventListeners();// Add listeners for the controls that exist in this function
 
         // Final touches
@@ -344,7 +350,6 @@ public final class GUICore {
             translateFromAdditionalPanel.setLayout(translateFromAdditionalPanelLayout);
             translateFromAdditionalPanel.add(translateFromReadLoud);
             translateFromAdditionalPanel.add(translateFromCopyToClipboard);
-            translateFromCharacterCount.setHorizontalAlignment(SwingConstants.CENTER);
             translateFromAdditionalPanel.add(translateFromCharacterCount);
             // translateTo Additional Panel
             translateToAdditionalPanel.setLayout(new GridLayout(1,2));
@@ -429,16 +434,21 @@ public final class GUICore {
 
     private void AddEventListeners() {
 
+        translateFromCharacterCount.addChangeListener(e->{
+            translateFromCharacterCount.setString(String.format("%d / %d", translateFromField.getText().length(), translateFieldMaxLength));
+            translateFromCharacterCount.update(translateFromCharacterCount.getGraphics());
+        });
+
         // On TranslateField Change(When user stops typing)
         translateFromField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void removeUpdate(DocumentEvent e) {
-                translateFromCharacterCount.setText(String.format("%d / %d", translateFromField.getText().length(), translateFieldMaxLength));
+                translateFromCharacterCount.setValue(translateFromField.getText().length());
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-                translateFromCharacterCount.setText(String.format("%d / %d", translateFromField.getText().length(), translateFieldMaxLength));
+                translateFromCharacterCount.setValue(translateFromField.getText().length());
             }
 
             @Override
