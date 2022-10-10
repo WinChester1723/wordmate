@@ -30,7 +30,7 @@ public final class GUICore {
     TrayIcon trayIcon = null;
     private TextToSpeechAPI textToSpeechAPI = null;
     // Main GUI Elements
-    final static short translateFieldMaxLength = 500;
+    final static short translateFieldMaxLength = 5000;
     private static GUICore single_instance = null;
     private JProgressBar mainProgressBar = null;
     private JDropdownButton translateFromLanguageDropdown;
@@ -41,10 +41,13 @@ public final class GUICore {
     private List<JToggleButton> translateFromUserLanguages = null;
     private JButton translateFromReadLoud = null;
     private JButton translateFromCopyToClipboard = null;
-    private JButton swapLanguages = null;
     private JTextArea translateFromField = null;
+    JScrollPane translateFromFieldScrollbar;
+    private JLabel translateFromCharacterCount = null;
+    private JButton swapLanguages = null;
     private List<JToggleButton> translateToUserLanguages = null;
     private JTextArea translateToField = null;
+    JScrollPane translateToFieldScrollbar;
     private JButton translateToReadLoud = null;
     private JButton translateToCopyToClipboard = null;
     // Side-Thread(s)
@@ -89,10 +92,11 @@ public final class GUICore {
     //  As the translation area text has a listener, it'll do translation job itself, we don't need to call anything else.
     public void UpdateTranslateFromField(String textToTranslate) {
         if (textToTranslate.length() >= translateFieldMaxLength) {
-            JOptionPane.showMessageDialog(null, "Given text cannot be greater than 500 characters long!", "Error", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, String.format("Given text cannot be greater than %d characters long!", translateFieldMaxLength), "Error", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         translateFromField.setText(textToTranslate);
+        translateFromField.requestFocus();
     }
 
     public void UpdateTranslateFromField() {
@@ -254,12 +258,13 @@ public final class GUICore {
             translateFromPreferencePanelGL = new GridLayout(1, 3,5,0);
             translateFromUserLanguages = new ArrayList<>();
             translateFromLanguageDropdown = new JDropdownButton("Add", new FlatDescendingSortIcon(), new ArrayList<>(TranslateAPI.getInstance().getAvailableLanguages().keySet()));
-            swapLanguages = new JButton("Swap");
-            swapLanguages.setIcon(new FlatMenuArrowIcon());
+            swapLanguages = new JButton("Swap", new FlatTreeLeafIcon());
             translateFromField = new JTextArea();
+            translateFromFieldScrollbar = new JScrollPane(translateFromField);
             translateFromAdditionalPanel = new JPanel();
             translateFromReadLoud = new JButton("Play", new FlatMenuArrowIcon());
             translateFromCopyToClipboard = new JButton("Copy to Clipboard", new FlatFileViewFileIcon());
+            translateFromCharacterCount = new JLabel(String.format("%d / %d", translateFromField.getText().length(), translateFieldMaxLength));
             //----------
             translateToPreferencePanel = new JPanel();
             translateToUserLanguagesPanel = new JPanel();//--------
@@ -268,6 +273,7 @@ public final class GUICore {
             translateToLanguageDropdown = new JDropdownButton("Add", new FlatDescendingSortIcon(), new ArrayList<>(TranslateAPI.getInstance().getAvailableLanguages().keySet()));
             translateToField = new JTextArea("");
             translateToAdditionalPanel = new JPanel();
+            translateToFieldScrollbar = new JScrollPane(translateToField);
             translateToReadLoud = new JButton("Play", new FlatMenuArrowIcon());
             translateToCopyToClipboard = new JButton("Copy to Clipboard", new FlatFileViewFileIcon());
         }
@@ -282,19 +288,20 @@ public final class GUICore {
             for (var i : translateFromUserLanguages)// add buttons to the panel
                 translateFromUserLanguagesPanel.add(i);
 
-            // TranslateFromPreferencePanel Handling
+            // TranslateFromPreferencePanel
+            translateFromPreferencePanel.setLayout(new GridLayout(1,2, 5, 0));
             translateFromPreferencePanel.add(translateFromUserLanguagesPanel);
             translateFromPreferencePanel.add(translateFromLanguageDropdown);
-            translateFromPreferencePanel.add(swapLanguages);
         }
 
-        // TranslateFromPreferencePanel Handling
+        // TranslateToPreferencePanel Handling
         {
             translateToUserLanguagesPanel.setLayout(translateToPreferencePanelGL);
             for (var i : translateToUserLanguages)// add buttons to the panel
                 translateToUserLanguagesPanel.add(i);
 
-            // TranslateFromPreferencePanel Handling
+            // TranslateToPreferencePanel Handling
+            translateToPreferencePanel.add(swapLanguages);
             translateToPreferencePanel.add(translateToUserLanguagesPanel);
             translateToPreferencePanel.add(translateToLanguageDropdown);
         }
@@ -323,19 +330,22 @@ public final class GUICore {
             translatorPanel.add(translateFromPreferencePanel, gridBagConstraints);
             gridBagConstraints.gridx = 1;
             translatorPanel.add(translateToPreferencePanel, gridBagConstraints);
-            gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.fill = GridBagConstraints.BOTH;
             gridBagConstraints.weightx = 0.0;
             gridBagConstraints.ipady = 100;
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = 1;
-            translatorPanel.add(translateFromField, gridBagConstraints);
+            translatorPanel.add(translateFromFieldScrollbar, gridBagConstraints);
             gridBagConstraints.gridx = 1;
-            translatorPanel.add(translateToField, gridBagConstraints);
+            translatorPanel.add(translateToFieldScrollbar, gridBagConstraints);
 
             // translateFrom Additional Panel
-            translateFromAdditionalPanel.setLayout(new GridLayout(1,2));
+            GridLayout translateFromAdditionalPanelLayout = new GridLayout();
+            translateFromAdditionalPanel.setLayout(translateFromAdditionalPanelLayout);
             translateFromAdditionalPanel.add(translateFromReadLoud);
             translateFromAdditionalPanel.add(translateFromCopyToClipboard);
+            translateFromCharacterCount.setHorizontalAlignment(SwingConstants.CENTER);
+            translateFromAdditionalPanel.add(translateFromCharacterCount);
             // translateTo Additional Panel
             translateToAdditionalPanel.setLayout(new GridLayout(1,2));
             translateToAdditionalPanel.add(translateToReadLoud);
@@ -420,6 +430,21 @@ public final class GUICore {
     private void AddEventListeners() {
 
         // On TranslateField Change(When user stops typing)
+        translateFromField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                translateFromCharacterCount.setText(String.format("%d / %d", translateFromField.getText().length(), translateFieldMaxLength));
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                translateFromCharacterCount.setText(String.format("%d / %d", translateFromField.getText().length(), translateFieldMaxLength));
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+            }
+        });
         DeferredDocumentListener listener = new DeferredDocumentListener(500, e -> {
             translatorThread = new Thread(() -> {
                 try {
@@ -428,15 +453,15 @@ public final class GUICore {
 
                     final String translatedText = TranslateAPI.getInstance().translate(TranslateAPI.getInstance().getLanguageCodeByName(from), TranslateAPI.getInstance().getLanguageCodeByName(to), translateFromField.getText());
 
+                    // TODO: Create a method for this:
                     translateToField.setText(translatedText);
+                    translateToFieldScrollbar.getVerticalScrollBar().setValue(translateToFieldScrollbar.getVerticalScrollBar().getMaximum());
                 } catch (IOException exc) {
                     exc.printStackTrace();
                 }
             });
             translatorThread.start();
 
-            // Update mainFrame size
-            getMainFrame().pack();
         }, true);
         translateFromField.getDocument().addDocumentListener(listener);
         translateFromField.addFocusListener(new FocusListener() {
@@ -489,8 +514,11 @@ public final class GUICore {
         // TODO: Depending on TTS support over the languages, these buttons will be enabled/disabled!
         translateFromReadLoud.addActionListener(e->
         {
-            textToSpeechAPI.RequestSetStream(translateFromField.getText());
-            textToSpeechAPI.RequestPlayStream();
+            Thread textToSpeechThread = new Thread(() -> {
+                textToSpeechAPI.RequestSetStream(translateFromField.getText());
+                textToSpeechAPI.RequestPlayStream();
+            });
+            textToSpeechThread.start();
         });
         translateToReadLoud.addActionListener(e-> {
             textToSpeechAPI.RequestSetStream(translateToField.getText());
