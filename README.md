@@ -15,7 +15,7 @@ Since master branch contains library files, you don't need to download any addit
 - OpenJDK 18
 
 # Maven
-No additional dependencies nor repositories required for this branch.
+- AWS SDK
 
 # Roadmap
 - Deprecate Google Script requirement
