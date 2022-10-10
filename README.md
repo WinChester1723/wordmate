@@ -10,11 +10,12 @@ to transmit the selected text to WordMate (You can customize the Home button as 
 WordMate will translate texts into another language in accordance with your translation environment.
 
 # Building
+### Required to download manually
 Since master branch contains library files, you don't need to download any additional SDKs except:
 - IDE (Recommended: IntelliJ IDEA)
 - OpenJDK 18
 
-# Maven
+### SDKs that will be downloaded automatically
 - AWS SDK
 
 # Roadmap
