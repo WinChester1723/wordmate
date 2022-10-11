@@ -30,11 +30,9 @@ public class IconManager {
 
         // dark or light theme
         if(UIManager.getLookAndFeel() instanceof FlatDarkLaf){
-            System.out.println("UI is dark");
             fileName += Constants.DARK_THEME_SUFFIX;
         }else{
             fileName += Constants.LIGHT_THEME_SUFFIX;
-            System.out.println("UI is not dark");
         }
 
         fileName += Constants.IMAGE_ICON_EXTENSION;

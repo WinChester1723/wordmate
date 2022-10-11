@@ -10,8 +10,6 @@ import gui.utils.IconManager;
 import utils.ClipboardManager;
 import utils.Constants;
 
-
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -41,14 +39,6 @@ public final class GUICore {
     private JProgressBar mainProgressBar = null;
     private JDropdownButton translateFromLanguageDropdown;
     private JDropdownButton translateToLanguageDropdown;
-
-    private JMenuBar mainMenuBar = null;
-    private JMenu mainMenu, mainSubmenu = null;
-    private JMenuItem mainMenuItemTheme = null;
-    private JMenuItem mainMenuItemOptions = null;
-    private JMenuItem mainMenuItemClose = null;
-    private JMenuItem themeDark = null;
-    private JMenuItem themeLight = null;
 
     private JFrame mainFrame = null;
     private JPanel mainPanel = null;// To store all pages/panels inside a panel (for now)
@@ -256,16 +246,20 @@ public final class GUICore {
             mainFrame = new JFrame(Constants.APP_NAME);
             translatorPanel = new JPanel();
         }
+
+        JMenuBar mainMenuBar;
+        JMenu mainMenu, mainSubmenu;
+        JMenuItem mainMenuItemTheme;
+        JMenuItem mainMenuItemOptions;
+        JMenuItem mainMenuItemClose;
+        JMenuItem themeDark;
+        JMenuItem themeLight;
+
         // Translate From Initialization
         // INFO: Translate Section
-        JPanel translateFromPreferencePanel;
-        GridLayout translateFromPreferencePanelGL;
-        JPanel translateFromUserLanguagesPanel;
+        JPanel translateSectionHeader;
         JPanel translateFromAdditionalPanel;
         // INFO: TranslateTo Section
-        JPanel translateToPreferencePanel;
-        GridLayout translateToPreferencePanelGL;
-        JPanel translateToUserLanguagesPanel;
         JPanel translateToAdditionalPanel;
         {
             mainPanel = new JPanel();
@@ -279,9 +273,8 @@ public final class GUICore {
             mainMenuItemOptions = new JMenuItem("Options");
             mainMenuItemClose = new JMenuItem("Close");
 
-            translateFromPreferencePanel = new JPanel();
-            translateFromUserLanguagesPanel = new JPanel();//--------
-            translateFromPreferencePanelGL = new GridLayout(1, 3,5,0);
+            translateSectionHeader = new JPanel();
+
             translateFromUserLanguages = new ArrayList<>();
             translateFromLanguageDropdown = new JDropdownButton("Add", new FlatDescendingSortIcon(), new ArrayList<>(TranslateAPI.getInstance().getAvailableLanguages().keySet()));
             swapLanguages = new JButton("Swap", new FlatTreeLeafIcon());
@@ -292,9 +285,6 @@ public final class GUICore {
             translateFromCopyToClipboard = new JButton("Copy to Clipboard", new FlatFileViewFileIcon());
             translateFromCharacterCount = new JProgressBar(0,translateFieldMaxLength);
             //----------
-            translateToPreferencePanel = new JPanel();
-            translateToUserLanguagesPanel = new JPanel();//--------
-            translateToPreferencePanelGL = new GridLayout(1, 3,5,0);
             translateToUserLanguages = new ArrayList<>();
             translateToLanguageDropdown = new JDropdownButton("Add", new FlatDescendingSortIcon(), new ArrayList<>(TranslateAPI.getInstance().getAvailableLanguages().keySet()));
             translateToField = new JTextArea("");
@@ -305,8 +295,6 @@ public final class GUICore {
         }
 
         { // Configure main menu
-            mainPanel.add(mainMenuBar);
-
             mainMenuBar.add(mainMenu);
             mainMenu.setIcon(new FlatTreeOpenIcon());
 
@@ -333,26 +321,16 @@ public final class GUICore {
 
         // TranslateFromPreferencePanel Handling
         {
-            translateFromUserLanguagesPanel.setLayout(translateFromPreferencePanelGL);
-            for (var i : translateFromUserLanguages)// add buttons to the panel
-                translateFromUserLanguagesPanel.add(i);
+            translateSectionHeader.setLayout(new FlowLayout());
+            for (var i : translateFromUserLanguages)
+                translateSectionHeader.add(i);
 
             // TranslateFromPreferencePanel
-            translateFromPreferencePanel.setLayout(new GridLayout(1,2, 5, 0));
-            translateFromPreferencePanel.add(translateFromUserLanguagesPanel);
-            translateFromPreferencePanel.add(translateFromLanguageDropdown);
-        }
-
-        // TranslateToPreferencePanel Handling
-        {
-            translateToUserLanguagesPanel.setLayout(translateToPreferencePanelGL);
-            for (var i : translateToUserLanguages)// add buttons to the panel
-                translateToUserLanguagesPanel.add(i);
-
-            // TranslateToPreferencePanel Handling
-            translateToPreferencePanel.add(swapLanguages);
-            translateToPreferencePanel.add(translateToUserLanguagesPanel);
-            translateToPreferencePanel.add(translateToLanguageDropdown);
+            translateSectionHeader.add(translateFromLanguageDropdown);
+            translateSectionHeader.add(swapLanguages);
+            for (var i : translateToUserLanguages)
+                translateSectionHeader.add(i);
+            translateSectionHeader.add(translateToLanguageDropdown);
         }
 
         // Handle Translate Field Configuration
@@ -360,10 +338,12 @@ public final class GUICore {
             translateFromField.setLineWrap(true);
             translateFromField.setWrapStyleWord(true);
             translateFromField.setDocument(new JTextFieldLimit(translateFieldMaxLength));
+            translateFromFieldScrollbar.setPreferredSize(new Dimension(translateFromFieldScrollbar.getWidth(), 150));
             //---------
             translateToField.setLineWrap(true);
             translateToField.setWrapStyleWord(true);
             translateToField.setEditable(false);
+            translateToFieldScrollbar.setPreferredSize(new Dimension(translateToFieldScrollbar.getWidth(), 150));
         }
 
         // Character count Handling
@@ -376,46 +356,41 @@ public final class GUICore {
 
         // Final touches
         {
-            translatorPanel.setLayout(new GridBagLayout());
+            translatorPanel.setLayout(new BorderLayout());
 
-            GridBagConstraints gridBagConstraints = new GridBagConstraints();
-            gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 0;
-            translatorPanel.add(translateFromPreferencePanel, gridBagConstraints);
-            gridBagConstraints.gridx = 1;
-            translatorPanel.add(translateToPreferencePanel, gridBagConstraints);
-            gridBagConstraints.fill = GridBagConstraints.BOTH;
-            gridBagConstraints.weightx = 0.0;
-            gridBagConstraints.ipady = 100;
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 1;
-            translatorPanel.add(translateFromFieldScrollbar, gridBagConstraints);
-            gridBagConstraints.gridx = 1;
-            translatorPanel.add(translateToFieldScrollbar, gridBagConstraints);
+            translatorPanel.add(translateSectionHeader, BorderLayout.PAGE_START);
+
+            JPanel translateFields = new JPanel();
+            translateFields.setLayout(new GridLayout(1,2));
+            translateFields.add(translateFromFieldScrollbar);
+            translateFields.add(translateToFieldScrollbar);
+
+            translatorPanel.add(translateFields, BorderLayout.CENTER);
 
             // translateFrom Additional Panel
-            GridLayout translateFromAdditionalPanelLayout = new GridLayout();
-            translateFromAdditionalPanel.setLayout(translateFromAdditionalPanelLayout);
+            translateFromAdditionalPanel.setLayout(new GridLayout());
             translateFromAdditionalPanel.add(translateFromReadLoud);
             translateFromAdditionalPanel.add(translateFromCopyToClipboard);
             translateFromAdditionalPanel.add(translateFromCharacterCount);
             // translateTo Additional Panel
-            translateToAdditionalPanel.setLayout(new GridLayout(1,2));
+            translateToAdditionalPanel.setLayout(new GridLayout());
             translateToAdditionalPanel.add(translateToReadLoud);
             translateToAdditionalPanel.add(translateToCopyToClipboard);
 
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 2;
-            translatorPanel.add(translateFromAdditionalPanel,gridBagConstraints);
-            gridBagConstraints.gridx = 1;
-            translatorPanel.add(translateToAdditionalPanel,gridBagConstraints);
+            JPanel translateFieldsFooterPanel = new JPanel();
+            translateFieldsFooterPanel.setLayout(new GridLayout(1,2));
+
+            translateFieldsFooterPanel.add(translateFromAdditionalPanel);
+            translateFieldsFooterPanel.add(translateToAdditionalPanel);
+
+            translatorPanel.add(translateFieldsFooterPanel, BorderLayout.PAGE_END);
 
             mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
             mainPanel.add(translatorPanel);
 
-            mainFrame.add(mainPanel);
+            mainFrame.setLayout(new BorderLayout());
+            mainFrame.add(mainMenu, BorderLayout.PAGE_START);
+            mainFrame.add(mainPanel, BorderLayout.CENTER);
             mainFrame.setAlwaysOnTop(false);
             mainFrame.pack();
             mainFrame.setVisible(true);
@@ -514,6 +489,7 @@ public final class GUICore {
 
                     // TODO: Create a method for this:
                     translateToField.setText(translatedText);
+
                     translateToFieldScrollbar.getVerticalScrollBar().setValue(translateToFieldScrollbar.getVerticalScrollBar().getMaximum());
                 } catch (IOException exc) {
                     exc.printStackTrace();
