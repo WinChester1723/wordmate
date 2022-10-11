@@ -27,33 +27,56 @@ import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.advanced.AdvancedPlayer;
 import javazoom.jl.player.advanced.PlaybackEvent;
 import javazoom.jl.player.advanced.PlaybackListener;
+import utils.Callback;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class TextToSpeechAPI {
-    private static List<TextToSpeechAPIEventListener> textToSpeechAPIEventListeners = null;
     private AdvancedPlayer advancedPlayer = null;
+    Map<String,Callback> _callback_ = null;
     private AmazonPolly amazonPolly = null;
     private Voice currentVoice = null;
     private InputStream currentInputStream = null;
     private OutputFormat currentOutputFormat = null;
 
+    boolean isPlaying = false;
+
     // Functions-----------------------------------
     public void Initialize() {
         amazonPolly = AmazonPollyClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(AWSCredentialsManager.getInstance())).withRegion(AWSCredentialsManager.getInstance().getRegion()).build();
-        textToSpeechAPIEventListeners = new ArrayList<>();
+
+        _callback_ = new HashMap<>();
 
         setDefaults();
     }
-    public void addTTSEventListener(TextToSpeechAPIEventListener listener) {
-        textToSpeechAPIEventListeners.add(listener);
+
+    //------------------------------------------------
+    // EVENTS
+    public void addOnStartListener(Callback callback){
+        _callback_.put("start",callback);
     }
+    public void addOnStopListener(Callback callback){
+        _callback_.put("stop",callback);
+    }
+    private void onStart(){
+        for(var i : _callback_.entrySet())
+            if(i.getKey().equals("start"))
+                i.getValue().call();
+        setPlaying(true);
+    }
+    private void onStop(){
+        for(var i : _callback_.entrySet())
+            if(i.getKey().equals("stop"))
+                i.getValue().call();
+        setPlaying(false);
+    }
+    //------------------------------------------------
     private InputStream synthesize(String text, OutputFormat format) throws IOException {
         SynthesizeSpeechRequest synthReq = new SynthesizeSpeechRequest().withText(text).withVoiceId(currentVoice.getId()).withOutputFormat(format).withSampleRate("8000");
         SynthesizeSpeechResult synthRes = amazonPolly.synthesizeSpeech(synthReq);
@@ -71,6 +94,14 @@ public final class TextToSpeechAPI {
 
     public Voice getVoice() {
         return currentVoice;
+    }
+
+    public boolean isPlaying() {
+        return isPlaying;
+    }
+
+    public void setPlaying(boolean playing) {
+        isPlaying = playing;
     }
 
     // Setters---------------------------------------
@@ -96,6 +127,14 @@ public final class TextToSpeechAPI {
         }
     }
 
+    public void RequestToStopStream(){
+        if(advancedPlayer != null) {
+            advancedPlayer.stop();
+            onStop(); // Let system know about this event
+            return;
+        }
+    }
+
     public void RequestPlayStream() {
         //create an MP3 player
         try {
@@ -108,13 +147,13 @@ public final class TextToSpeechAPI {
             @Override
             public void playbackStarted(PlaybackEvent evt) {
                 System.out.println("Playback started");// TODO: REMOVE SOUT
-                textToSpeechAPIEventListeners.forEach((el) -> el.onStartReading());
+                onStart();// Let system know about this event
             }
 
             @Override
             public void playbackFinished(PlaybackEvent evt) {
                 System.out.println("Playback finished");// TODO: REMOVE SOUT
-                textToSpeechAPIEventListeners.forEach((el) -> el.onFinishReading());
+                onStop();// Let system know about this event
             }
         });
 
@@ -136,10 +175,5 @@ public final class TextToSpeechAPI {
     }
 
     // Event Listener-------------------------------
-    private interface TextToSpeechAPIEventListener {
-        void onStartReading();
-
-        void onFinishReading();
-    }
 }
 

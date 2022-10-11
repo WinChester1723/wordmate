@@ -235,9 +235,6 @@ public final class GUICore {
         }
 
         // Init other elements
-        textToSpeechAPI = new TextToSpeechAPI();
-        textToSpeechAPI.Initialize();// TODO: Load recent voice and output format (serialized ones)
-
         dictionaryAPI = new DictionaryAPI();
 
         // Init UI Elements
@@ -267,11 +264,11 @@ public final class GUICore {
 
             translateFromUserLanguages = new ArrayList<>();
             translateFromLanguageDropdown = new JDropdownButton("Add", new FlatDescendingSortIcon(), new ArrayList<>(TranslateAPI.getInstance().getAvailableLanguages().keySet()));
-            swapLanguages = new JButton("Swap", new FlatTreeLeafIcon());
+            swapLanguages = new JButton("Swap", IconManager.getInstance().getIcon(ApplicationIcons.ICON_SWAP));
             translateFromField = new JTextArea();
             translateFromFieldScrollbar = new JScrollPane(translateFromField);
             translateFromAdditionalPanel = new JPanel();
-            translateFromReadLoud = new JButton("Play", new FlatMenuArrowIcon());
+            translateFromReadLoud = new JButton("Play",  IconManager.getInstance().getIcon(ApplicationIcons.ICON_PLAY));
             translateFromCopyToClipboard = new JButton("Copy to Clipboard", new FlatFileViewFileIcon());
             translateFromCharacterCount = new JProgressBar(0,translateFieldMaxLength);
             //----------
@@ -280,7 +277,7 @@ public final class GUICore {
             translateToField = new JTextArea("");
             translateToAdditionalPanel = new JPanel();
             translateToFieldScrollbar = new JScrollPane(translateToField);
-            translateToReadLoud = new JButton("Play", new FlatMenuArrowIcon());
+            translateToReadLoud = new JButton("Play", IconManager.getInstance().getIcon(ApplicationIcons.ICON_PLAY));
             translateToCopyToClipboard = new JButton("Copy to Clipboard", new FlatFileViewFileIcon());
         }
 
@@ -336,9 +333,7 @@ public final class GUICore {
         // Final touches
         {
             translatorPanel.setLayout(new BorderLayout());
-
             translatorPanel.add(translateSectionHeader, BorderLayout.PAGE_START);
-
             JPanel translateFields = new JPanel();
             translateFields.setLayout(new GridLayout(1,2));
             translateFields.add(translateFromFieldScrollbar);
@@ -527,14 +522,46 @@ public final class GUICore {
         translateFromReadLoud.addActionListener(e->
         {
             Thread textToSpeechThread = new Thread(() -> {
+                // Reset icons first
+                translateFromReadLoud.setIcon(IconManager.getInstance().getIcon(ApplicationIcons.ICON_PLAY));
+                translateToReadLoud.setIcon(IconManager.getInstance().getIcon(ApplicationIcons.ICON_PLAY));
+                // Then set which needs to be changed
+                translateFromReadLoud.setIcon(IconManager.getInstance().getIcon(ApplicationIcons.ICON_STOP));
+
+                if(textToSpeechAPI != null )
+                    if(textToSpeechAPI.isPlaying())
+                        textToSpeechAPI.RequestToStopStream();
+
+                textToSpeechAPI = new TextToSpeechAPI();
+                textToSpeechAPI.Initialize();// TODO: Load recent voice and output format (serialized ones)
+
+                // Then TTS request
                 textToSpeechAPI.RequestSetStream(translateFromField.getText());
                 textToSpeechAPI.RequestPlayStream();
             });
             textToSpeechThread.start();
         });
         translateToReadLoud.addActionListener(e-> {
-            textToSpeechAPI.RequestSetStream(translateToField.getText());
-            textToSpeechAPI.RequestPlayStream();
+            Thread textToSpeechThread = new Thread(() -> {
+
+                // Reset icons first
+                translateFromReadLoud.setIcon(IconManager.getInstance().getIcon(ApplicationIcons.ICON_PLAY));
+                translateToReadLoud.setIcon(IconManager.getInstance().getIcon(ApplicationIcons.ICON_PLAY));
+                // Then set which needs to be changed
+                translateToReadLoud.setIcon(IconManager.getInstance().getIcon(ApplicationIcons.ICON_STOP));
+
+                if(textToSpeechAPI != null)
+                    if(textToSpeechAPI.isPlaying())
+                    textToSpeechAPI.RequestToStopStream();
+
+                textToSpeechAPI = new TextToSpeechAPI();
+                textToSpeechAPI.Initialize();// TODO: Load recent voice and output format (serialized ones)
+
+                // Then TTS request
+                textToSpeechAPI.RequestSetStream(translateToField.getText());
+                textToSpeechAPI.RequestPlayStream();
+            });
+            textToSpeechThread.start();
         });
 
         // Copy to Clipboard events

@@ -25,6 +25,12 @@ public class IconManager {
             fileName = Constants.MENU_OPTIONS_ICON;
         else if (icon.equals(ApplicationIcons.ICON_MENU_CLOSE))
             fileName = Constants.MENU_CLOSE_ICON;
+        else if(icon.equals(ApplicationIcons.ICON_SWAP))
+            fileName = Constants.SWAP_ICON;
+        else if(icon.equals(ApplicationIcons.ICON_PLAY))
+            fileName = Constants.PLAY_ICON;
+        else if(icon.equals(ApplicationIcons.ICON_STOP))
+            fileName = Constants.STOP_ICON;
         else
             System.err.printf("%s: Unexpected icon request", this.getClass().getName());
 
