@@ -14,6 +14,23 @@
             <artifactId>aws-java-sdk</artifactId>
             <version>1.11.1000</version>
         </dependency>
+
+        <!-- Added JAR instead-->
+<!--        &lt;!&ndash; JSON Parser Google GSON&ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.google.code.gson</groupId>-->
+<!--            <artifactId>gson</artifactId>-->
+<!--            <version>2.9.1</version>-->
+<!--        </dependency>-->
+
+        <!-- JWKTL is a huge dictionary indeed.-->
+        <!-- We're not going to implement it for now-->
+<!--        &lt;!&ndash; JWKTL Wiktionary &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.dkpro.jwktl</groupId>-->
+<!--            <artifactId>dkpro-jwktl</artifactId>-->
+<!--            <version>1.1.0</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <properties>

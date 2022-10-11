@@ -1,0 +1,54 @@
+<changelist name="Uncommitted_changes_before_Update_at_11_10_2022_10_54_[Changes]" date="1665471264362" recycled="false" toDelete="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_10_2022_10_54_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 11.10.2022 10:54 [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/gui/core/GUICore$JTextFieldLimit.class" />
+    <option name="AFTER_PATH" value="target/classes/gui/core/GUICore$JTextFieldLimit.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_10_2022_10_54_[Changes]/GUICore$JTextFieldLimit.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/gui/core/GUICore$JDropdownButton.class" />
+    <option name="AFTER_PATH" value="target/classes/gui/core/GUICore$JDropdownButton.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_10_2022_10_54_[Changes]/GUICore$JDropdownButton.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/gui/core/GUICore$4.class" />
+    <option name="AFTER_PATH" value="target/classes/gui/core/GUICore$4.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_10_2022_10_54_[Changes]/GUICore$4.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/gui/core/GUICore$3.class" />
+    <option name="AFTER_PATH" value="target/classes/gui/core/GUICore$3.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_10_2022_10_54_[Changes]/GUICore$3.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/gui/core/GUICore$TranslationSides.class" />
+    <option name="AFTER_PATH" value="target/classes/gui/core/GUICore$TranslationSides.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_10_2022_10_54_[Changes]/GUICore$TranslationSides.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/gui/core/GUICore$2.class" />
+    <option name="AFTER_PATH" value="target/classes/gui/core/GUICore$2.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_10_2022_10_54_[Changes]/GUICore$2.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/utils/Constants.class" />
+    <option name="AFTER_PATH" value="target/classes/utils/Constants.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_10_2022_10_54_[Changes]/Constants.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/gui/core/GUICore$1.class" />
+    <option name="AFTER_PATH" value="target/classes/gui/core/GUICore$1.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_10_2022_10_54_[Changes]/GUICore$1.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/gui/core/GUICore.class" />
+    <option name="AFTER_PATH" value="target/classes/gui/core/GUICore.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_10_2022_10_54_[Changes]/GUICore.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/gui/core/GUICore$DeferredDocumentListener.class" />
+    <option name="AFTER_PATH" value="target/classes/gui/core/GUICore$DeferredDocumentListener.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_10_2022_10_54_[Changes]/GUICore$DeferredDocumentListener.class" />
+  </binary>
+</changelist>

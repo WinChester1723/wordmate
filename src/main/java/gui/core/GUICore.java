@@ -1,11 +1,16 @@
 package gui.core;
 
+import aws.api.DictionaryAPI;
 import aws.api.TextToSpeechAPI;
+import aws.api.TranslateAPI;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.icons.*;
-import aws.api.TranslateAPI;
+import gui.utils.ApplicationIcons;
+import gui.utils.IconManager;
 import utils.ClipboardManager;
 import utils.Constants;
+
+
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -29,12 +34,21 @@ public final class GUICore {
     // GUI Core
     TrayIcon trayIcon = null;
     private TextToSpeechAPI textToSpeechAPI = null;
+    private DictionaryAPI dictionaryAPI = null;
     // Main GUI Elements
     final static short translateFieldMaxLength = 5000;
     private static GUICore single_instance = null;
     private JProgressBar mainProgressBar = null;
     private JDropdownButton translateFromLanguageDropdown;
     private JDropdownButton translateToLanguageDropdown;
+
+    private JMenuBar mainMenuBar = null;
+    private JMenu mainMenu, mainSubmenu = null;
+    private JMenuItem mainMenuItemTheme = null;
+    private JMenuItem mainMenuItemOptions = null;
+    private JMenuItem mainMenuItemClose = null;
+    private JMenuItem themeDark = null;
+    private JMenuItem themeLight = null;
 
     private JFrame mainFrame = null;
     private JPanel mainPanel = null;// To store all pages/panels inside a panel (for now)
@@ -234,6 +248,8 @@ public final class GUICore {
         textToSpeechAPI = new TextToSpeechAPI();
         textToSpeechAPI.Initialize();// TODO: Load recent voice and output format (serialized ones)
 
+        dictionaryAPI = new DictionaryAPI();
+
         // Init UI Elements
         JPanel translatorPanel;
         {
@@ -253,6 +269,16 @@ public final class GUICore {
         JPanel translateToAdditionalPanel;
         {
             mainPanel = new JPanel();
+
+            mainMenuBar = new JMenuBar();
+            mainMenu = new JMenu("Menu");
+            mainSubmenu = new JMenu("Submenu");
+            mainMenuItemTheme = new JMenuItem("Theme");
+            themeDark = new JMenuItem("Dark");
+            themeLight = new JMenuItem("light");
+            mainMenuItemOptions = new JMenuItem("Options");
+            mainMenuItemClose = new JMenuItem("Close");
+
             translateFromPreferencePanel = new JPanel();
             translateFromUserLanguagesPanel = new JPanel();//--------
             translateFromPreferencePanelGL = new GridLayout(1, 3,5,0);
@@ -276,6 +302,29 @@ public final class GUICore {
             translateToFieldScrollbar = new JScrollPane(translateToField);
             translateToReadLoud = new JButton("Play", new FlatMenuArrowIcon());
             translateToCopyToClipboard = new JButton("Copy to Clipboard", new FlatFileViewFileIcon());
+        }
+
+        { // Configure main menu
+            mainPanel.add(mainMenuBar);
+
+            mainMenuBar.add(mainMenu);
+            mainMenu.setIcon(new FlatTreeOpenIcon());
+
+            ImageIcon t = IconManager.getInstance().getIcon(ApplicationIcons.ICON_MENU_THEME);
+            mainMenuItemTheme.setIcon(t);
+            mainMenu.add(mainMenuItemTheme);
+
+            mainSubmenu.add(themeDark);
+            //themeDark.setIcon();
+
+            mainSubmenu.add(themeLight);
+            //themeLight.setIcon();
+
+            mainMenu.add(mainMenuItemOptions);
+            //mainMenuItemOptions.setIcon();
+
+            mainMenu.add(mainMenuItemClose);
+            //mainMenuItemClose.setIcon();
         }
 
         { // Configure Language Buttons
@@ -456,7 +505,7 @@ public final class GUICore {
             }
         });
         DeferredDocumentListener listener = new DeferredDocumentListener(500, e -> {
-            translatorThread = new Thread(() -> {
+            translatorThread = new Thread(() -> {// TODO: this method is called periodically. Optimization is required!
                 try {
                     final String from = getSelectedLanguage(TranslationSides.TS_LEFT);
                     final String to = getSelectedLanguage(TranslationSides.TS_RIGHT);
@@ -471,8 +520,7 @@ public final class GUICore {
                 }
             });
             translatorThread.start();
-
-        }, true);
+        }, false);
         translateFromField.getDocument().addDocumentListener(listener);
         translateFromField.addFocusListener(new FocusListener() {
             @Override

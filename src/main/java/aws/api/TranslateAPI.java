@@ -104,7 +104,9 @@ public final class TranslateAPI {
 
     public String translate(String langFrom, String langTo, String text) throws IOException {
 
-        if ((langFrom == "" || langFrom == null) || (langTo == "" || langTo == null) || (text == "" || text == null))
+        if ((langFrom == "" || langFrom == null || langFrom.isEmpty() || langFrom.isBlank())
+                || (langTo == "" || langTo == null || langTo.isEmpty() || langTo.isBlank())
+                || (text == "" || text == null || text.isEmpty() || text.isBlank()))
             return "";
 
         TranslateTextRequest request = new TranslateTextRequest().withText(text).withSourceLanguageCode(langFrom).withTargetLanguageCode(langTo);
