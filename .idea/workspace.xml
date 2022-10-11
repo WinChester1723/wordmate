@@ -4,29 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a" name="Changes" comment="Converted: Character count label to progress bar">
-      <change afterPath="$PROJECT_DIR$/lib/gson-2.9.1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/json-20220924.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/aws/api/DictionaryAPI.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/aws/api/URLAudioPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/aws.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/aws.xml" afterDir="false" />
+    <list default="true" id="c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a" name="Changes" comment="Added Temporal Dictionary API, Play from URL API and JSON library.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WordMate.iml" beforeDir="false" afterPath="$PROJECT_DIR$/WordMate.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aws/api/TranslateAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aws/api/TranslateAPI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/gui/core/GUICore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/core/GUICore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Application.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/aws/api/TranslateAPI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/aws/api/TranslateAPI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$DeferredDocumentListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$DeferredDocumentListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$JDropdownButton.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$JDropdownButton.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$JTextFieldLimit.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$JTextFieldLimit.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$TranslationSides.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$TranslationSides.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -169,7 +151,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665396218897</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Added Temporal Dictionary API, Play from URL API and JSON library.">
+      <created>1665458948306</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1665458948306</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -191,7 +180,8 @@
     <MESSAGE value="Fixed a small issue. Known bugs about layouts still exist." />
     <MESSAGE value="Added: AWS Support:&#10;       AWS Translate&#10;       AWS Polly&#10;       &#10;Created: New TTS API&#10;The new TTS API provides handy functionalities such as listeners, read loud and download stream functions.&#10;         New Translator API&#10;Refactored: UI Buttons and their functionality&#10;Added: UI Buttons to read the text for both sides&#10;Added: Copy to clipboard button for both sides&#10;&#10;Known issues: &#10;1. AWS may throw some error messages that does not affect the functionality. &#10;2. AWS Polly will need a new thread to play." />
     <MESSAGE value="Converted: Character count label to progress bar" />
-    <option name="LAST_COMMIT_MESSAGE" value="Converted: Character count label to progress bar" />
+    <MESSAGE value="Added Temporal Dictionary API, Play from URL API and JSON library." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Temporal Dictionary API, Play from URL API and JSON library." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

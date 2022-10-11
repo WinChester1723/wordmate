@@ -473,9 +473,6 @@ public final class GUICore {
                     // TODO: Create a method for this:
                     translateToField.setText(translatedText);
                     translateToFieldScrollbar.getVerticalScrollBar().setValue(translateToFieldScrollbar.getVerticalScrollBar().getMaximum());
-
-                    dictionaryAPI.RequestWordDefinitionJson("en",translateFromField.getText());
-                    System.out.println(dictionaryAPI.getJSONStream());
                 } catch (IOException exc) {
                     exc.printStackTrace();
                 }
