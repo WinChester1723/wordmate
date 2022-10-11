@@ -4,32 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a" name="Changes" comment="Small user Interface fixes">
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/Callback.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/resources/static/control_icons/play_button_dark.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/resources/static/control_icons/play_button_light.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/resources/static/control_icons/stop_button_dark.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/resources/static/control_icons/stop_button_light.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/resources/static/control_icons/swap_icon_dark.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/resources/static/control_icons/swap_icon_light.png" afterDir="false" />
+    <list default="true" id="c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a" name="Changes" comment="Added: UI icons&#10;Added: Play/Stop functionality&#10;&#10;Known bug: App does not work properly because of TTS API bug. TODO: Fix ASAP">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aws/api/TextToSpeechAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aws/api/TextToSpeechAPI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/core/GUICore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/core/GUICore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/utils/ApplicationIcons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/utils/ApplicationIcons.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/utils/IconManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/utils/IconManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$DeferredDocumentListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$DeferredDocumentListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$JDropdownButton.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$JDropdownButton.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$JTextFieldLimit.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$JTextFieldLimit.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$TranslationSides.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$TranslationSides.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/utils/ApplicationIcons.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/utils/ApplicationIcons.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/utils/IconManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/utils/IconManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/utils/Constants.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/utils/Constants.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/core/GUICore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/core/TranslateUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/InputCore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/InputCore.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Application.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/aws/api/TextToSpeechAPI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/aws/api/TextToSpeechAPI$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/aws/api/TextToSpeechAPI$TextToSpeechAPIEventListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/aws/api/TextToSpeechAPI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/aws/api/TextToSpeechAPI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$DeferredDocumentListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$JDropdownButton.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$JTextFieldLimit.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$TranslationSides.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/io/InputCore.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/io/InputCore.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -195,7 +188,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665484478341</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Added: UI icons&#10;Added: Play/Stop functionality&#10;&#10;Known bug: App does not work properly because of TTS API bug. TODO: Fix ASAP">
+      <created>1665492447601</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1665492447601</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -220,7 +220,8 @@
     <MESSAGE value="Added Temporal Dictionary API, Play from URL API and JSON library." />
     <MESSAGE value="Fixed: Layout's expansion bug&#10;Added: Current and maximum character count&#10;Added: Scrollbar for text areas in both sides&#10;&#10;Known layout problem: Layout of the buttons" />
     <MESSAGE value="Small user Interface fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Small user Interface fixes" />
+    <MESSAGE value="Added: UI icons&#10;Added: Play/Stop functionality&#10;&#10;Known bug: App does not work properly because of TTS API bug. TODO: Fix ASAP" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added: UI icons&#10;Added: Play/Stop functionality&#10;&#10;Known bug: App does not work properly because of TTS API bug. TODO: Fix ASAP" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
