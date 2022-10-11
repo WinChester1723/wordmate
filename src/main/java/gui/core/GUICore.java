@@ -247,14 +247,9 @@ public final class GUICore {
             translatorPanel = new JPanel();
         }
 
-        JMenuBar mainMenuBar;
-        JMenu mainMenu, mainSubmenu;
-        JMenuItem mainMenuItemTheme;
-        JMenuItem mainMenuItemOptions;
-        JMenuItem mainMenuItemClose;
-        JMenuItem themeDark;
-        JMenuItem themeLight;
-
+        // Menu
+        JMenuBar menuBar;
+        JMenu settingsMenu, preferencesMenu;
         // Translate From Initialization
         // INFO: Translate Section
         JPanel translateSectionHeader;
@@ -262,16 +257,11 @@ public final class GUICore {
         // INFO: TranslateTo Section
         JPanel translateToAdditionalPanel;
         {
-            mainPanel = new JPanel();
+            menuBar = new JMenuBar();
+            settingsMenu = new JMenu("Settings");
+            preferencesMenu = new JMenu("Preferences");
 
-            mainMenuBar = new JMenuBar();
-            mainMenu = new JMenu("Menu");
-            mainSubmenu = new JMenu("Submenu");
-            mainMenuItemTheme = new JMenuItem("Theme");
-            themeDark = new JMenuItem("Dark");
-            themeLight = new JMenuItem("light");
-            mainMenuItemOptions = new JMenuItem("Options");
-            mainMenuItemClose = new JMenuItem("Close");
+            mainPanel = new JPanel();
 
             translateSectionHeader = new JPanel();
 
@@ -295,24 +285,13 @@ public final class GUICore {
         }
 
         { // Configure main menu
-            mainMenuBar.add(mainMenu);
-            mainMenu.setIcon(new FlatTreeOpenIcon());
+            ImageIcon settingsIcon = IconManager.getInstance().getIcon(ApplicationIcons.ICON_MENU_OPTIONS);
+            settingsMenu.setIcon(settingsIcon);
+            menuBar.add(settingsMenu);
 
-            ImageIcon t = IconManager.getInstance().getIcon(ApplicationIcons.ICON_MENU_THEME);
-            mainMenuItemTheme.setIcon(t);
-            mainMenu.add(mainMenuItemTheme);
-
-            mainSubmenu.add(themeDark);
-            //themeDark.setIcon();
-
-            mainSubmenu.add(themeLight);
-            //themeLight.setIcon();
-
-            mainMenu.add(mainMenuItemOptions);
-            //mainMenuItemOptions.setIcon();
-
-            mainMenu.add(mainMenuItemClose);
-            //mainMenuItemClose.setIcon();
+            ImageIcon preferencesIcon = IconManager.getInstance().getIcon(ApplicationIcons.ICON_MENU_THEME);
+            preferencesMenu.setIcon(preferencesIcon);
+            menuBar.add(preferencesMenu);
         }
 
         { // Configure Language Buttons
@@ -388,8 +367,7 @@ public final class GUICore {
             mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
             mainPanel.add(translatorPanel);
 
-            mainFrame.setLayout(new BorderLayout());
-            mainFrame.add(mainMenu, BorderLayout.PAGE_START);
+            mainFrame.setJMenuBar(menuBar);
             mainFrame.add(mainPanel, BorderLayout.CENTER);
             mainFrame.setAlwaysOnTop(false);
             mainFrame.pack();

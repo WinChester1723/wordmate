@@ -5,20 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a" name="Changes" comment="Fixed: Layout's expansion bug&#10;Added: Current and maximum character count&#10;Added: Scrollbar for text areas in both sides&#10;&#10;Known layout problem: Layout of the buttons">
-      <change afterPath="$PROJECT_DIR$/src/resources/static/control_icons/close_button_icon_dark.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/resources/static/control_icons/close_button_icon_light.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/resources/static/control_icons/dark_theme_icon_dark.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/resources/static/control_icons/dark_theme_icon_light.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/resources/static/control_icons/light_theme_icon_dark.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/resources/static/control_icons/light_theme_icon_light.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/resources/static/control_icons/options_icon_dark.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/resources/static/control_icons/options_icon_light.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/resources/static/control_icons/theme_icon_dark.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/resources/static/control_icons/theme_icon_light.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/aws.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/aws.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_10_2022_1_45_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_10_2022_1_45_PM__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_10_2022_10_54__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_10_2022_10_54__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_10_2022_10_55__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_10_2022_10_55__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/gui/core/GUICore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/core/GUICore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/utils/IconManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/utils/IconManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resources/static/control_icons/close_button_icon_dark.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/static/control_icons/close_button_icon_dark.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resources/static/control_icons/dark_theme_icon_dark.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/static/control_icons/dark_theme_icon_dark.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resources/static/control_icons/light_theme_icon_dark.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/static/control_icons/light_theme_icon_dark.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resources/static/control_icons/options_icon_dark.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/static/control_icons/options_icon_dark.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resources/static/control_icons/theme_icon_dark.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/static/control_icons/theme_icon_dark.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$3.class" afterDir="false" />
@@ -28,7 +25,6 @@
       <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$JTextFieldLimit.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$JTextFieldLimit.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$TranslationSides.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$TranslationSides.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/utils/Constants.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/utils/Constants.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
