@@ -4,9 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a" name="Changes" comment="Fixed a small issue. Known bugs about layouts still exist.">
+    <list default="true" id="c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a" name="Changes" comment="Converted: Character count label to progress bar">
+      <change afterPath="$PROJECT_DIR$/lib/gson-2.9.1.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/json-20220924.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/aws/api/DictionaryAPI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/aws/api/URLAudioPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/aws.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/aws.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WordMate.iml" beforeDir="false" afterPath="$PROJECT_DIR$/WordMate.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/aws/api/TranslateAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aws/api/TranslateAPI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/gui/core/GUICore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/core/GUICore.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Application.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/aws/api/TranslateAPI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/aws/api/TranslateAPI.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$3.class" afterDir="false" />
@@ -16,8 +27,6 @@
       <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$JTextFieldLimit.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$JTextFieldLimit.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$TranslationSides.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$TranslationSides.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/main/java/utils/ClipboardManager$CustomUser32.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/main/java/utils/ClipboardManager.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +63,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;F:/Code_repos/Github/WordMate/wordmate/lib/jlayer-1.0.1.jar&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/Code_repos/Github/WordMate/wordmate/lib/gson-2.9.1.jar&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
@@ -153,7 +162,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665311160133</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Converted: Character count label to progress bar">
+      <created>1665396218897</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1665396218897</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -173,7 +189,9 @@
     <MESSAGE value="Up to 50 error fixes. &#10;Changed ToggleButton Map to List and added temporal but powerful solutions. Known bugs: 1. translateField layout gets expanded automatically while typing text. 2. Add language dropdown button exists but does not work." />
     <MESSAGE value="Added App icons and their functionality. Testing on Mac &amp; Linux has not been done yet." />
     <MESSAGE value="Fixed a small issue. Known bugs about layouts still exist." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed a small issue. Known bugs about layouts still exist." />
+    <MESSAGE value="Added: AWS Support:&#10;       AWS Translate&#10;       AWS Polly&#10;       &#10;Created: New TTS API&#10;The new TTS API provides handy functionalities such as listeners, read loud and download stream functions.&#10;         New Translator API&#10;Refactored: UI Buttons and their functionality&#10;Added: UI Buttons to read the text for both sides&#10;Added: Copy to clipboard button for both sides&#10;&#10;Known issues: &#10;1. AWS may throw some error messages that does not affect the functionality. &#10;2. AWS Polly will need a new thread to play." />
+    <MESSAGE value="Converted: Character count label to progress bar" />
+    <option name="LAST_COMMIT_MESSAGE" value="Converted: Character count label to progress bar" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

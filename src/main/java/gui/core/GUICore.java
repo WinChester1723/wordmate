@@ -1,9 +1,13 @@
 package gui.core;
 
+import aws.api.DictionaryAPI;
 import aws.api.TextToSpeechAPI;
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.icons.*;
 import aws.api.TranslateAPI;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.icons.FlatDescendingSortIcon;
+import com.formdev.flatlaf.icons.FlatFileViewFileIcon;
+import com.formdev.flatlaf.icons.FlatMenuArrowIcon;
+import com.formdev.flatlaf.icons.FlatTreeLeafIcon;
 import utils.ClipboardManager;
 import utils.Constants;
 
@@ -29,6 +33,7 @@ public final class GUICore {
     // GUI Core
     TrayIcon trayIcon = null;
     private TextToSpeechAPI textToSpeechAPI = null;
+    private DictionaryAPI dictionaryAPI = null;
     // Main GUI Elements
     final static short translateFieldMaxLength = 5000;
     private static GUICore single_instance = null;
@@ -233,6 +238,8 @@ public final class GUICore {
         // Init other elements
         textToSpeechAPI = new TextToSpeechAPI();
         textToSpeechAPI.Initialize();// TODO: Load recent voice and output format (serialized ones)
+
+        dictionaryAPI = new DictionaryAPI();
 
         // Init UI Elements
         JPanel translatorPanel;
@@ -456,7 +463,7 @@ public final class GUICore {
             }
         });
         DeferredDocumentListener listener = new DeferredDocumentListener(500, e -> {
-            translatorThread = new Thread(() -> {
+            translatorThread = new Thread(() -> {// TODO: this method is called periodically. Optimization is required!
                 try {
                     final String from = getSelectedLanguage(TranslationSides.TS_LEFT);
                     final String to = getSelectedLanguage(TranslationSides.TS_RIGHT);
@@ -466,13 +473,15 @@ public final class GUICore {
                     // TODO: Create a method for this:
                     translateToField.setText(translatedText);
                     translateToFieldScrollbar.getVerticalScrollBar().setValue(translateToFieldScrollbar.getVerticalScrollBar().getMaximum());
+
+                    dictionaryAPI.RequestWordDefinitionJson("en",translateFromField.getText());
+                    System.out.println(dictionaryAPI.getJSONStream());
                 } catch (IOException exc) {
                     exc.printStackTrace();
                 }
             });
             translatorThread.start();
-
-        }, true);
+        }, false);
         translateFromField.getDocument().addDocumentListener(listener);
         translateFromField.addFocusListener(new FocusListener() {
             @Override

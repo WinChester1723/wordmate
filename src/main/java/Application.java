@@ -1,5 +1,6 @@
 // Authors: OrkhanGG, WinChester1723, Deusrazen
 
+import aws.api.URLAudioPlayer;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import gui.core.GUICore;
