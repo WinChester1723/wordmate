@@ -1,4 +1,4 @@
-package gui.utils;
+package gui.utils.icons;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import utils.Constants;

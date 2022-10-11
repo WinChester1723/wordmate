@@ -1,9 +1,8 @@
 // Authors: OrkhanGG, WinChester1723, Deusrazen
 
-import aws.api.URLAudioPlayer;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
-import gui.core.GUICore;
+import gui.core.TranslateUI;
 import io.InputCore;
 
 import javax.swing.text.BadLocationException;
@@ -15,7 +14,7 @@ public class Application {
     public static void main(String[] args) throws IOException {
         // Start GUI
         try {
-            GUICore.getInstance().Initialize();
+            TranslateUI.getInstance().Initialize();
         } catch (BadLocationException e) {
             throw new RuntimeException(e);
         }

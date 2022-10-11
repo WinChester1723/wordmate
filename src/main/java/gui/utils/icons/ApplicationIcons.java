@@ -1,4 +1,4 @@
-package gui.utils;
+package gui.utils.icons;
 
 public enum ApplicationIcons {
     ICON_SWAP,
