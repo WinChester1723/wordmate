@@ -1,0 +1,297 @@
+Index: src/main/java/utils/Constants.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package utils;\r\n\r\npublic final class Constants {\r\n\r\n    public static final String APP_NAME = \"WordMate\";\r\n\r\n    // Amazon Web Services\r\n    public static final String AWS_REGION = \"us-east-1\";\r\n    public static final String AWS_ACCESS_KEY_ID = \"AKIARALMO6LF7IZ2LKGT\";\r\n    public static final String AWS_SECRET_KEY = \"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\";\r\n\r\n    // PATHS\r\n    public static final String APP_ICON_PATH = \"src/resources/static/app_icon.png\";\r\n    public static final String APP_TRAY_ICON_PATH = \"src/resources/static/app_tray_icon.png\";\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/utils/Constants.java b/src/main/java/utils/Constants.java
+--- a/src/main/java/utils/Constants.java	(revision cf4b33acda0780c7cd1b121e39a114a90f57e1c2)
++++ b/src/main/java/utils/Constants.java	(date 1665470642376)
+@@ -10,6 +10,16 @@
+     public static final String AWS_SECRET_KEY = "9/jvww8jCq02/BIaY7fvkATwgOtLAHCxmwhARbsV";
+ 
+     // PATHS
++    public static final String IMAGE_ICON_EXTENSION = ".png";
+     public static final String APP_ICON_PATH = "src/resources/static/app_icon.png";
+     public static final String APP_TRAY_ICON_PATH = "src/resources/static/app_tray_icon.png";
++
++    // Control Icons
++    public static final String DARK_THEME_SUFFIX = "_dark";
++    public static final String LIGHT_THEME_SUFFIX = "_light";
++    public static final String MENU_THEME_ICON = "src/resources/static/control_icons/theme_icon";
++    public static final String MENU_OPTIONS_ICON = "src/resources/static/control_icons/options_icon";
++    public static final String MENU_DARK_THEME_ICON = "src/resources/static/control_icons/dark_theme_icon";
++    public static final String MENU_LIGHT_THEME_ICON = "src/resources/static/control_icons/light_theme_icon";
++    public static final String MENU_CLOSE_ICON = "src/resources/static/control_icons/close_button_icon";
+ }
+Index: src/main/java/gui/core/GUICore.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package gui.core;\r\n\r\nimport aws.api.TextToSpeechAPI;\r\nimport com.formdev.flatlaf.FlatDarkLaf;\r\nimport com.formdev.flatlaf.icons.*;\r\nimport aws.api.TranslateAPI;\r\nimport utils.ClipboardManager;\r\nimport utils.Constants;\r\n\r\nimport javax.imageio.ImageIO;\r\nimport javax.swing.*;\r\nimport javax.swing.event.DocumentEvent;\r\nimport javax.swing.event.DocumentListener;\r\nimport javax.swing.text.AttributeSet;\r\nimport javax.swing.text.BadLocationException;\r\nimport javax.swing.text.PlainDocument;\r\nimport java.awt.*;\r\nimport java.awt.event.ActionListener;\r\nimport java.awt.event.FocusEvent;\r\nimport java.awt.event.FocusListener;\r\nimport java.awt.image.BufferedImage;\r\nimport java.io.File;\r\nimport java.io.IOException;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic final class GUICore {\r\n\r\n    // GUI Core\r\n    TrayIcon trayIcon = null;\r\n    private TextToSpeechAPI textToSpeechAPI = null;\r\n    // Main GUI Elements\r\n    final static short translateFieldMaxLength = 5000;\r\n    private static GUICore single_instance = null;\r\n    private JProgressBar mainProgressBar = null;\r\n    private JDropdownButton translateFromLanguageDropdown;\r\n    private JDropdownButton translateToLanguageDropdown;\r\n\r\n    private JFrame mainFrame = null;\r\n    private JPanel mainPanel = null;// To store all pages/panels inside a panel (for now)\r\n    private List<JToggleButton> translateFromUserLanguages = null;\r\n    private JButton translateFromReadLoud = null;\r\n    private JButton translateFromCopyToClipboard = null;\r\n    private JTextArea translateFromField = null;\r\n    JScrollPane translateFromFieldScrollbar;\r\n    private JLabel translateFromCharacterCount = null;\r\n    private JButton swapLanguages = null;\r\n    private List<JToggleButton> translateToUserLanguages = null;\r\n    private JTextArea translateToField = null;\r\n    JScrollPane translateToFieldScrollbar;\r\n    private JButton translateToReadLoud = null;\r\n    private JButton translateToCopyToClipboard = null;\r\n    // Side-Thread(s)\r\n    private Thread translatorThread = null;\r\n\r\n    // Public Methods\r\n    public static GUICore getInstance() {\r\n        if (single_instance == null) single_instance = new GUICore();\r\n\r\n        return single_instance;\r\n    }\r\n\r\n    public JFrame getMainFrame() {\r\n        return mainFrame;\r\n    }\r\n\r\n    private void HandleProgressBar(boolean show, double seconds) {\r\n        if (mainProgressBar == null) mainProgressBar = new JProgressBar();\r\n\r\n        final long pastTime = System.currentTimeMillis();\r\n        SwingUtilities.invokeLater(() -> {\r\n            while (System.currentTimeMillis() < (pastTime + (seconds * 1000))) { //multiply by 1000 to get milliseconds\r\n                final double passed = System.currentTimeMillis() - pastTime;\r\n                final int percentage = (int) ((passed / (seconds * 1000)) * 100);\r\n                mainProgressBar.setValue(percentage);\r\n                //below code to update progress bar while running on thread\r\n                mainProgressBar.update(mainProgressBar.getGraphics());\r\n            }\r\n            HandleProgressBar(false, 0);\r\n        });\r\n\r\n        if (show) {\r\n            mainPanel.add(mainProgressBar);\r\n        } else {\r\n            mainPanel.remove(mainProgressBar);\r\n        }\r\n\r\n        getMainFrame().pack();\r\n    }\r\n\r\n    // INFO: RequestTranslate will do some pre-checks and set the translation area text if everything's okay.\r\n    //  As the translation area text has a listener, it'll do translation job itself, we don't need to call anything else.\r\n    public void UpdateTranslateFromField(String textToTranslate) {\r\n        if (textToTranslate.length() >= translateFieldMaxLength) {\r\n            JOptionPane.showMessageDialog(null, String.format(\"Given text cannot be greater than %d characters long!\", translateFieldMaxLength), \"Error\", JOptionPane.INFORMATION_MESSAGE);\r\n            return;\r\n        }\r\n        translateFromField.setText(textToTranslate);\r\n        translateFromField.requestFocus();\r\n    }\r\n\r\n    public void UpdateTranslateFromField() {\r\n        UpdateTranslateFromField(translateFromField.getText());\r\n    }\r\n\r\n    private void loadLanguagesButtons() {\r\n        boolean saveFound = false;\r\n        if (!saveFound) { // Default initialization values\r\n            // left side\r\n            translateFromUserLanguages.add(new JToggleButton(\"English\"));\r\n            translateFromUserLanguages.add(new JToggleButton(\"Russian\"));\r\n            translateFromUserLanguages.add(new JToggleButton(\"French\"));//-------\r\n            // right side\r\n            translateToUserLanguages.add(new JToggleButton(\"Turkish\"));\r\n            translateToUserLanguages.add(new JToggleButton(\"Spanish\"));\r\n            translateToUserLanguages.add(new JToggleButton(\"Japanese\"));//-------\r\n\r\n            // Set Selected Languages\r\n            setSelectedLanguage(\"English\", TranslationSides.TS_LEFT);\r\n            setSelectedLanguage(\"Turkish\", TranslationSides.TS_RIGHT);\r\n        }\r\n\r\n        // TODO: Serialize user info to load on startup.\r\n    }\r\n\r\n    private List<String> getExistingLanguages(TranslationSides side) {\r\n        List<String> out = new ArrayList<>();\r\n        for (var i : getLanguageButtonsBySide(side)) {\r\n            out.add(i.getText());\r\n        }\r\n        return out;\r\n    }\r\n\r\n    private List<JToggleButton> getLanguageButtonsBySide(TranslationSides side) {\r\n        if (side.equals(TranslationSides.TS_LEFT)) return translateFromUserLanguages;\r\n        else return translateToUserLanguages;\r\n    }\r\n\r\n    // Returns the selected language button's value; Returns null it could not find any selected button\r\n    private String getSelectedLanguage(TranslationSides side) {\r\n        for (var i : getLanguageButtonsBySide(side))\r\n            if (i.isSelected()) return i.getText();\r\n        // TODO: IDK WHETHER RETURNING THE BUTTON'S TEXT IS THE RIGHT WAY\r\n        //  BECAUSE BUTTON'S TEXT CANNOT REPRESENT LANGUAGE NAME ALWAYS.\r\n        //  BUT IT WORKS FOR NOW, SO I KEEP IT\r\n        return \"\";\r\n    }\r\n\r\n    private int getSelectedLanguageIndex(TranslationSides side) {\r\n        for (int c = 0; c < getLanguageButtonsBySide(side).size(); c++) {\r\n            var i = getLanguageButtonsBySide(side).get(c);\r\n            if (i.isSelected()) return c;\r\n        }\r\n        return -1;\r\n    }\r\n\r\n    // Returns the selected language button's instance; Returns null it could not find any selected button\r\n    private JToggleButton getSelectedLanguageButton(TranslationSides side) {\r\n        for (var i : getLanguageButtonsBySide(side))\r\n            if (i.isSelected()) return i;\r\n        return null;\r\n    }\r\n\r\n    private void selectNextLanguage(TranslationSides side) {\r\n        int currentSelectedIndex = getSelectedLanguageIndex(side)+1;\r\n\r\n        if(currentSelectedIndex >= getExistingLanguages(side).size())\r\n            currentSelectedIndex = 0;\r\n\r\n        setSelectedLanguage(getExistingLanguages(side).get(currentSelectedIndex),side);\r\n    }\r\n\r\n    // Returns the opposite side of the given side -> EX: RIGHT for LEFT, LEFT for RIGHT\r\n    private TranslationSides getOppositeSide(TranslationSides side){\r\n        return side.equals(TranslationSides.TS_LEFT) ? TranslationSides.TS_RIGHT : TranslationSides.TS_LEFT;\r\n    }\r\n\r\n    // Attempts to select the given language.\r\n    private void setSelectedLanguage(String lang, TranslationSides side) {\r\n            // This will be called only once(if there's no bugs)\r\n            for (var i : getLanguageButtonsBySide(side))\r\n                i.setSelected(i.getText().equals(lang));\r\n\r\n                // be sure that we don't try to translate to same language\r\n        if (getSelectedLanguage(getOppositeSide(side)).equals(lang))\r\n            selectNextLanguage(getOppositeSide(side));\r\n\r\n        UpdateTranslateFromField();// Update translation in any case\r\n    }\r\n\r\n    private boolean containsLanguage(String lang, TranslationSides side) {\r\n        for (var i : getLanguageButtonsBySide(side))\r\n            if (i.getText().equals(lang)) return true;\r\n        return false;\r\n    }\r\n\r\n    private void addLanguage(String lang, TranslationSides side) {\r\n        if (!containsLanguage(lang, side)) {\r\n            // We are going to insert a new language\r\n            // Since we always will have 3 languages -> EN, RU, AZ\r\n            // We can push the first and remove the last -> FR, EN, RU\r\n            List<String> _languages_ = getExistingLanguages(side);\r\n            _languages_.add(0, lang);\r\n            _languages_.remove((_languages_.size() - 1) <= 0 ? 0 : _languages_.size() - 1);\r\n            //---------------------------------------------------------\r\n\r\n            assert getLanguageButtonsBySide(side).size() == _languages_.size() : \"EC:001-> getLanguageButtonsBySide(side).size() != _languages_.size()\";\r\n\r\n            // Assign values\r\n            for (int c = 0; c < _languages_.size(); c++) {\r\n                getLanguageButtonsBySide(side).get(c).setText(_languages_.get(c));\r\n            }\r\n        }\r\n        // Finally, whether it's recently added or not, select the button\r\n        setSelectedLanguage(lang, side);\r\n    }\r\n\r\n    public void RequestToSelectLanguage(String lang, TranslationSides side) {\r\n        if (containsLanguage(lang, side)) {\r\n            setSelectedLanguage(lang, side);\r\n        } else {\r\n            addLanguage(lang, side);\r\n        }\r\n    }\r\n\r\n    public void Initialize() throws BadLocationException {\r\n        try {\r\n            UIManager.setLookAndFeel(new FlatDarkLaf());\r\n        } catch (UnsupportedLookAndFeelException e) {\r\n            e.printStackTrace();\r\n        }\r\n\r\n        // Init other elements\r\n        textToSpeechAPI = new TextToSpeechAPI();\r\n        textToSpeechAPI.Initialize();// TODO: Load recent voice and output format (serialized ones)\r\n\r\n        // Init UI Elements\r\n        JPanel translatorPanel;\r\n        {\r\n            mainFrame = new JFrame(Constants.APP_NAME);\r\n            translatorPanel = new JPanel();\r\n        }\r\n        // Translate From Initialization\r\n        // INFO: Translate Section\r\n        JPanel translateFromPreferencePanel;\r\n        GridLayout translateFromPreferencePanelGL;\r\n        JPanel translateFromUserLanguagesPanel;\r\n        JPanel translateFromAdditionalPanel;\r\n        // INFO: TranslateTo Section\r\n        JPanel translateToPreferencePanel;\r\n        GridLayout translateToPreferencePanelGL;\r\n        JPanel translateToUserLanguagesPanel;\r\n        JPanel translateToAdditionalPanel;\r\n        {\r\n            mainPanel = new JPanel();\r\n            translateFromPreferencePanel = new JPanel();\r\n            translateFromUserLanguagesPanel = new JPanel();//--------\r\n            translateFromPreferencePanelGL = new GridLayout(1, 3,5,0);\r\n            translateFromUserLanguages = new ArrayList<>();\r\n            translateFromLanguageDropdown = new JDropdownButton(\"Add\", new FlatDescendingSortIcon(), new ArrayList<>(TranslateAPI.getInstance().getAvailableLanguages().keySet()));\r\n            swapLanguages = new JButton(\"Swap\", new FlatTreeLeafIcon());\r\n            translateFromField = new JTextArea();\r\n            translateFromFieldScrollbar = new JScrollPane(translateFromField);\r\n            translateFromAdditionalPanel = new JPanel();\r\n            translateFromReadLoud = new JButton(\"Play\", new FlatMenuArrowIcon());\r\n            translateFromCopyToClipboard = new JButton(\"Copy to Clipboard\", new FlatFileViewFileIcon());\r\n            translateFromCharacterCount = new JLabel(String.format(\"%d / %d\", translateFromField.getText().length(), translateFieldMaxLength));\r\n            //----------\r\n            translateToPreferencePanel = new JPanel();\r\n            translateToUserLanguagesPanel = new JPanel();//--------\r\n            translateToPreferencePanelGL = new GridLayout(1, 3,5,0);\r\n            translateToUserLanguages = new ArrayList<>();\r\n            translateToLanguageDropdown = new JDropdownButton(\"Add\", new FlatDescendingSortIcon(), new ArrayList<>(TranslateAPI.getInstance().getAvailableLanguages().keySet()));\r\n            translateToField = new JTextArea(\"\");\r\n            translateToAdditionalPanel = new JPanel();\r\n            translateToFieldScrollbar = new JScrollPane(translateToField);\r\n            translateToReadLoud = new JButton(\"Play\", new FlatMenuArrowIcon());\r\n            translateToCopyToClipboard = new JButton(\"Copy to Clipboard\", new FlatFileViewFileIcon());\r\n        }\r\n\r\n        { // Configure Language Buttons\r\n            loadLanguagesButtons();\r\n        }\r\n\r\n        // TranslateFromPreferencePanel Handling\r\n        {\r\n            translateFromUserLanguagesPanel.setLayout(translateFromPreferencePanelGL);\r\n            for (var i : translateFromUserLanguages)// add buttons to the panel\r\n                translateFromUserLanguagesPanel.add(i);\r\n\r\n            // TranslateFromPreferencePanel\r\n            translateFromPreferencePanel.setLayout(new GridLayout(1,2, 5, 0));\r\n            translateFromPreferencePanel.add(translateFromUserLanguagesPanel);\r\n            translateFromPreferencePanel.add(translateFromLanguageDropdown);\r\n        }\r\n\r\n        // TranslateToPreferencePanel Handling\r\n        {\r\n            translateToUserLanguagesPanel.setLayout(translateToPreferencePanelGL);\r\n            for (var i : translateToUserLanguages)// add buttons to the panel\r\n                translateToUserLanguagesPanel.add(i);\r\n\r\n            // TranslateToPreferencePanel Handling\r\n            translateToPreferencePanel.add(swapLanguages);\r\n            translateToPreferencePanel.add(translateToUserLanguagesPanel);\r\n            translateToPreferencePanel.add(translateToLanguageDropdown);\r\n        }\r\n\r\n        // Handle Translate Field Configuration\r\n        {\r\n            translateFromField.setLineWrap(true);\r\n            translateFromField.setWrapStyleWord(true);\r\n            translateFromField.setDocument(new JTextFieldLimit(translateFieldMaxLength));\r\n            //---------\r\n            translateToField.setLineWrap(true);\r\n            translateToField.setWrapStyleWord(true);\r\n            translateToField.setEditable(false);\r\n        }\r\n\r\n        AddEventListeners();// Add listeners for the controls that exist in this function\r\n\r\n        // Final touches\r\n        {\r\n            translatorPanel.setLayout(new GridBagLayout());\r\n\r\n            GridBagConstraints gridBagConstraints = new GridBagConstraints();\r\n            gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;\r\n            gridBagConstraints.gridx = 0;\r\n            gridBagConstraints.gridy = 0;\r\n            translatorPanel.add(translateFromPreferencePanel, gridBagConstraints);\r\n            gridBagConstraints.gridx = 1;\r\n            translatorPanel.add(translateToPreferencePanel, gridBagConstraints);\r\n            gridBagConstraints.fill = GridBagConstraints.BOTH;\r\n            gridBagConstraints.weightx = 0.0;\r\n            gridBagConstraints.ipady = 100;\r\n            gridBagConstraints.gridx = 0;\r\n            gridBagConstraints.gridy = 1;\r\n            translatorPanel.add(translateFromFieldScrollbar, gridBagConstraints);\r\n            gridBagConstraints.gridx = 1;\r\n            translatorPanel.add(translateToFieldScrollbar, gridBagConstraints);\r\n\r\n            // translateFrom Additional Panel\r\n            GridLayout translateFromAdditionalPanelLayout = new GridLayout();\r\n            translateFromAdditionalPanel.setLayout(translateFromAdditionalPanelLayout);\r\n            translateFromAdditionalPanel.add(translateFromReadLoud);\r\n            translateFromAdditionalPanel.add(translateFromCopyToClipboard);\r\n            translateFromCharacterCount.setHorizontalAlignment(SwingConstants.CENTER);\r\n            translateFromAdditionalPanel.add(translateFromCharacterCount);\r\n            // translateTo Additional Panel\r\n            translateToAdditionalPanel.setLayout(new GridLayout(1,2));\r\n            translateToAdditionalPanel.add(translateToReadLoud);\r\n            translateToAdditionalPanel.add(translateToCopyToClipboard);\r\n\r\n            gridBagConstraints.ipady = 5;\r\n            gridBagConstraints.gridx = 0;\r\n            gridBagConstraints.gridy = 2;\r\n            translatorPanel.add(translateFromAdditionalPanel,gridBagConstraints);\r\n            gridBagConstraints.gridx = 1;\r\n            translatorPanel.add(translateToAdditionalPanel,gridBagConstraints);\r\n\r\n            mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));\r\n            mainPanel.add(translatorPanel);\r\n\r\n            mainFrame.add(mainPanel);\r\n            mainFrame.setAlwaysOnTop(false);\r\n            mainFrame.pack();\r\n            mainFrame.setVisible(true);\r\n            mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);\r\n            mainFrame.setResizable(false);\r\n        }\r\n\r\n        SetIcon();\r\n        AddTrayIcon();\r\n    }\r\n\r\n    private void SetIcon() {\r\n        File file = new File(Constants.APP_ICON_PATH);\r\n\r\n        if (!(new File(Constants.APP_TRAY_ICON_PATH).exists())) {\r\n            JOptionPane.showMessageDialog(mainFrame, \"App icon could not be found!\", \"Error\", JOptionPane.ERROR_MESSAGE);\r\n            return;\r\n        }\r\n\r\n        try {\r\n            BufferedImage bImage = ImageIO.read(file);\r\n            getMainFrame().setIconImage(bImage);\r\n\r\n            //set icon on system tray, as in Mac OS X system\r\n            if (System.getProperty(\"os.name\").contains(\"Mac\")) {\r\n                final Taskbar taskbar = Taskbar.getTaskbar();\r\n                taskbar.setIconImage(bImage);// - OrkhanGG TODO: test it on Mac\r\n            }\r\n        } catch (IOException e) {\r\n            throw new RuntimeException(e);\r\n        }\r\n    }\r\n\r\n    private void AddTrayIcon() {\r\n        if (!SystemTray.isSupported()) {\r\n            System.out.println(\"SystemTray is not supported\");\r\n            return;\r\n        }\r\n\r\n        if (!(new File(Constants.APP_TRAY_ICON_PATH).exists())) {\r\n            JOptionPane.showMessageDialog(mainFrame, \"App Tray icon could not be found!\", \"Error\", JOptionPane.ERROR_MESSAGE);\r\n            return;\r\n        }\r\n\r\n        Image image = Toolkit.getDefaultToolkit().getImage(Constants.APP_TRAY_ICON_PATH);\r\n        final PopupMenu popup = new PopupMenu();\r\n        trayIcon = new TrayIcon(image, Constants.APP_NAME, popup);\r\n        trayIcon.setImageAutoSize(true);\r\n        final SystemTray tray = SystemTray.getSystemTray();\r\n\r\n        MenuItem exitItem = new MenuItem(\"Exit\");\r\n        exitItem.addActionListener(e -> System.exit(1));\r\n        popup.add(exitItem);\r\n\r\n        trayIcon.setPopupMenu(popup);\r\n\r\n        try {\r\n            tray.add(trayIcon);\r\n        } catch (AWTException e) {\r\n            System.out.println(\"TrayIcon could not be added.\");\r\n        }\r\n    }\r\n\r\n    // info: ------------------------------------\r\n\r\n    private void AddEventListeners() {\r\n\r\n        // On TranslateField Change(When user stops typing)\r\n        translateFromField.getDocument().addDocumentListener(new DocumentListener() {\r\n            @Override\r\n            public void removeUpdate(DocumentEvent e) {\r\n                translateFromCharacterCount.setText(String.format(\"%d / %d\", translateFromField.getText().length(), translateFieldMaxLength));\r\n            }\r\n\r\n            @Override\r\n            public void insertUpdate(DocumentEvent e) {\r\n                translateFromCharacterCount.setText(String.format(\"%d / %d\", translateFromField.getText().length(), translateFieldMaxLength));\r\n            }\r\n\r\n            @Override\r\n            public void changedUpdate(DocumentEvent e) {\r\n            }\r\n        });\r\n        DeferredDocumentListener listener = new DeferredDocumentListener(500, e -> {\r\n            translatorThread = new Thread(() -> {\r\n                try {\r\n                    final String from = getSelectedLanguage(TranslationSides.TS_LEFT);\r\n                    final String to = getSelectedLanguage(TranslationSides.TS_RIGHT);\r\n\r\n                    final String translatedText = TranslateAPI.getInstance().translate(TranslateAPI.getInstance().getLanguageCodeByName(from), TranslateAPI.getInstance().getLanguageCodeByName(to), translateFromField.getText());\r\n\r\n                    // TODO: Create a method for this:\r\n                    translateToField.setText(translatedText);\r\n                    translateToFieldScrollbar.getVerticalScrollBar().setValue(translateToFieldScrollbar.getVerticalScrollBar().getMaximum());\r\n                } catch (IOException exc) {\r\n                    exc.printStackTrace();\r\n                }\r\n            });\r\n            translatorThread.start();\r\n\r\n        }, true);\r\n        translateFromField.getDocument().addDocumentListener(listener);\r\n        translateFromField.addFocusListener(new FocusListener() {\r\n            @Override\r\n            public void focusGained(FocusEvent e) {\r\n                listener.start();\r\n            }\r\n\r\n            @Override\r\n            public void focusLost(FocusEvent e) {\r\n                listener.stop();\r\n            }\r\n        });\r\n\r\n        // On any translateFromUserLanguages button pressed\r\n        for (var currentEntry : translateFromUserLanguages) {\r\n            currentEntry.addActionListener(e -> RequestToSelectLanguage(currentEntry.getText(), TranslationSides.TS_LEFT));\r\n        }\r\n\r\n        //translateToUserLanguages\r\n        for (var currentEntry : translateToUserLanguages) {\r\n            currentEntry.addActionListener(e -> RequestToSelectLanguage(currentEntry.getText(), TranslationSides.TS_RIGHT));\r\n        }\r\n\r\n        // Swap button listener\r\n        swapLanguages.addActionListener(e -> {\r\n            final String leftSideText = getSelectedLanguageButton(TranslationSides.TS_LEFT).getText();\r\n            final String rightSideText = getSelectedLanguageButton(TranslationSides.TS_RIGHT).getText();\r\n            getSelectedLanguageButton(TranslationSides.TS_LEFT).setText(rightSideText);\r\n            getSelectedLanguageButton(TranslationSides.TS_RIGHT).setText(leftSideText);\r\n\r\n            //-----------------------\r\n            final String rightSideTranslation = translateToField.getText();\r\n            translateFromField.setText(rightSideTranslation);\r\n        });\r\n\r\n        // Dropdown events\r\n        if (translateFromLanguageDropdown.getMenuItems().size() > 0 && translateToLanguageDropdown.getMenuItems().size() > 0) {\r\n            for (var i : translateFromLanguageDropdown.getMenuItems()) {\r\n                i.addActionListener(e -> RequestToSelectLanguage(i.getText(), TranslationSides.TS_LEFT));\r\n            }\r\n            for (var i : translateToLanguageDropdown.getMenuItems()) {\r\n                i.addActionListener(e -> RequestToSelectLanguage(i.getText(), TranslationSides.TS_RIGHT));\r\n            }\r\n        } else {\r\n            JOptionPane.showMessageDialog(mainFrame, \"Either translate-From/To LanguageDropdown button's menu items don't exist! \", \"Error\", JOptionPane.ERROR_MESSAGE);\r\n        }\r\n\r\n        // Text to Speech events\r\n        // TODO: Depending on TTS support over the languages, these buttons will be enabled/disabled!\r\n        translateFromReadLoud.addActionListener(e->\r\n        {\r\n            Thread textToSpeechThread = new Thread(() -> {\r\n                textToSpeechAPI.RequestSetStream(translateFromField.getText());\r\n                textToSpeechAPI.RequestPlayStream();\r\n            });\r\n            textToSpeechThread.start();\r\n        });\r\n        translateToReadLoud.addActionListener(e-> {\r\n            textToSpeechAPI.RequestSetStream(translateToField.getText());\r\n            textToSpeechAPI.RequestPlayStream();\r\n        });\r\n\r\n        // Copy to Clipboard events\r\n        translateFromCopyToClipboard.addActionListener(e->{\r\n            try {\r\n                ClipboardManager.getInstance().setClipboardText(translateFromField.getText());\r\n                String originalText = translateFromCopyToClipboard.getText();\r\n                translateFromCopyToClipboard.setText(\"Copied!\");\r\n                trayIcon.displayMessage(Constants.APP_NAME,\"Copied:\"+translateFromField.getText(), TrayIcon.MessageType.INFO);\r\n\r\n                new java.util.Timer().schedule(\r\n                        new java.util.TimerTask() {\r\n                            @Override\r\n                            public void run() {\r\n                                translateFromCopyToClipboard.setText(originalText);\r\n                            }\r\n                        },\r\n                        1000\r\n                );\r\n            } catch (Exception ex) {\r\n                throw new RuntimeException(ex);\r\n            }\r\n        });\r\n        translateToCopyToClipboard.addActionListener(e->{\r\n            try {\r\n                ClipboardManager.getInstance().setClipboardText(translateToField.getText());\r\n                String originalText = translateToCopyToClipboard.getText();\r\n                translateToCopyToClipboard.setText(\"Copied!\");\r\n                trayIcon.displayMessage(Constants.APP_NAME,\"Copied:\"+translateToField.getText(), TrayIcon.MessageType.INFO);\r\n\r\n                new java.util.Timer().schedule(\r\n                        new java.util.TimerTask() {\r\n                            @Override\r\n                            public void run() {\r\n                                translateToCopyToClipboard.setText(originalText);\r\n                            }\r\n                        },\r\n                        1000\r\n                );\r\n            } catch (Exception ex) {\r\n                throw new RuntimeException(ex);\r\n            }\r\n        });\r\n    }\r\n\r\n    enum TranslationSides {\r\n        TS_LEFT, TS_RIGHT\r\n    }\r\n\r\n    private static final class JTextFieldLimit extends PlainDocument {\r\n        private final int limit;\r\n\r\n        JTextFieldLimit(int limit) {\r\n            super();\r\n            this.limit = limit;\r\n        }\r\n\r\n        public void insertString(int offset, String str, AttributeSet attr) throws BadLocationException {\r\n            if (str == null) return;\r\n\r\n            if ((getLength() + str.length()) <= limit) {\r\n                super.insertString(offset, str, attr);\r\n            }\r\n        }\r\n    }\r\n\r\n    // Nested Classes\r\n    private final class JDropdownButton extends JButton {\r\n        private final List<JMenuItem> menuItems;\r\n        private JPopupMenu popupMenu = null;\r\n\r\n        public JDropdownButton(String label, Icon icon, List<String> items) {\r\n\r\n            super(label, icon);\r\n\r\n            menuItems = new ArrayList<>();\r\n            for (var i : items) {\r\n                menuItems.add(new JMenuItem(i));\r\n            }\r\n\r\n            super.addActionListener(e -> {\r\n                popupMenu = new JPopupMenu();\r\n\r\n                for (var i : menuItems)\r\n                    popupMenu.add(i);\r\n\r\n                popupMenu.show(this, 10, 10);\r\n            });\r\n        }\r\n\r\n        public List<JMenuItem> getMenuItems() {\r\n            return menuItems;\r\n        }\r\n\r\n    }\r\n\r\n    public class DeferredDocumentListener implements DocumentListener {\r\n\r\n        private final Timer timer;\r\n\r\n        public DeferredDocumentListener(int timeOut, ActionListener listener, boolean repeats) {\r\n            timer = new Timer(timeOut, listener);\r\n            timer.setRepeats(repeats);\r\n        }\r\n\r\n        public void start() {\r\n            timer.start();\r\n        }\r\n\r\n        public void stop() {\r\n            timer.stop();\r\n        }\r\n\r\n        @Override\r\n        public void insertUpdate(DocumentEvent e) {\r\n            timer.restart();\r\n        }\r\n\r\n        @Override\r\n        public void removeUpdate(DocumentEvent e) {\r\n            timer.restart();\r\n        }\r\n\r\n        @Override\r\n        public void changedUpdate(DocumentEvent e) {\r\n            timer.restart();\r\n        }\r\n\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/gui/core/GUICore.java b/src/main/java/gui/core/GUICore.java
+--- a/src/main/java/gui/core/GUICore.java	(revision cf4b33acda0780c7cd1b121e39a114a90f57e1c2)
++++ b/src/main/java/gui/core/GUICore.java	(date 1665471217919)
+@@ -1,9 +1,11 @@
+ package gui.core;
+ 
+ import aws.api.TextToSpeechAPI;
++import aws.api.TranslateAPI;
+ import com.formdev.flatlaf.FlatDarkLaf;
+ import com.formdev.flatlaf.icons.*;
+-import aws.api.TranslateAPI;
++import gui.utils.ApplicationIcons;
++import gui.utils.IconManager;
+ import utils.ClipboardManager;
+ import utils.Constants;
+ 
+@@ -38,6 +40,15 @@
+ 
+     private JFrame mainFrame = null;
+     private JPanel mainPanel = null;// To store all pages/panels inside a panel (for now)
++
++    private JMenuBar mainMenuBar = null;
++    private JMenu mainMenu, mainSubmenu = null;
++    private JMenuItem mainMenuItemTheme = null;
++    private JMenuItem mainMenuItemOptions = null;
++    private JMenuItem mainMenuItemClose = null;
++    private JMenuItem themeDark = null;
++    private JMenuItem themeLight = null;
++
+     private List<JToggleButton> translateFromUserLanguages = null;
+     private JButton translateFromReadLoud = null;
+     private JButton translateFromCopyToClipboard = null;
+@@ -253,6 +264,16 @@
+         JPanel translateToAdditionalPanel;
+         {
+             mainPanel = new JPanel();
++
++            mainMenuBar = new JMenuBar();
++            mainMenu = new JMenu("Menu");
++            mainSubmenu = new JMenu("Submenu");
++            mainMenuItemTheme = new JMenuItem("Theme");
++            themeDark = new JMenuItem("Dark");
++            themeLight = new JMenuItem("light");
++            mainMenuItemOptions = new JMenuItem("Options");
++            mainMenuItemClose = new JMenuItem("Close");
++
+             translateFromPreferencePanel = new JPanel();
+             translateFromUserLanguagesPanel = new JPanel();//--------
+             translateFromPreferencePanelGL = new GridLayout(1, 3,5,0);
+@@ -278,6 +299,29 @@
+             translateToCopyToClipboard = new JButton("Copy to Clipboard", new FlatFileViewFileIcon());
+         }
+ 
++        { // Configure main menu
++            mainPanel.add(mainMenuBar);
++
++            mainMenuBar.add(mainMenu);
++            mainMenu.setIcon(new FlatTreeOpenIcon());
++
++            ImageIcon t = IconManager.getInstance().getIcon(ApplicationIcons.ICON_MENU_THEME);
++            mainMenuItemTheme.setIcon(t);
++            mainMenu.add(mainMenuItemTheme);
++
++            mainSubmenu.add(themeDark);
++            //themeDark.setIcon();
++
++            mainSubmenu.add(themeLight);
++            //themeLight.setIcon();
++
++            mainMenu.add(mainMenuItemOptions);
++            //mainMenuItemOptions.setIcon();
++
++            mainMenu.add(mainMenuItemClose);
++            //mainMenuItemClose.setIcon();
++        }
++
+         { // Configure Language Buttons
+             loadLanguagesButtons();
+         }
+@@ -462,7 +506,7 @@
+             });
+             translatorThread.start();
+ 
+-        }, true);
++        }, false);
+         translateFromField.getDocument().addDocumentListener(listener);
+         translateFromField.addFocusListener(new FocusListener() {
+             @Override
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a\" name=\"Changes\" comment=\"Fixed a small issue. Known bugs about layouts still exist.\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/aws.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/aws.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/WordMate.iml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/WordMate.iml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/gui/core/GUICore.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/gui/core/GUICore.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"CodeInsightWorkspaceSettings\">\r\n    <option name=\"optimizeImportsOnTheFly\" value=\"true\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"2Fn8jBfH6ob5986cNnb8lLaR68N\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\">\r\n    <ConfirmationsSetting value=\"2\" id=\"Add\" />\r\n  </component>\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"ASKED_ADD_EXTERNAL_FILES\": \"true\",\r\n    \"RunOnceActivity.OpenProjectViewOnStart\": \"true\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"SHARE_PROJECT_CONFIGURATION_FILES\": \"true\",\r\n    \"last_opened_file_path\": \"F:/Code_repos/Github/WordMate/wordmate/lib/jlayer-1.0.1.jar\",\r\n    \"project.structure.last.edited\": \"Modules\",\r\n    \"project.structure.proportion\": \"0.15\",\r\n    \"project.structure.side.proportion\": \"0.2\",\r\n    \"settings.editor.selected.configurable\": \"aws.codewhisperer\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RunManager\" selected=\"Application.Application\">\r\n    <configuration name=\"Application\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"Application\" />\r\n      <module name=\"WordMate\" />\r\n      <shortenClasspath name=\"ARGS_FILE\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"MASTER\" type=\"Application\" factoryName=\"Application\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"main.java.Application\" />\r\n      <module name=\"WordMate\" />\r\n      <option name=\"VM_PARAMETERS\" value=\"-ea\" />\r\n      <extension name=\"software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension\">\r\n        <option name=\"credential\" />\r\n        <option name=\"region\" />\r\n        <option name=\"useCurrentConnection\" value=\"false\" />\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration default=\"true\" type=\"Application\" factoryName=\"Application\">\r\n      <shortenClasspath name=\"ARGS_FILE\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Application.Application\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a\" name=\"Changes\" comment=\"\" />\r\n      <created>1665116619440</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1665116619440</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"Added necessary libraries. Additionally, project management is adjusted.\">\r\n      <created>1665117388082</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1665117388082</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"Added necessary libraries. Additionally, project management is adjusted.\">\r\n      <created>1665214289627</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1665214289627</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"Up to 50 error fixes. &#10;Changed ToggleButton Map to List and added temporal but powerful solutions. Known bugs: 1. translateField layout gets expanded automatically while typing text. 2. Add language dropdown button exists but does not work.\">\r\n      <created>1665286176588</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1665286176588</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00004\" summary=\"Added App icons and their functionality. Testing on Mac &amp; Linux has not been done yet.\">\r\n      <created>1665301311676</created>\r\n      <option name=\"number\" value=\"00004\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1665301311676</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00005\" summary=\"Fixed a small issue. Known bugs about layouts still exist.\">\r\n      <created>1665301576011</created>\r\n      <option name=\"number\" value=\"00005\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00005\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1665301576011</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00006\" summary=\"Fixed a small issue. Known bugs about layouts still exist.\">\r\n      <created>1665303355068</created>\r\n      <option name=\"number\" value=\"00006\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00006\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1665303355068</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00007\" summary=\"Fixed a small issue. Known bugs about layouts still exist.\">\r\n      <created>1665311160133</created>\r\n      <option name=\"number\" value=\"00007\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00007\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1665311160133</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"8\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <option name=\"ADD_EXTERNAL_FILES_SILENTLY\" value=\"true\" />\r\n    <MESSAGE value=\"Added necessary libraries. Additionally, project management is adjusted.\" />\r\n    <MESSAGE value=\"Up to 50 error fixes. &#10;Changed ToggleButton Map to List and added temporal but powerful solutions. Known bugs: 1. translateField layout gets expanded automatically while typing text. 2. Add language dropdown button exists but does not work.\" />\r\n    <MESSAGE value=\"Added App icons and their functionality. Testing on Mac &amp; Linux has not been done yet.\" />\r\n    <MESSAGE value=\"Fixed a small issue. Known bugs about layouts still exist.\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Fixed a small issue. Known bugs about layouts still exist.\" />\r\n  </component>\r\n  <component name=\"XDebuggerManager\">\r\n    <breakpoint-manager>\r\n      <breakpoints>\r\n        <line-breakpoint enabled=\"true\" type=\"java-line\">\r\n          <url>file://$PROJECT_DIR$/src/main/java/aws/api/TextToSpeechAPI.java</url>\r\n          <line>122</line>\r\n          <option name=\"timeStamp\" value=\"84\" />\r\n        </line-breakpoint>\r\n      </breakpoints>\r\n    </breakpoint-manager>\r\n  </component>\r\n  <component name=\"XSLT-Support.FileAssociations.UIState\">\r\n    <expand />\r\n    <select />\r\n  </component>\r\n  <component name=\"com.intellij.coverage.CoverageDataManagerImpl\">\r\n    <SUITE FILE_PATH=\"coverage/wordmate$Application.ic\" NAME=\"Application Coverage Results\" MODIFIED=\"1665371160963\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" />\r\n    <SUITE FILE_PATH=\"coverage/wordmate$MASTER.ic\" NAME=\"MASTER Coverage Results\" MODIFIED=\"1665301457343\" SOURCE_PROVIDER=\"com.intellij.coverage.DefaultCoverageFileProvider\" RUNNER=\"idea\" COVERAGE_BY_TEST_ENABLED=\"false\" COVERAGE_TRACING_ENABLED=\"false\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision cf4b33acda0780c7cd1b121e39a114a90f57e1c2)
++++ b/.idea/workspace.xml	(date 1665471079041)
+@@ -4,11 +4,22 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a" name="Changes" comment="Fixed a small issue. Known bugs about layouts still exist.">
+-      <change beforePath="$PROJECT_DIR$/.idea/aws.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/aws.xml" afterDir="false" />
++    <list default="true" id="c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a" name="Changes" comment="Fixed: Layout's expansion bug&#10;Added: Current and maximum character count&#10;Added: Scrollbar for text areas in both sides&#10;&#10;Known layout problem: Layout of the buttons">
++      <change afterPath="$PROJECT_DIR$/src/main/java/gui/utils/ApplicationIcons.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/gui/utils/IconManager.java" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/WordMate.iml" beforeDir="false" afterPath="$PROJECT_DIR$/WordMate.iml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/java/gui/core/GUICore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/core/GUICore.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/java/utils/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/Constants.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$1.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$2.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$3.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$4.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$DeferredDocumentListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$DeferredDocumentListener.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$JDropdownButton.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$JDropdownButton.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$JTextFieldLimit.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$JTextFieldLimit.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore$TranslationSides.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore$TranslationSides.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/GUICore.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/GUICore.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/target/classes/utils/Constants.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/utils/Constants.class" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -22,6 +33,7 @@
+     <option name="RECENT_TEMPLATES">
+       <list>
+         <option value="Class" />
++        <option value="Enum" />
+       </list>
+     </option>
+   </component>
+@@ -39,19 +51,19 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "ASKED_ADD_EXTERNAL_FILES": "true",
+-    "RunOnceActivity.OpenProjectViewOnStart": "true",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+-    "last_opened_file_path": "F:/Code_repos/Github/WordMate/wordmate/lib/jlayer-1.0.1.jar",
+-    "project.structure.last.edited": "Modules",
+-    "project.structure.proportion": "0.15",
+-    "project.structure.side.proportion": "0.2",
+-    "settings.editor.selected.configurable": "aws.codewhisperer"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
++    &quot;last_opened_file_path&quot;: &quot;F:/Code_repos/Github/WordMate/wordmate/lib/jlayer-1.0.1.jar&quot;,
++    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
++    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
++    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
++    &quot;settings.editor.selected.configurable&quot;: &quot;aws.codewhisperer&quot;
+   }
+-}]]></component>
++}</component>
+   <component name="RunManager" selected="Application.Application">
+     <configuration name="Application" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+       <option name="MAIN_CLASS_NAME" value="Application" />
+@@ -144,7 +156,14 @@
+       <option name="project" value="LOCAL" />
+       <updated>1665311160133</updated>
+     </task>
+-    <option name="localTasksCounter" value="8" />
++    <task id="LOCAL-00008" summary="Fixed: Layout's expansion bug&#10;Added: Current and maximum character count&#10;Added: Scrollbar for text areas in both sides&#10;&#10;Known layout problem: Layout of the buttons">
++      <created>1665395109748</created>
++      <option name="number" value="00008" />
++      <option name="presentableId" value="LOCAL-00008" />
++      <option name="project" value="LOCAL" />
++      <updated>1665395109748</updated>
++    </task>
++    <option name="localTasksCounter" value="9" />
+     <servers />
+   </component>
+   <component name="Vcs.Log.Tabs.Properties">
+@@ -164,7 +183,8 @@
+     <MESSAGE value="Up to 50 error fixes. &#10;Changed ToggleButton Map to List and added temporal but powerful solutions. Known bugs: 1. translateField layout gets expanded automatically while typing text. 2. Add language dropdown button exists but does not work." />
+     <MESSAGE value="Added App icons and their functionality. Testing on Mac &amp; Linux has not been done yet." />
+     <MESSAGE value="Fixed a small issue. Known bugs about layouts still exist." />
+-    <option name="LAST_COMMIT_MESSAGE" value="Fixed a small issue. Known bugs about layouts still exist." />
++    <MESSAGE value="Fixed: Layout's expansion bug&#10;Added: Current and maximum character count&#10;Added: Scrollbar for text areas in both sides&#10;&#10;Known layout problem: Layout of the buttons" />
++    <option name="LAST_COMMIT_MESSAGE" value="Fixed: Layout's expansion bug&#10;Added: Current and maximum character count&#10;Added: Scrollbar for text areas in both sides&#10;&#10;Known layout problem: Layout of the buttons" />
+   </component>
+   <component name="XDebuggerManager">
+     <breakpoint-manager>
+Index: src/main/java/gui/utils/ApplicationIcons.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/gui/utils/ApplicationIcons.java b/src/main/java/gui/utils/ApplicationIcons.java
+new file mode 100644
+--- /dev/null	(date 1665471078947)
++++ b/src/main/java/gui/utils/ApplicationIcons.java	(date 1665471078947)
+@@ -0,0 +1,9 @@
++package gui.utils;
++
++public enum ApplicationIcons {
++    ICON_MENU_THEME,
++    ICON_MENU_THEME_LIGHT,
++    ICON_MENU_THEME_DARK,
++    ICON_MENU_OPTIONS,
++    ICON_MENU_CLOSE
++}
+Index: src/main/java/gui/utils/IconManager.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/gui/utils/IconManager.java b/src/main/java/gui/utils/IconManager.java
+new file mode 100644
+--- /dev/null	(date 1665471078931)
++++ b/src/main/java/gui/utils/IconManager.java	(date 1665471078931)
+@@ -0,0 +1,44 @@
++package gui.utils;
++
++import com.formdev.flatlaf.FlatDarkLaf;
++import utils.Constants;
++
++import javax.swing.*;
++
++public class IconManager {
++
++    private static IconManager single_instance = null;
++
++    public static IconManager getInstance(){
++        if(single_instance == null)
++            single_instance = new IconManager();
++
++        return single_instance;
++    }
++
++    public ImageIcon getIcon(ApplicationIcons icon){
++        String fileName = null;
++
++        if(icon.equals(ApplicationIcons.ICON_MENU_THEME))
++            fileName = Constants.MENU_THEME_ICON;
++        else if(icon.equals(ApplicationIcons.ICON_MENU_OPTIONS))
++            fileName = Constants.MENU_OPTIONS_ICON;
++        else if (icon.equals(ApplicationIcons.ICON_MENU_CLOSE))
++            fileName = Constants.MENU_CLOSE_ICON;
++        else
++            System.err.printf("%s: Unexpected icon request", this.getClass().getName());
++
++        // dark or light theme
++        if(UIManager.getLookAndFeel() instanceof FlatDarkLaf){
++            System.out.println("UI is dark");
++            fileName += Constants.DARK_THEME_SUFFIX;
++        }else{
++            fileName += Constants.LIGHT_THEME_SUFFIX;
++            System.out.println("UI is not dark");
++        }
++
++        fileName += Constants.IMAGE_ICON_EXTENSION;
++
++        return new ImageIcon(fileName,fileName);
++    }
++}
