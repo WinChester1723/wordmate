@@ -93,6 +93,8 @@ public final class TranslateUI {
             translatorPanel = new JPanel();
         }
 
+        SwingUtilities.updateComponentTreeUI(getTranslateUIFrame());// move all the way down
+
         JPanel ioHeaderPanel;
         JPanel inputFooterPanel;
         JPanel outputFooterPanel;
@@ -142,6 +144,7 @@ public final class TranslateUI {
             inputField.setWrapStyleWord(true);
             inputField.setDocument(new JTextFieldLimit(translateFieldMaxLength));
             inputFieldScrollbar.setPreferredSize(new Dimension(inputFieldScrollbar.getWidth(), 150));
+
             outputField.setLineWrap(true);
             outputField.setWrapStyleWord(true);
             outputField.setEditable(false);
@@ -165,6 +168,7 @@ public final class TranslateUI {
             inputFooterPanel.add(inputReadLoudButton);
             inputFooterPanel.add(inputCopyToClipboard);
             inputFooterPanel.add(inputFieldCharacterCountIndicator);
+
             outputFooterPanel.setLayout(new GridLayout());
             outputFooterPanel.add(outputReadLoud);
             outputFooterPanel.add(outputCopyToClipboard);
