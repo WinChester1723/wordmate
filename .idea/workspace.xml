@@ -4,29 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a" name="Changes" comment="Code refactor">
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/serialization/Bridge.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/serialization/PreLoaded.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/serialization/structures/WordDefinition.java" afterDir="false" />
+    <list default="true" id="c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a" name="Changes" comment="Fixed a small issue. Known bugs about layouts still exist.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/gui/utils/IconManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/core/TranslateUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/core/TranslateUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/frames/MiniQuick.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/utils/ApplicationIcons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/utils/icons/ApplicationIcons.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/utils/IconManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/utils/icons/IconManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/InputCore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/InputCore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$DeferredDocumentListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$DeferredDocumentListener.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$JDropdownButton.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$JDropdownButton.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$JTextFieldLimit.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$JTextFieldLimit.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/utils/ApplicationIcons.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/utils/IconManager.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/io/InputCore.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/io/InputCore.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/main/java/gui/frames/MiniQuick$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/main/java/gui/frames/MiniQuick.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/Constants.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,13 +20,17 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Enum" />
-        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--tags" />
+        <option name="title" value="All" />
+      </GitPushTagMode>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -65,11 +50,11 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;F:/Code_repos/Github/WordMate/wordmate/lib/gson-2.9.1.jar&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/Code_repos/Github/WordMate/wordmate/lib/jlayer-1.0.1.jar&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.editor&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;aws.codewhisperer&quot;
   }
 }</component>
   <component name="RunManager" selected="Application.Application">
@@ -164,49 +149,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665311160133</updated>
     </task>
-    <task id="LOCAL-00008" summary="Converted: Character count label to progress bar">
-      <created>1665396218897</created>
+    <task id="LOCAL-00008" summary="Fixed a small issue. Known bugs about layouts still exist.">
+      <created>1665557390175</created>
       <option name="number" value="00008" />
       <option name="presentableId" value="LOCAL-00008" />
       <option name="project" value="LOCAL" />
-      <updated>1665396218897</updated>
+      <updated>1665557390175</updated>
     </task>
-    <task id="LOCAL-00009" summary="Added Temporal Dictionary API, Play from URL API and JSON library.">
-      <created>1665458948306</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1665458948306</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Fixed: Layout's expansion bug&#10;Added: Current and maximum character count&#10;Added: Scrollbar for text areas in both sides&#10;&#10;Known layout problem: Layout of the buttons">
-      <created>1665472860747</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1665472860747</updated>
-    </task>
-    <task id="LOCAL-00011" summary="Small user Interface fixes">
-      <created>1665484478340</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1665484478341</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Added: UI icons&#10;Added: Play/Stop functionality&#10;&#10;Known bug: App does not work properly because of TTS API bug. TODO: Fix ASAP">
-      <created>1665492447601</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1665492447601</updated>
-    </task>
-    <task id="LOCAL-00013" summary="Code refactor">
-      <created>1665501477005</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1665501477005</updated>
-    </task>
-    <option name="localTasksCounter" value="14" />
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -226,25 +176,22 @@
     <MESSAGE value="Up to 50 error fixes. &#10;Changed ToggleButton Map to List and added temporal but powerful solutions. Known bugs: 1. translateField layout gets expanded automatically while typing text. 2. Add language dropdown button exists but does not work." />
     <MESSAGE value="Added App icons and their functionality. Testing on Mac &amp; Linux has not been done yet." />
     <MESSAGE value="Fixed a small issue. Known bugs about layouts still exist." />
-    <MESSAGE value="Added: AWS Support:&#10;       AWS Translate&#10;       AWS Polly&#10;       &#10;Created: New TTS API&#10;The new TTS API provides handy functionalities such as listeners, read loud and download stream functions.&#10;         New Translator API&#10;Refactored: UI Buttons and their functionality&#10;Added: UI Buttons to read the text for both sides&#10;Added: Copy to clipboard button for both sides&#10;&#10;Known issues: &#10;1. AWS may throw some error messages that does not affect the functionality. &#10;2. AWS Polly will need a new thread to play." />
-    <MESSAGE value="Converted: Character count label to progress bar" />
-    <MESSAGE value="Added Temporal Dictionary API, Play from URL API and JSON library." />
-    <MESSAGE value="Fixed: Layout's expansion bug&#10;Added: Current and maximum character count&#10;Added: Scrollbar for text areas in both sides&#10;&#10;Known layout problem: Layout of the buttons" />
-    <MESSAGE value="Small user Interface fixes" />
-    <MESSAGE value="Added: UI icons&#10;Added: Play/Stop functionality&#10;&#10;Known bug: App does not work properly because of TTS API bug. TODO: Fix ASAP" />
-    <MESSAGE value="Code refactor" />
-    <option name="LAST_COMMIT_MESSAGE" value="Code refactor" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed a small issue. Known bugs about layouts still exist." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/aws/api/TextToSpeechAPI.java</url>
-          <line>161</line>
+          <line>122</line>
           <option name="timeStamp" value="84" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/wordmate$Application.ic" NAME="Application Coverage Results" MODIFIED="1665475389170" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
