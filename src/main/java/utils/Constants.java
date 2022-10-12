@@ -12,18 +12,4 @@ public final class Constants {
     // PATHS
     public static final String APP_ICON_PATH = "src/resources/static/app_icon.png";
     public static final String APP_TRAY_ICON_PATH = "src/resources/static/app_tray_icon.png";
-
-    // APP ICONS
-    public static final String IMAGE_ICON_EXTENSION = ".png";
-    public static final String DARK_THEME_SUFFIX = "_dark";
-    public static final String LIGHT_THEME_SUFFIX = "_light";
-    public static final String SWAP_ICON = "src/resources/static/control_icons/swap_icon";
-    public static final String PLAY_ICON = "src/resources/static/control_icons/play_button";
-    public static final String STOP_ICON = "src/resources/static/control_icons/stop_button";
-
-    public static final String MENU_THEME_ICON = "src/resources/static/control_icons/theme_icon";
-    public static final String MENU_OPTIONS_ICON = "src/resources/static/control_icons/options_icon";
-    public static final String MENU_DARK_THEME_ICON = "src/resources/static/control_icons/dark_theme_icon";
-    public static final String MENU_LIGHT_THEME_ICON = "src/resources/static/control_icons/light_theme_icon";
-    public static final String MENU_CLOSE_ICON = "src/resources/static/control_icons/close_button_icon";
 }
