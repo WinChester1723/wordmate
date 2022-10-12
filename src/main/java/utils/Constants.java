@@ -25,5 +25,4 @@ public final class Constants {
     public static final String SWAP_ICON = "src/resources/static/control_icons/swap_icon";
     public static final String PLAY_ICON = "src/resources/static/control_icons/play_button";
     public static final String STOP_ICON = "src/resources/static/control_icons/stop_button";
-
 }
