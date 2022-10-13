@@ -8,9 +8,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import gui.core.TranslateUI;
 import io.InputCore;
+import utils.serialization.structures.WordDefinition;
 
 import javax.swing.text.BadLocationException;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Application {
@@ -39,15 +44,9 @@ public class Application {
         BufferedReader test = new BufferedReader(new InputStreamReader(System.in));
         String meaningDef = new DictionaryAPI().RequestWordDefinitionJson("en", test.readLine());
 
-        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(meaningDef));
-        meaningDef = (String) ois.readObject();
-        ois.close();
-
-//        ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(meaningDef.getBytes()));
-//        meaningDef = (String) ois.readObject();
-//        ois.close();
-
         System.out.println(meaningDef);
+
+        List<WordDefinition> wordDefinitions = new ArrayList<>();
 
         JsonArray allData = new JsonParser().parse(meaningDef).getAsJsonArray();
 
@@ -58,47 +57,73 @@ public class Application {
         JsonArray raw = allData.getAsJsonArray();
         for (var mainElements : raw) {
             final String word = mainElements.getAsJsonObject().get("word").getAsString();
-            System.out.println("Word:" + word);
+
+            WordDefinition wordDefinition = new WordDefinition();
+
+            wordDefinition.word = word;
 
             JsonElement phonetics = mainElements.getAsJsonObject().get("phonetics");
 
             System.out.println("Phonetics -----------");
-            if (phonetics != null) for (var phonetic : phonetics.getAsJsonArray()) {
-                // text audio sourceURL
+            if (phonetics != null) {
+                wordDefinition.phonetics = new ArrayList<>();
 
-                final String text = phonetic.getAsJsonObject().get("text").getAsString();
-                System.out.println("Text:" + text);
-                final String audio = phonetic.getAsJsonObject().get("audio").getAsString();
-                System.out.println("Audio:" + audio);
-                final String sourceURL = phonetic.getAsJsonObject().get("sourceUrl").getAsString();
-                System.out.println("SourceURL:" + sourceURL);
+                for (var phonetic : phonetics.getAsJsonArray()) {
+                    // text audio sourceURL
+                    final String text = phonetic.getAsJsonObject().get("text").getAsString();
+                    final String audio = phonetic.getAsJsonObject().get("audio").getAsString();
+                    final String sourceURL = phonetic.getAsJsonObject().get("sourceUrl").getAsString();
+
+                    wordDefinition.phonetics.add(wordDefinition.createPhonetic(text, audio, sourceURL));
+                }
             }
             System.out.println("Phonetics END  -----------");
 
+
             JsonElement meanings = mainElements.getAsJsonObject().get("meanings");
+
             System.out.println("------Meanings");
-            for (var meaning : meanings.getAsJsonArray()) {
-                final String partOfSpeech = meaning.getAsJsonObject().get("partOfSpeech").getAsString();
-                System.out.println("Part of speech:" + partOfSpeech);
 
-                JsonElement definitions = meaning.getAsJsonObject().get("definitions");
-                System.out.printf("Definitions(%s):\n", partOfSpeech);
-                if (definitions != null) for (var definition : definitions.getAsJsonArray()) {
+            if (meanings == null) {
+                wordDefinition.meanings = new ArrayList<>();
 
-                    JsonElement example = definition.getAsJsonObject().get("definition");
-                    System.out.println(example);
+                for (var meaning : meanings.getAsJsonArray()) {
+                    final String partOfSpeech = meaning.getAsJsonObject().get("partOfSpeech").getAsString();
+//                    System.out.println("Part of speech:" + partOfSpeech);
 
-                    JsonElement definitionSynonyms = definition.getAsJsonObject().get("synonyms");
-                    if (definitionSynonyms != null) for (var definitionSynonym : definitionSynonyms.getAsJsonArray()) {
-                        // If exist any, will be displayed
-                        System.out.println(definitionSynonym);
+                    JsonElement definitions = meaning.getAsJsonObject().get("definitions");
+//                    System.out.printf("Definitions(%s):\n", partOfSpeech);
+                    if (definitions != null) {
+                        wordDefinition.definitions = new ArrayList<>();
+
+                        for (var definition : definitions.getAsJsonArray()) {
+
+                            JsonElement example = definition.getAsJsonObject().get("definition");
+                            System.out.println(example);
+
+                            JsonElement definitionSynonyms = definition.getAsJsonObject().get("synonyms");
+                            if (definitionSynonyms != null) {
+                                wordDefinition.definitionSynonyms = new ArrayList<>();
+                                for (var definitionSynonym : definitionSynonyms.getAsJsonArray()) {
+                                    // If exist any, will be displayed
+                                    System.out.println(definitionSynonym);
+                                }
+                            }
+
+                            JsonElement definitionAntonyms = definition.getAsJsonObject().get("antonyms");
+                            if (definitionAntonyms != null) {
+                                wordDefinition.definitionAntonyms = new ArrayList<>();
+                                for (var definitionAntonym : definitionAntonyms.getAsJsonArray()) {
+                                    // If exist any, will be displayed
+                                    System.out.println(definitionAntonym);
+                                }
+                            }
+                            wordDefinition.definitions.add(wordDefinition.createDefinition(partOfSpeech,
+                                    (List<String>) definitionSynonyms, (List<String>) definitionAntonyms));
+                        }
                     }
+                    wordDefinition.meanings.add(wordDefinition.createMeaning(partOfSpeech));
 
-                    JsonElement definitionAntonyms = definition.getAsJsonObject().get("antonyms");
-                    if (definitionAntonyms != null) for (var definitionAntonym : definitionAntonyms.getAsJsonArray()) {
-                        // If exist any, will be displayed
-                        System.out.println(definitionAntonym);
-                    }
                 }
 
                 JsonElement synonyms = mainElements.getAsJsonObject().get("synonyms");
@@ -117,8 +142,14 @@ public class Application {
             }
             System.out.println("-------------------");
 
+            wordDefinitions.add(wordDefinition);
             //System.out.println(mainElements.getAsJsonObject().get("license"));
             //System.out.println(mainElements.getAsJsonObject().get("sourceUrls"));
         }
+
+
+        System.out.printf("WordDefintion Size: %d, Phonetics that are available for this word: %d",
+                wordDefinitions.size(), wordDefinitions.get(0).phonetics.size());
+
     }
 }
