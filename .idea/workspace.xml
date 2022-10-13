@@ -5,12 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a" name="Changes" comment="Fixed a small issue. Known bugs about layouts still exist.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/gui/dialogs/ThemeDialog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/aws.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/aws.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_10_2022_1_45_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_10_2022_1_45_PM__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_10_2022_10_54__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_10_2022_10_54__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_10_2022_10_55__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_10_2022_10_55__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Application.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/gui/core/TranslateUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/core/TranslateUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/serialization/structures/WordDefinition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/serialization/structures/WordDefinition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Application.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$3$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$3$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$DeferredDocumentListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$DeferredDocumentListener.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$JDropdownButton.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$JDropdownButton.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$JTextFieldLimit.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$JTextFieldLimit.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$TranslateUIMenuBar.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$TranslateUIMenuBar.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$TranslationInputOutputEnum.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$TranslationInputOutputEnum.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/utils/serialization/structures/WordDefinition.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/utils/serialization/structures/WordDefinition.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +69,9 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;last_opened_file_path&quot;: &quot;F:/Code_repos/Github/WordMate/wordmate/lib/jlayer-1.0.1.jar&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
@@ -102,6 +120,9 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1665116619440</updated>
+      <workItem from="1665568676016" duration="8409000" />
+      <workItem from="1665584829873" duration="3190000" />
+      <workItem from="1665652411244" duration="1856000" />
     </task>
     <task id="LOCAL-00001" summary="Added necessary libraries. Additionally, project management is adjusted.">
       <created>1665117388082</created>
@@ -197,6 +218,9 @@
     <option name="localTasksCounter" value="14" />
     <servers />
   </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
@@ -232,7 +256,7 @@
     <select />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/wordmate$Application.ic" NAME="Application Coverage Results" MODIFIED="1665475389170" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="coverage/wordmate$MASTER.ic" NAME="MASTER Coverage Results" MODIFIED="1665301457343" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/wordmate$Application.ic" NAME="Application Coverage Results" MODIFIED="1665475389170" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

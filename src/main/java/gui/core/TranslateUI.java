@@ -448,6 +448,7 @@ public final class TranslateUI {
                     throw new RuntimeException(ex);
                 }
 
+                // TODO: Improve tooltip
                 final Popup p = PopupFactory.getSharedInstance().getPopup(inputField, new
                         JLabel("Here is my popup!"), MouseInfo.getPointerInfo().getLocation().x,  MouseInfo.getPointerInfo().getLocation().y);
                 p.show();
