@@ -1,10 +1,14 @@
-// Authors: OrkhanGG, WinChester1723, Deusrazen
+// Authors:
+// Software Developer: OrkhanGG
+// API Developer: WinChester1723
+// UI Developer: Deusrazen
 
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
-import gui.core.TranslateUI;
+import gui.frames.TranslateUIPanel;
 import io.InputCore;
 
+import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import java.io.IOException;
 
@@ -13,11 +17,15 @@ public class Application {
 
     public static void main(String[] args) throws IOException {
         // Start GUI
-        try {
-            TranslateUI.getInstance().Initialize();
-        } catch (BadLocationException e) {
-            throw new RuntimeException(e);
-        }
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    TranslateUIPanel.getInstance().Initialize();
+                } catch (BadLocationException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
 
         // Implement Input Core
         try {

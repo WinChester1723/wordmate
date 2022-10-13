@@ -4,16 +4,16 @@ import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-import gui.core.TranslateUI;
+import gui.frames.TranslateUIPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ThemeDialog extends JDialog {
+public class AppearanceDialog extends JDialog {
 
-    public ThemeDialog() {
+    public AppearanceDialog() {
         setLayout(new GridLayout(2, 2));
         List<JButton> themeButtons = new ArrayList<>();
         themeButtons.add(new JButton("Light"));
@@ -36,13 +36,15 @@ public class ThemeDialog extends JDialog {
                     throw new RuntimeException(ex);
                 }
 
-                SwingUtilities.updateComponentTreeUI(TranslateUI.getInstance().getTranslateUIFrame());
+                SwingUtilities.updateComponentTreeUI(TranslateUIPanel.getInstance().getParentFrame());
                 SwingUtilities.updateComponentTreeUI(this);
                 dispose();
             });
         }
+        setSize(new Dimension(300,200));
+        setResizable(false);
+        setModal(true);
         setVisible(true);
-
     }
 
 }

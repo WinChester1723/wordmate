@@ -1,20 +1,20 @@
-package gui.core;
+package gui.frames;
 
 import aws.api.DictionaryAPI;
 import aws.api.TextToSpeechAPI;
 import aws.api.TranslateAPI;
-import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.icons.FlatDescendingSortIcon;
 import com.formdev.flatlaf.icons.FlatFileViewFileIcon;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import gui.controls.AppFrame;
+import gui.dialogs.AppearanceDialog;
 import gui.utils.icons.ApplicationIcons;
 import gui.utils.icons.IconManager;
 import utils.ClipboardManager;
 import utils.Constants;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -28,21 +28,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class TranslateUI {
+public final class TranslateUIPanel extends JPanel{
     // Main GUI Elements
     final static short translateFieldMaxLength = 5000;
-    private static TranslateUI single_instance = null;
+    private AppFrame ParentFrame = null;
+    private static TranslateUIPanel single_instance = null;
     private final JProgressBar mainProgressBar = null;
-    BufferedImage TranslateUIIcon = null;
-    TrayIcon translateUITrayIcon = null;
     JScrollPane inputFieldScrollbar;
     JScrollPane outputFieldScrollbar = null;
     // API Objects
@@ -50,8 +47,6 @@ public final class TranslateUI {
     private DictionaryAPI dictionaryAPI = null;
     private JDropdownButton inputLanguageDropdown;
     private JDropdownButton outputLanguageDropdown;
-    private JFrame translateUIFrame = null;
-    private JPanel translateUIPanel = null;
     // GUI Controls
     private List<JToggleButton> inputUserLanguages = null;
     private JButton inputReadLoudButton = null;
@@ -65,35 +60,28 @@ public final class TranslateUI {
     private JButton outputCopyToClipboard = null;
 
     // Methods
-    public static TranslateUI getInstance() {
-        if (single_instance == null) single_instance = new TranslateUI();
+    public static TranslateUIPanel getInstance() {
+        if (single_instance == null) single_instance = new TranslateUIPanel();
 
         return single_instance;
     }
 
-    public JFrame getTranslateUIFrame() {
-        return translateUIFrame;
+    public AppFrame getParentFrame(){
+        if(ParentFrame == null)
+            System.err.println("Parent was null and requested to be used.");
+
+        return ParentFrame;
     }
 
     public void Initialize() throws BadLocationException {
-
-        try {
-            UIManager.setLookAndFeel(new FlatDarkLaf());
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
-
         // Init other elements
         dictionaryAPI = new DictionaryAPI();
 
         // Init UI Elements
         JPanel translatorPanel;
         {
-            translateUIFrame = new JFrame(Constants.APP_NAME);
             translatorPanel = new JPanel();
         }
-
-        SwingUtilities.updateComponentTreeUI(getTranslateUIFrame());// move all the way down
 
         JPanel ioHeaderPanel;
         JPanel inputFooterPanel;
@@ -102,7 +90,6 @@ public final class TranslateUI {
         JPanel ioFieldsFooterPanel;
 
         {
-            translateUIPanel = new JPanel();
             ioHeaderPanel = new JPanel();
             inputUserLanguages = new ArrayList<>();
             inputLanguageDropdown = new JDropdownButton("Add", new FlatDescendingSortIcon(), new ArrayList<>(TranslateAPI.getInstance().getAvailableLanguages().keySet()));
@@ -177,66 +164,14 @@ public final class TranslateUI {
             ioFieldsFooterPanel.add(outputFooterPanel);
             translatorPanel.add(ioFieldsFooterPanel, BorderLayout.PAGE_END);
 
-            translateUIPanel.setLayout(new BoxLayout(translateUIPanel, BoxLayout.Y_AXIS));
-            translateUIPanel.add(translatorPanel);
-            translateUIFrame.setJMenuBar(new TranslateUIMenuBar());
-            translateUIFrame.add(translateUIPanel, BorderLayout.CENTER);
-            translateUIFrame.setAlwaysOnTop(false);
-            translateUIFrame.pack();
-            translateUIFrame.setVisible(true);
-            translateUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            translateUIFrame.setResizable(false);
+            this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            this.add(translatorPanel);
+
+            AppFrame parentFrame = new AppFrame(Constants.APP_NAME,this);
+            parentFrame.setJMenuBar(new TranslateUIMenuBar());
         }
 
-        setIcon();
-        addTrayIcon();
         addEventListeners();
-    }
-
-    private void addTrayIcon() {
-        if (!SystemTray.isSupported()) {
-            System.out.println("SystemTray is not supported");
-            return;
-        }
-
-        if (!(new File(Constants.APP_TRAY_ICON_PATH).exists())) {
-            JOptionPane.showMessageDialog(translateUIFrame, "App Tray icon could not be found!", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        Image image = Toolkit.getDefaultToolkit().getImage(Constants.APP_TRAY_ICON_PATH);
-        final PopupMenu popup = new PopupMenu();
-        translateUITrayIcon = new TrayIcon(image, Constants.APP_NAME, popup);
-        translateUITrayIcon.setImageAutoSize(true);
-        final SystemTray tray = SystemTray.getSystemTray();
-
-        MenuItem exitItem = new MenuItem("Exit");
-        exitItem.addActionListener(e -> System.exit(1));
-        popup.add(exitItem);
-
-        translateUITrayIcon.setPopupMenu(popup);
-
-        try {
-            tray.add(translateUITrayIcon);
-        } catch (AWTException e) {
-            System.out.println("TrayIcon could not be added.");
-        }
-    }
-
-    private void setIcon() {
-        File file = new File(Constants.APP_ICON_PATH);
-
-        if (!(new File(Constants.APP_TRAY_ICON_PATH).exists())) {
-            JOptionPane.showMessageDialog(translateUIFrame, "App icon could not be found!", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        try {
-            TranslateUIIcon = ImageIO.read(file);
-            getTranslateUIFrame().setIconImage(TranslateUIIcon);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public void updateInputField(String textToTranslate) {
@@ -543,7 +478,7 @@ public final class TranslateUI {
                 i.addActionListener(e -> headerRequestToSelectLanguage(i.getText(), TranslationInputOutputEnum.TS_OUTPUT));
             }
         } else {
-            JOptionPane.showMessageDialog(translateUIFrame, "Either translate-From/To LanguageDropdown button's menu items don't exist! ", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Either translate-From/To LanguageDropdown button's menu items don't exist! ", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
         // Text to Speech events
@@ -632,7 +567,7 @@ public final class TranslateUI {
                 ClipboardManager.getInstance().setClipboardText(inputField.getText());
                 String originalText = inputCopyToClipboard.getText();
                 inputCopyToClipboard.setText("Copied!");
-                translateUITrayIcon.displayMessage(Constants.APP_NAME, "Copied:" + inputField.getText(), TrayIcon.MessageType.INFO);
+                getParentFrame().getTrayIcon().displayMessage(Constants.APP_NAME, "Copied:" + inputField.getText(), TrayIcon.MessageType.INFO);
 
                 inputCopyToClipboard.setEnabled(false);
                 new java.util.Timer().schedule(new java.util.TimerTask() {
@@ -651,7 +586,7 @@ public final class TranslateUI {
                 ClipboardManager.getInstance().setClipboardText(outputField.getText());
                 String originalText = outputCopyToClipboard.getText();
                 outputCopyToClipboard.setText("Copied!");
-                translateUITrayIcon.displayMessage(Constants.APP_NAME, "Copied:" + outputField.getText(), TrayIcon.MessageType.INFO);
+                getParentFrame().getTrayIcon().displayMessage(Constants.APP_NAME, "Copied:" + outputField.getText(), TrayIcon.MessageType.INFO);
 
                 outputCopyToClipboard.setEnabled(false);
                 new java.util.Timer().schedule(new java.util.TimerTask() {
@@ -689,6 +624,9 @@ public final class TranslateUI {
     }
 
     private final class TranslateUIMenuBar extends JMenuBar {
+        final String settingsMenuName = "Settings";
+        final String preferencesMenuName = "Preferences";
+
         Map<String, JMenu> menus = null;
         Map<String, JMenuItem> menu_items = null;
         private ImageIcon settingsIcon = null;
@@ -708,9 +646,6 @@ public final class TranslateUI {
             menus = new LinkedHashMap<>();
             menu_items = new LinkedHashMap<>();
 
-            final String settingsMenuName = "Settings";
-            final String preferencesMenuName = "Preferences";
-
             menu_items.put(settingsMenuName + "Account", new JMenuItem("Account"));
             menu_items.put(settingsMenuName + "History", new JMenuItem("History"));
             menu_items.put(settingsMenuName + "Shortcuts", new JMenuItem("Shortcuts"));
@@ -722,16 +657,20 @@ public final class TranslateUI {
 
             menus.put(settingsMenuName, new JMenu(settingsMenuName));
             menus.get(settingsMenuName).setIcon(settingsIcon);
-            for (var i : menu_items.entrySet())
+            for (var i : menu_items.entrySet()) {
+             i.getValue().addActionListener(e -> {onMenuItemClick(i.getKey());});
                 if (i.getKey().contains(settingsMenuName)) menus.get(settingsMenuName).add(i.getValue());
-
+            }
             menus.put(preferencesMenuName, new JMenu(preferencesMenuName));
             menus.get(preferencesMenuName).setIcon(preferencesIcon);
             for (var i : menu_items.entrySet())
                 if (i.getKey().contains(preferencesMenuName)) menus.get(preferencesMenuName).add(i.getValue());
         }
 
-        private void addMenuListeners() {
+        private void onMenuItemClick(String itemId){
+            if(itemId.contains("Themes")){
+                new AppearanceDialog();
+            }
         }
     }
 
