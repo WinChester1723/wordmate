@@ -3,6 +3,7 @@
 // API Developer: WinChester1723
 // UI Developer: Deusrazen
 
+import com.formdev.flatlaf.FlatDarkLaf;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import gui.frames.TranslateUIPanel;
@@ -21,7 +22,12 @@ public class Application {
             public void run() {
                 try {
                     TranslateUIPanel.getInstance().Initialize();
+
+                    UIManager.setLookAndFeel(new FlatDarkLaf());
+
                 } catch (BadLocationException e) {
+                    throw new RuntimeException(e);
+                } catch (UnsupportedLookAndFeelException e) {
                     throw new RuntimeException(e);
                 }
             }

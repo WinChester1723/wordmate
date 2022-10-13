@@ -1,6 +1,5 @@
 package gui.controls;
 
-import com.formdev.flatlaf.FlatDarkLaf;
 import utils.Constants;
 
 import javax.imageio.ImageIO;
@@ -17,30 +16,33 @@ import static gui.controls.TitleBar.FrameType.*;
 
 public final class TitleBar<E>{
     enum FrameType{
-        FT_NULL,
         FT_JFRAME,
         FT_JDIALOG
     }
-    FrameType frameType = FT_NULL;
+    FrameType frameType;
     private E attachedObject = null;
-    private JPanel childPanel = null;
+    private final JPanel childPanel;
 
-    private BufferedImage translateUIIcon = null;
-    private TrayIcon translateUITrayIcon = null;
-    public TitleBar(E parentType, JPanel childPanel) {
-        if(parentType instanceof JFrame){
+
+    // Only JFrame can use frame and tray icon
+    private BufferedImage frameIcon = null;
+    private TrayIcon frameTrayIcon = null;
+
+
+    public TitleBar(Class<E> parentType, JPanel childPanel) {
+        if(parentType == JFrame.class){
             frameType = FT_JFRAME;
-        }else if(parentType instanceof JDialog){
+        }else if(parentType == JDialog.class){
             frameType = FT_JDIALOG;
         }else{
             throw new IllegalArgumentException(String.format("%s is not an acceptable parameter!",parentType.getClass().getName()));
         }
-        attachedObject = parentType;
         this.childPanel = childPanel;
-        Initialize();
     }
+
     public void Initialize(){
         if(frameType.equals(FT_JFRAME)){
+            attachedObject = ((E)new JFrame());
             ((JFrame)attachedObject).setUndecorated(true);
             ((JFrame)attachedObject).add(new OutsidePanel(this, childPanel));
             ((JFrame)attachedObject).setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,9 +50,10 @@ public final class TitleBar<E>{
             ((JFrame)attachedObject).setLocationRelativeTo(null);
             ((JFrame)attachedObject).setVisible(true);
         }else if(frameType.equals(FT_JDIALOG)){
+            attachedObject = ((E)new JDialog());
             ((JDialog)attachedObject).setUndecorated(true);
             ((JDialog)attachedObject).add(new OutsidePanel(this, childPanel));
-            ((JDialog)attachedObject).setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            ((JDialog)attachedObject).setModal(true);
             ((JDialog)attachedObject).pack();
             ((JDialog)attachedObject).setLocationRelativeTo(null);
             ((JDialog)attachedObject).setVisible(true);
@@ -64,11 +67,11 @@ public final class TitleBar<E>{
     }
 
     public BufferedImage getIcon(){
-        return translateUIIcon;
+        return frameIcon;
     }
 
-    public TrayIcon getTrayIcon(){
-        return translateUITrayIcon;
+    public TrayIcon getFrameTrayIcon(){
+        return frameTrayIcon;
     }
 
     private void addTrayIcon() {
@@ -77,26 +80,25 @@ public final class TitleBar<E>{
             return;
         }
 
-        // TODO: Enable
-//        if (!(new File(Constants.APP_TRAY_ICON_PATH).exists())) {
-//            JOptionPane.showMessageDialog(this, "App Tray icon could not be found!", "Error", JOptionPane.ERROR_MESSAGE);
-//            return;
-//        }
+        if (!(new File(Constants.APP_TRAY_ICON_PATH).exists())) {
+            JOptionPane.showMessageDialog(null, "App Tray icon could not be found!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         Image image = Toolkit.getDefaultToolkit().getImage(Constants.APP_TRAY_ICON_PATH);
         final PopupMenu popup = new PopupMenu();
-        translateUITrayIcon = new TrayIcon(image, Constants.APP_NAME, popup);
-        translateUITrayIcon.setImageAutoSize(true);
+        frameTrayIcon = new TrayIcon(image, Constants.APP_NAME, popup);
+        frameTrayIcon.setImageAutoSize(true);
         final SystemTray tray = SystemTray.getSystemTray();
 
         MenuItem exitItem = new MenuItem("Exit");
         exitItem.addActionListener(e -> System.exit(1));
         popup.add(exitItem);
 
-        translateUITrayIcon.setPopupMenu(popup);
+        frameTrayIcon.setPopupMenu(popup);
 
         try {
-            tray.add(translateUITrayIcon);
+            tray.add(frameTrayIcon);
         } catch (AWTException e) {
             System.out.println("TrayIcon could not be added.");
         }
@@ -111,12 +113,12 @@ public final class TitleBar<E>{
 //        }
 
         try {
-            translateUIIcon = ImageIO.read(file);
+            frameIcon = ImageIO.read(file);
 
             if(frameType.equals(FT_JFRAME))
-                ((JFrame)attachedObject).setIconImage(translateUIIcon);
+                ((JFrame)attachedObject).setIconImage(frameIcon);
             else if (frameType.equals(FT_JDIALOG))
-                ((JDialog)attachedObject).setIconImage(translateUIIcon);
+                ((JDialog)attachedObject).setIconImage(frameIcon);
             else
                 throw new IllegalArgumentException(String.format("%s is not an acceptable parameter!",attachedObject.getClass().getName()));
 
@@ -127,11 +129,10 @@ public final class TitleBar<E>{
 
     private final class BorderPanel extends JPanel {
 
-        private JLabel label = null;
         private int pointX = 0, pointY = 0;
 
         public BorderPanel(TitleBar parentFrame) {
-            label = new JLabel(" X ");
+            JLabel label = new JLabel(" X ");
 
             setLayout(new FlowLayout(FlowLayout.RIGHT));
             add(label);
@@ -182,13 +183,6 @@ public final class TitleBar<E>{
             setLayout(new BorderLayout());
             add(childPanel, BorderLayout.CENTER);
             add(new BorderPanel(parentFrame), BorderLayout.PAGE_START);
-
-            try {
-                UIManager.setLookAndFeel(new FlatDarkLaf());
-            } catch (UnsupportedLookAndFeelException e) {
-                throw new RuntimeException(e);
-            }
-
         }
     }
 }

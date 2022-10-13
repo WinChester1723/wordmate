@@ -5,6 +5,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import gui.controls.TitleBar;
+import gui.frames.TranslateUIPanel;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -28,6 +29,9 @@ public class AppearanceDialog extends JPanel{
         themeButtons.add(new JButton("Dark"));
         themeButtons.add(new JButton("Carbon"));
 
+        for(var button : themeButtons)
+            themePanel.add(button);
+
         opacity = new JSlider(JSlider.HORIZONTAL,30,100,100);
 
         Hashtable<Integer, JLabel> labelTable =
@@ -40,22 +44,24 @@ public class AppearanceDialog extends JPanel{
         setLayout(new BorderLayout());
         add(themePanel, BorderLayout.PAGE_START);
         add(opacity, BorderLayout.PAGE_END);
-        //setSize(new Dimension(300,200));
+        setSize(new Dimension(300,200));
 
-        ParentFrame = new TitleBar<JDialog>(new JDialog(),this);
+        addListeners();
+
+        ParentFrame = new TitleBar<>(JDialog.class,this);
+        ParentFrame.Initialize();
     }
 
     private void addListeners(){
         opacity.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 final float op = opacity.getValue()/100.f;
-                //TranslateUIPanel.getInstance().getParentFrame().setOpacity(op);
+                TranslateUIPanel.getInstance().getParentFrame().setOpacity(op);
                 ParentFrame.getAppFrame().setOpacity(op);
             }
         });
 
         for (JButton button : themeButtons) {
-            themePanel.add(button);
             button.addActionListener(e -> {
                 try {
                     final String btnName = button.getText();
@@ -69,7 +75,7 @@ public class AppearanceDialog extends JPanel{
                     throw new RuntimeException(ex);
                 }
 
-                //.updateComponentTreeUI(TranslateUIPanel.getInstance().getParentFrame());
+                SwingUtilities.updateComponentTreeUI(TranslateUIPanel.getInstance().getParentFrame());
                 SwingUtilities.updateComponentTreeUI(this);
                 ParentFrame.getAppFrame().dispose();
             });

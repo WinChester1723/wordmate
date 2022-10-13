@@ -13,6 +13,7 @@ import gui.dialogs.AppearanceDialog;
 import gui.utils.icons.ApplicationIcons;
 import gui.utils.icons.IconManager;
 import utils.ClipboardManager;
+import utils.Constants;
 
 import javax.swing.*;
 import javax.swing.event.CaretEvent;
@@ -166,7 +167,7 @@ public final class TranslateUIPanel extends JPanel{
             this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             this.add(translatorPanel);
 
-            ParentFrame = new TitleBar<JFrame>(new JFrame(), this);
+            ParentFrame = new TitleBar<>(JFrame.class,this);
             ParentFrame.Initialize();
             new AppearanceDialog();
         }
@@ -567,8 +568,7 @@ public final class TranslateUIPanel extends JPanel{
                 ClipboardManager.getInstance().setClipboardText(inputField.getText());
                 String originalText = inputCopyToClipboard.getText();
                 inputCopyToClipboard.setText("Copied!");
-                // TODO: Enable
-                //getParentFrame().getTrayIcon().displayMessage(Constants.APP_NAME, "Copied:" + inputField.getText(), TrayIcon.MessageType.INFO);
+                ParentFrame.getFrameTrayIcon().displayMessage(Constants.APP_NAME, "Copied:" + outputField.getText(), TrayIcon.MessageType.INFO);
 
                 inputCopyToClipboard.setEnabled(false);
                 new java.util.Timer().schedule(new java.util.TimerTask() {
@@ -587,8 +587,8 @@ public final class TranslateUIPanel extends JPanel{
                 ClipboardManager.getInstance().setClipboardText(outputField.getText());
                 String originalText = outputCopyToClipboard.getText();
                 outputCopyToClipboard.setText("Copied!");
-                // TODO: Enable
-                //getParentFrame().getTrayIcon().displayMessage(Constants.APP_NAME, "Copied:" + outputField.getText(), TrayIcon.MessageType.INFO);
+
+                ParentFrame.getFrameTrayIcon().displayMessage(Constants.APP_NAME, "Copied:" + outputField.getText(), TrayIcon.MessageType.INFO);
 
                 outputCopyToClipboard.setEnabled(false);
                 new java.util.Timer().schedule(new java.util.TimerTask() {
