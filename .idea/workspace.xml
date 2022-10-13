@@ -5,33 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a" name="Changes" comment="New titlebar functionality">
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_10_2022_4_29_PM_[Changes]/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_10_2022_4_29_PM__Changes_.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/gui/controls/AppFrame.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/Application$1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/gui/dialogs/AppearanceDialog.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_10_2022_4_29_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_10_2022_4_29_PM__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/core/TranslateUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/frames/TranslateUIPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/dialogs/ThemeDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/dialogs/AppearanceDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/utils/ApplicationIcons.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/utils/IconManager.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/io/InputCore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/InputCore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Application.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$3$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$4.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$5.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$DeferredDocumentListener.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$JDropdownButton.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$JTextFieldLimit.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$TranslateUIMenuBar.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI$TranslationInputOutputEnum.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/core/TranslateUI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/utils/ApplicationIcons.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/utils/IconManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/controls/AppFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/controls/TitleBar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/dialogs/AppearanceDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/dialogs/AppearanceDialog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/frames/TranslateUIPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/frames/TranslateUIPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/controls/AppFrame$BorderPanel$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/controls/AppFrame$BorderPanel$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/controls/AppFrame$BorderPanel$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/controls/AppFrame$BorderPanel.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/controls/AppFrame$OutsidePanel.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/controls/AppFrame.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/dialogs/AppearanceDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/dialogs/AppearanceDialog.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$DeferredDocumentListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$DeferredDocumentListener.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$JDropdownButton.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$JDropdownButton.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$JTextFieldLimit.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$JTextFieldLimit.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$TranslateUIMenuBar.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$TranslateUIMenuBar.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$TranslationInputOutputEnum.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$TranslationInputOutputEnum.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/io/InputCore.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/io/InputCore.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

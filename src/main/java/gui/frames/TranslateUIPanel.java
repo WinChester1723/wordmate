@@ -8,12 +8,11 @@ import com.formdev.flatlaf.icons.FlatFileViewFileIcon;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import gui.controls.AppFrame;
+import gui.controls.TitleBar;
 import gui.dialogs.AppearanceDialog;
 import gui.utils.icons.ApplicationIcons;
 import gui.utils.icons.IconManager;
 import utils.ClipboardManager;
-import utils.Constants;
 
 import javax.swing.*;
 import javax.swing.event.CaretEvent;
@@ -37,7 +36,7 @@ import java.util.Map;
 public final class TranslateUIPanel extends JPanel{
     // Main GUI Elements
     final static short translateFieldMaxLength = 5000;
-    private AppFrame ParentFrame = null;
+    private TitleBar<JFrame> ParentFrame = null;
     private static TranslateUIPanel single_instance = null;
     private final JProgressBar mainProgressBar = null;
     JScrollPane inputFieldScrollbar;
@@ -66,11 +65,11 @@ public final class TranslateUIPanel extends JPanel{
         return single_instance;
     }
 
-    public AppFrame getParentFrame(){
+    public JFrame getParentFrame(){
         if(ParentFrame == null)
             System.err.println("Parent was null and requested to be used.");
 
-        return ParentFrame;
+        return (JFrame)ParentFrame.getAppFrame();
     }
 
     public void Initialize() throws BadLocationException {
@@ -167,8 +166,9 @@ public final class TranslateUIPanel extends JPanel{
             this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             this.add(translatorPanel);
 
-            AppFrame parentFrame = new AppFrame(Constants.APP_NAME,this);
-            parentFrame.setJMenuBar(new TranslateUIMenuBar());
+            ParentFrame = new TitleBar<JFrame>(new JFrame(), this);
+            ParentFrame.Initialize();
+            new AppearanceDialog();
         }
 
         addEventListeners();
@@ -567,7 +567,8 @@ public final class TranslateUIPanel extends JPanel{
                 ClipboardManager.getInstance().setClipboardText(inputField.getText());
                 String originalText = inputCopyToClipboard.getText();
                 inputCopyToClipboard.setText("Copied!");
-                getParentFrame().getTrayIcon().displayMessage(Constants.APP_NAME, "Copied:" + inputField.getText(), TrayIcon.MessageType.INFO);
+                // TODO: Enable
+                //getParentFrame().getTrayIcon().displayMessage(Constants.APP_NAME, "Copied:" + inputField.getText(), TrayIcon.MessageType.INFO);
 
                 inputCopyToClipboard.setEnabled(false);
                 new java.util.Timer().schedule(new java.util.TimerTask() {
@@ -586,7 +587,8 @@ public final class TranslateUIPanel extends JPanel{
                 ClipboardManager.getInstance().setClipboardText(outputField.getText());
                 String originalText = outputCopyToClipboard.getText();
                 outputCopyToClipboard.setText("Copied!");
-                getParentFrame().getTrayIcon().displayMessage(Constants.APP_NAME, "Copied:" + outputField.getText(), TrayIcon.MessageType.INFO);
+                // TODO: Enable
+                //getParentFrame().getTrayIcon().displayMessage(Constants.APP_NAME, "Copied:" + outputField.getText(), TrayIcon.MessageType.INFO);
 
                 outputCopyToClipboard.setEnabled(false);
                 new java.util.Timer().schedule(new java.util.TimerTask() {
