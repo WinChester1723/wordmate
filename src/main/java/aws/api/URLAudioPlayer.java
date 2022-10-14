@@ -25,7 +25,6 @@
 package aws.api;
 
 import javax.sound.sampled.*;
-import javax.swing.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -62,12 +61,5 @@ public class URLAudioPlayer {
             throw new RuntimeException(e);
         }
         clip.loop(Clip.LOOP_CONTINUOUSLY);
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                // A GUI element to prevent the Clip's daemon Thread
-                // from terminating at the end of the main()
-                JOptionPane.showMessageDialog(null, "Close to exit!");
-            }
-        });
     }
 }

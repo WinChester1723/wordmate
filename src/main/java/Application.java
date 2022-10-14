@@ -3,6 +3,7 @@
 // API Developer: WinChester1723
 // UI Developer: Deusrazen
 
+import com.formdev.flatlaf.intellijthemes.FlatDarkPurpleIJTheme;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import gui.UICore;
@@ -21,6 +22,14 @@ public class Application {
         // Start GUI
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
+                try { // TODO: Move to respective places
+                    UIManager.setLookAndFeel(new FlatDarkPurpleIJTheme());
+                } catch (UnsupportedLookAndFeelException e) {
+                    throw new RuntimeException(e);
+                }
+
+                //IntelliJTheme.setup(getClass().getResourceAsStream("/template.theme.json"));
+
                 final UICore uiCore = UICore.getInstance();
                 uiCore.setMainUIPanel(new TranslateUIPanel());
                 uiCore.setMainUIFrame(new GUIFrame<>(JFrame.class, UICore.getInstance().getMainUIPanel()));
@@ -28,6 +37,8 @@ public class Application {
                 uiCore.getMainUIFrame().Initialize();
                 uiCore.getMainUIFrame().setOnCloseCallback(()->{System.exit(1);});// Call this function on close
                 uiCore.getMainUIFrame().getAppFrame().setJMenuBar(new GMenuBar());
+
+                SwingUtilities.updateComponentTreeUI((JFrame)uiCore.getMainUIFrame().getAppFrame());
             }
         });
 

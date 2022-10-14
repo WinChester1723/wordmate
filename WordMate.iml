@@ -340,5 +340,14 @@
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.8.1" level="project" />
     <orderEntry type="library" name="Maven: com.amazonaws:aws-java-sdk-models:1.11.1000" level="project" />
     <orderEntry type="library" name="Maven: com.amazonaws:aws-java-sdk-swf-libraries:1.11.22" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/themes/flatlaf-intellij-themes-2.5.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

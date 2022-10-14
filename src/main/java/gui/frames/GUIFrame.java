@@ -1,12 +1,13 @@
 package gui.frames;
 
-import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.icons.FlatWindowCloseIcon;
+import com.formdev.flatlaf.icons.FlatWindowIconifyIcon;
 import utils.Callback;
 import utils.Constants;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -35,12 +36,6 @@ public final class GUIFrame<E> {
     // EVENTS END--------------------------------------------------
 
     public GUIFrame(Class<E> parentType, JPanel childPanel) {
-        try { // TODO: Move to respective places
-            UIManager.setLookAndFeel(new FlatDarkLaf());
-        } catch (UnsupportedLookAndFeelException e) {
-            throw new RuntimeException(e);
-        }
-
         if (parentType == JFrame.class) {
             frameType = FT_JFRAME;
         } else if (parentType == JDialog.class) {
@@ -54,7 +49,6 @@ public final class GUIFrame<E> {
     public void Initialize() {
         if (frameType.equals(FT_JFRAME)) {
             attachedObject = ((E) new JFrame());
-            SwingUtilities.updateComponentTreeUI(((JFrame)attachedObject));// TODO: Move to respective places
             ((JFrame) attachedObject).setUndecorated(true);
             ((JFrame) attachedObject).add(new OutsidePanel(this, childPanel));
             ((JFrame) attachedObject).setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -63,7 +57,6 @@ public final class GUIFrame<E> {
             ((JFrame) attachedObject).setVisible(true);
         } else if (frameType.equals(FT_JDIALOG)) {
             attachedObject = ((E) new JDialog());
-            SwingUtilities.updateComponentTreeUI(((JDialog)attachedObject));// TODO: Move to respective places
             ((JDialog) attachedObject).setUndecorated(true);
             ((JDialog) attachedObject).add(new OutsidePanel(this, childPanel));
             ((JDialog) attachedObject).setModal(true);
@@ -155,9 +148,12 @@ public final class GUIFrame<E> {
 
         public BorderPanel(GUIFrame parentFrame) {
             JButton closeButton = new JButton("",new FlatWindowCloseIcon());
-
-            setLayout(new FlowLayout(FlowLayout.RIGHT));
-            add(closeButton);
+            JButton minimizeButton = new JButton("", new FlatWindowIconifyIcon());
+            BorderLayout layout = new BorderLayout();
+            setLayout(layout);
+            add(new JLabel("WordMate"), BorderLayout.WEST);
+            add(closeButton,BorderLayout.EAST);
+            add(minimizeButton,BorderLayout.AFTER_LINE_ENDS);
 
             closeButton.addMouseListener(new MouseAdapter() {
                 public void mouseReleased(MouseEvent e) {
@@ -215,6 +211,7 @@ public final class GUIFrame<E> {
             setLayout(new BorderLayout());
             add(childPanel, BorderLayout.CENTER);
             add(new BorderPanel(parentFrame), BorderLayout.PAGE_START);
+            setBorder(new LineBorder(Color.DARK_GRAY,1,true));
         }
     }
 }
