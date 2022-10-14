@@ -1,4 +1,4 @@
-package gui.frames;
+package gui.panels;
 
 import aws.api.DictionaryAPI;
 import aws.api.TextToSpeechAPI;
@@ -8,8 +8,7 @@ import com.formdev.flatlaf.icons.FlatFileViewFileIcon;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import gui.controls.TitleBar;
-import gui.dialogs.AppearanceDialog;
+import gui.frames.GUIFrame;
 import gui.utils.icons.ApplicationIcons;
 import gui.utils.icons.IconManager;
 import utils.ClipboardManager;
@@ -30,18 +29,16 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public final class TranslateUIPanel extends JPanel{
     // Main GUI Elements
     final static short translateFieldMaxLength = 5000;
-    private TitleBar<JFrame> ParentFrame = null;
-    private static TranslateUIPanel single_instance = null;
+    private GUIFrame<JFrame> ParentFrame = null;
+//    private static TranslateUIPanel single_instance = null;
     private final JProgressBar mainProgressBar = null;
-    JScrollPane inputFieldScrollbar;
-    JScrollPane outputFieldScrollbar = null;
+    private JScrollPane inputFieldScrollbar;
+    private JScrollPane outputFieldScrollbar = null;
     // API Objects
     private TextToSpeechAPI textToSpeechAPI = null;
     private DictionaryAPI dictionaryAPI = null;
@@ -58,20 +55,19 @@ public final class TranslateUIPanel extends JPanel{
     private JTextArea outputField = null;
     private JButton outputReadLoud = null;
     private JButton outputCopyToClipboard = null;
-
+    public TranslateUIPanel() {
+        try {
+            Initialize();
+        } catch (BadLocationException e) {
+            throw new RuntimeException(e);
+        }
+    }
     // Methods
-    public static TranslateUIPanel getInstance() {
-        if (single_instance == null) single_instance = new TranslateUIPanel();
-
-        return single_instance;
-    }
-
-    public JFrame getParentFrame(){
-        if(ParentFrame == null)
-            System.err.println("Parent was null and requested to be used.");
-
-        return (JFrame)ParentFrame.getAppFrame();
-    }
+//    public static TranslateUIPanel getInstance() {
+//        if (single_instance == null) single_instance = new TranslateUIPanel();
+//
+//        return single_instance;
+//    }
 
     public void Initialize() throws BadLocationException {
         // Init other elements
@@ -166,10 +162,6 @@ public final class TranslateUIPanel extends JPanel{
 
             this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             this.add(translatorPanel);
-
-            ParentFrame = new TitleBar<>(JFrame.class,this);
-            ParentFrame.Initialize();
-            new AppearanceDialog();
         }
 
         addEventListeners();
@@ -624,58 +616,6 @@ public final class TranslateUIPanel extends JPanel{
             }
         }
     }
-
-    private final class TranslateUIMenuBar extends JMenuBar {
-        final String settingsMenuName = "Settings";
-        final String preferencesMenuName = "Preferences";
-
-        Map<String, JMenu> menus = null;
-        Map<String, JMenuItem> menu_items = null;
-        private ImageIcon settingsIcon = null;
-        private ImageIcon preferencesIcon = null;
-
-        public TranslateUIMenuBar() {
-            settingsIcon = IconManager.getInstance().getIcon(ApplicationIcons.ICON_MENU_OPTIONS);
-            preferencesIcon = IconManager.getInstance().getIcon(ApplicationIcons.ICON_MENU_THEME);
-
-            InitMenus();
-
-            for (var i : menus.entrySet())
-                this.add(i.getValue());
-        }
-
-        private void InitMenus() {
-            menus = new LinkedHashMap<>();
-            menu_items = new LinkedHashMap<>();
-
-            menu_items.put(settingsMenuName + "Account", new JMenuItem("Account"));
-            menu_items.put(settingsMenuName + "History", new JMenuItem("History"));
-            menu_items.put(settingsMenuName + "Shortcuts", new JMenuItem("Shortcuts"));
-
-            menu_items.put(preferencesMenuName + "Themes", new JMenuItem("Themes"));
-            menu_items.put(preferencesMenuName + "Voices", new JMenuItem("Voices"));
-            menu_items.put(preferencesMenuName + "Favorites", new JMenuItem("Favorites"));
-            menu_items.put(preferencesMenuName + "Contribute", new JMenuItem("Contribute"));
-
-            menus.put(settingsMenuName, new JMenu(settingsMenuName));
-            menus.get(settingsMenuName).setIcon(settingsIcon);
-            for (var i : menu_items.entrySet()) {
-             i.getValue().addActionListener(e -> {onMenuItemClick(i.getKey());});
-                if (i.getKey().contains(settingsMenuName)) menus.get(settingsMenuName).add(i.getValue());
-            }
-            menus.put(preferencesMenuName, new JMenu(preferencesMenuName));
-            menus.get(preferencesMenuName).setIcon(preferencesIcon);
-            for (var i : menu_items.entrySet())
-                if (i.getKey().contains(preferencesMenuName)) menus.get(preferencesMenuName).add(i.getValue());
-        }
-
-        private void onMenuItemClick(String itemId){
-            if(itemId.contains("Themes")){
-                new AppearanceDialog();
-            }
-        }
-    }
-
     private final class JDropdownButton extends JButton {
         private final List<JMenuItem> menuItems;
         private JPopupMenu popupMenu = null;

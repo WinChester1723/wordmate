@@ -3,14 +3,15 @@
 // API Developer: WinChester1723
 // UI Developer: Deusrazen
 
-import com.formdev.flatlaf.FlatDarkLaf;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
-import gui.frames.TranslateUIPanel;
+import gui.UICore;
+import gui.controls.GMenuBar;
+import gui.frames.GUIFrame;
+import gui.panels.TranslateUIPanel;
 import io.InputCore;
 
 import javax.swing.*;
-import javax.swing.text.BadLocationException;
 import java.io.IOException;
 
 
@@ -20,16 +21,13 @@ public class Application {
         // Start GUI
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                try {
-                    TranslateUIPanel.getInstance().Initialize();
-
-                    UIManager.setLookAndFeel(new FlatDarkLaf());
-
-                } catch (BadLocationException e) {
-                    throw new RuntimeException(e);
-                } catch (UnsupportedLookAndFeelException e) {
-                    throw new RuntimeException(e);
-                }
+                final UICore uiCore = UICore.getInstance();
+                uiCore.setMainUIPanel(new TranslateUIPanel());
+                uiCore.setMainUIFrame(new GUIFrame<>(JFrame.class, UICore.getInstance().getMainUIPanel()));
+                uiCore.appendFrame("Main", UICore.getInstance().getMainUIFrame());
+                uiCore.getMainUIFrame().Initialize();
+                uiCore.getMainUIFrame().setOnCloseCallback(()->{System.exit(1);});// Call this function on close
+                uiCore.getMainUIFrame().getAppFrame().setJMenuBar(new GMenuBar());
             }
         });
 

@@ -5,18 +5,47 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a" name="Changes" comment="New titlebar functionality">
+      <change afterPath="$PROJECT_DIR$/src/main/java/gui/UICore.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/gui/controls/GMenuBar.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/gui/frames/GUIFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/aws.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/aws.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_10_2022_1_45_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_10_2022_1_45_PM__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_10_2022_10_54__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_10_2022_10_54__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_10_2022_10_55__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_10_2022_10_55__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_10_2022_4_29_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_10_2022_4_29_PM__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_10_2022_10_34__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_10_2022_10_34__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_10_2022_10_34__Changes_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_10_2022_10_34__Changes_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_10_2022_12_36_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_10_2022_12_36_PM__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/controls/TitleBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/controls/TitleBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/dialogs/AppearanceDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/dialogs/AppearanceDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/frames/TranslateUIPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/frames/TranslateUIPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/controls/TitleBar.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/dialogs/AppearanceDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/panels/dialogs/AppearanceDialog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gui/frames/TranslateUIPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/panels/TranslateUIPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/InputCore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/io/InputCore.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Application$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Application$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Application.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/dialogs/AppearanceDialog$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/dialogs/AppearanceDialog$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/dialogs/AppearanceDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/dialogs/AppearanceDialog.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/controls/TitleBar$BorderPanel$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/controls/TitleBar$BorderPanel$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/controls/TitleBar$BorderPanel$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/controls/TitleBar$BorderPanel.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/controls/TitleBar$FrameType.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/controls/TitleBar$OutsidePanel.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/controls/TitleBar.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/dialogs/AppearanceDialog$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/dialogs/AppearanceDialog.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$3$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$5.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$DeferredDocumentListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$JDropdownButton.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$JTextFieldLimit.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$TranslateUIMenuBar.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel$TranslationInputOutputEnum.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/io/InputCore.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/io/InputCore.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

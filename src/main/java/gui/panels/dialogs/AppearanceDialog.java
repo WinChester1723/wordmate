@@ -1,11 +1,11 @@
-package gui.dialogs;
+package gui.panels.dialogs;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-import gui.controls.TitleBar;
-import gui.frames.TranslateUIPanel;
+import gui.UICore;
+import gui.frames.GUIFrame;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -16,7 +16,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class AppearanceDialog extends JPanel{
-    private TitleBar<JDialog> ParentFrame = null;
+    private GUIFrame<JDialog> ParentFrame = null;
     private List<JButton> themeButtons = null;
     private JPanel themePanel = null;
     private JSlider opacity = null;
@@ -48,7 +48,7 @@ public class AppearanceDialog extends JPanel{
 
         addListeners();
 
-        ParentFrame = new TitleBar<>(JDialog.class,this);
+        ParentFrame = new GUIFrame<>(JDialog.class,this);
         ParentFrame.Initialize();
     }
 
@@ -56,7 +56,8 @@ public class AppearanceDialog extends JPanel{
         opacity.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 final float op = opacity.getValue()/100.f;
-                TranslateUIPanel.getInstance().getParentFrame().setOpacity(op);
+
+                ((JFrame)((GUIFrame<JFrame>) UICore.getInstance().getFrame("Main")).getAppFrame()).setOpacity(op);
                 ParentFrame.getAppFrame().setOpacity(op);
             }
         });
@@ -75,7 +76,7 @@ public class AppearanceDialog extends JPanel{
                     throw new RuntimeException(ex);
                 }
 
-                SwingUtilities.updateComponentTreeUI(TranslateUIPanel.getInstance().getParentFrame());
+                SwingUtilities.updateComponentTreeUI(((JFrame)((GUIFrame<JFrame>) UICore.getInstance().getFrame("Main")).getAppFrame()));
                 SwingUtilities.updateComponentTreeUI(this);
                 ParentFrame.getAppFrame().dispose();
             });

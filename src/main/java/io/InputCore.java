@@ -3,7 +3,7 @@ package io;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import com.sun.jna.platform.win32.User32;
-import gui.frames.TranslateUIPanel;
+import gui.UICore;
 import utils.ClipboardManager;
 
 import javax.swing.*;
@@ -13,12 +13,13 @@ public final class InputCore implements NativeKeyListener {//<-- Remember to add
     public void nativeKeyPressed(NativeKeyEvent e) {
         if (e.getKeyCode() == NativeKeyEvent.VC_HOME) {
             try {
-                TranslateUIPanel.getInstance().updateInputField(ClipboardManager.getInstance().getSelectedText(User32.INSTANCE, ClipboardManager.CustomUser32.INSTANCE));
+                UICore.getInstance().getMainUIPanel()
+                        .updateInputField(ClipboardManager.getInstance().getSelectedText(User32.INSTANCE, ClipboardManager.CustomUser32.INSTANCE));
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
 
-            JFrame mf = TranslateUIPanel.getInstance().getParentFrame();
+            JFrame mf = (JFrame)UICore.getInstance().getMainUIFrame().getAppFrame();
 
             int state = mf.getExtendedState();
             state &= ~JFrame.ICONIFIED;
