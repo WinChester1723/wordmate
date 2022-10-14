@@ -147,13 +147,15 @@ public final class GUIFrame<E> {
         private int pointX = 0, pointY = 0;
 
         public BorderPanel(GUIFrame parentFrame) {
+            JLabel frameLabel = new JLabel("WordMate");
+            frameLabel.setText("<html>" + "<B>"+ "WordMate" + "</B>" + "</html>");
             JButton closeButton = new JButton("",new FlatWindowCloseIcon());
             JButton minimizeButton = new JButton("", new FlatWindowIconifyIcon());
-            BorderLayout layout = new BorderLayout();
+            FlowLayout layout = new FlowLayout(FlowLayout.RIGHT);
             setLayout(layout);
-            add(new JLabel("WordMate"), BorderLayout.WEST);
-            add(closeButton,BorderLayout.EAST);
-            add(minimizeButton,BorderLayout.AFTER_LINE_ENDS);
+            add(frameLabel);
+            add(minimizeButton);
+            add(closeButton);
 
             closeButton.addMouseListener(new MouseAdapter() {
                 public void mouseReleased(MouseEvent e) {

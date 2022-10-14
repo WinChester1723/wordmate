@@ -4,24 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a" name="Changes" comment="New titlebar functionality">
-      <change afterPath="$PROJECT_DIR$/lib/themes/flatlaf-intellij-themes-2.5.jar" afterDir="false" />
+    <list default="true" id="c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a" name="Changes" comment="Backup Commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WordMate.iml" beforeDir="false" afterPath="$PROJECT_DIR$/WordMate.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/aws/api/URLAudioPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/aws/api/URLAudioPlayer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/gui/frames/GUIFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/frames/GUIFrame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Application$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Application$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Application.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/aws/api/URLAudioPlayer$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/aws/api/URLAudioPlayer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/aws/api/URLAudioPlayer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/GUIFrame$BorderPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/frames/GUIFrame$BorderPanel$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/GUIFrame$BorderPanel$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/frames/GUIFrame$BorderPanel$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/GUIFrame$BorderPanel$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/frames/GUIFrame$BorderPanel$3.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/GUIFrame$BorderPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/frames/GUIFrame$BorderPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/GUIFrame$FrameType.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/frames/GUIFrame$FrameType.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/GUIFrame$OutsidePanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/frames/GUIFrame$OutsidePanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/GUIFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/frames/GUIFrame.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,7 +188,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665558276781</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Backup Commit">
+      <created>1665742711612</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1665742711612</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -219,7 +216,8 @@
     <MESSAGE value="Added App icons and their functionality. Testing on Mac &amp; Linux has not been done yet." />
     <MESSAGE value="Fixed a small issue. Known bugs about layouts still exist." />
     <MESSAGE value="New titlebar functionality" />
-    <option name="LAST_COMMIT_MESSAGE" value="New titlebar functionality" />
+    <MESSAGE value="Backup Commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Backup Commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
