@@ -1,0 +1,39 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	
++++ b/.idea/workspace.xml	
+@@ -5,18 +5,10 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="c2e6b94a-e00e-4f0f-8aa1-9f149c1d8d7a" name="Changes" comment="New titlebar functionality">
++      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_10_2022_4_29_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_10_2022_4_29_PM__Changes_.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_10_2022_10_34__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_10_2022_10_34__Changes_.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_10_2022_10_34__Changes_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_10_2022_10_34__Changes_1.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Application.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/controls/TitleBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/controls/TitleBar.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/dialogs/AppearanceDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/dialogs/AppearanceDialog.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/gui/frames/TranslateUIPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gui/frames/TranslateUIPanel.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/target/classes/Application$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Application$1.class" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/target/classes/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Application.class" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/target/classes/gui/dialogs/AppearanceDialog$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/dialogs/AppearanceDialog$1.class" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/target/classes/gui/dialogs/AppearanceDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/dialogs/AppearanceDialog.class" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/gui/frames/TranslateUIPanel.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_10_2022_12_36_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_13_10_2022_12_36_PM__Changes_.xml" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -232,7 +224,7 @@
+     <select />
+   </component>
+   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+-    <SUITE FILE_PATH="coverage/wordmate$Application.ic" NAME="Application Coverage Results" MODIFIED="1665475389170" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+     <SUITE FILE_PATH="coverage/wordmate$MASTER.ic" NAME="MASTER Coverage Results" MODIFIED="1665301457343" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
++    <SUITE FILE_PATH="coverage/wordmate$Application.ic" NAME="Application Coverage Results" MODIFIED="1665475389170" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+   </component>
+ </project>
+\ No newline at end of file

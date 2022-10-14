@@ -10,6 +10,8 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/utils/serialization/structures/WordDefinition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/serialization/structures/WordDefinition.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Application.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/utils/serialization/structures/WordDefinition$Meaning$Definition.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/utils/serialization/structures/WordDefinition$Meaning$Definition.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/utils/serialization/structures/WordDefinition$Meaning$DefinitionAntonyms.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/utils/serialization/structures/WordDefinition$Meaning$DefinitionAntonyms.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/utils/serialization/structures/WordDefinition$Meaning$DefinitionSynonyms.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/utils/serialization/structures/WordDefinition$Meaning$DefinitionSynonyms.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/utils/serialization/structures/WordDefinition$Meaning.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/utils/serialization/structures/WordDefinition$Meaning.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/utils/serialization/structures/WordDefinition$Phonetic.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/utils/serialization/structures/WordDefinition$Phonetic.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/utils/serialization/structures/WordDefinition.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/utils/serialization/structures/WordDefinition.class" afterDir="false" />
@@ -35,6 +37,11 @@
         <option name="argument" value="--tags" />
         <option name="title" value="All" />
       </GitPushTagMode>
+    </option>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -110,6 +117,10 @@
       <workItem from="1665584829873" duration="3190000" />
       <workItem from="1665652411244" duration="8444000" />
       <workItem from="1665678723282" duration="4157000" />
+      <workItem from="1665698476498" duration="2333000" />
+      <workItem from="1665746122352" duration="1776000" />
+      <workItem from="1665750621384" duration="5741000" />
+      <workItem from="1665787509185" duration="402000" />
     </task>
     <task id="LOCAL-00001" summary="Added necessary libraries. Additionally, project management is adjusted.">
       <created>1665117388082</created>
